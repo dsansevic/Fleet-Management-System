@@ -1,9 +1,11 @@
 import './App.css'
+import AdminRegistration from './pages/AdminRegistration'
 
 function App() {
 
   return (
     <>
+    <AdminRegistration/>
     </>
   )
 }
