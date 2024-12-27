@@ -23,6 +23,9 @@ function FormInputField({
         className="w-full p-2.5 text-sm border border-gray-300 rounded-md"
         ref={ref}
         required
+        aria-required="true"
+        aria-invalid={error ? "true" : "false"}
+        aria-describedby={error ? `${name}-error` : undefined}
       />
       {type === "password" && (
         <button
