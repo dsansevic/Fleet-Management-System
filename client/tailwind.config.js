@@ -9,7 +9,7 @@ export default {
       colors: {
         linkText: '#3b82f6',
         errorText: '#ef4444'
-      },
+      }
     },
   },
   plugins: [],

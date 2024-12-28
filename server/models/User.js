@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -18,7 +19,7 @@ const userSchema = new Schema({
         unique: true,  
         trim: true, 
         lowercase: true, 
-        match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ 
+        match: /^\S+@\S+\.\S+$/
     },
     password: { 
         type: String, 
@@ -27,10 +28,27 @@ const userSchema = new Schema({
     },
     oib: {
         type: String,
-        required: true,
-        unique: true,
         match: /^\d{11}$/
     },
 });
 
-module.exports = mongoose.model("User", userSchema);
+// TREBA DODAT ENKRIPCIJU OIBA !!
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) 
+    return next();
+  try {
+    const salt = await bcrypt.genSalt(10); 
+    this.password = await bcrypt.hash(this.password, salt); 
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.method('validatePassword', async function(password){
+    return await bcrypt.compare(password, this.password)
+})
+
+module.exports = mongoose.model("User", userSchema)

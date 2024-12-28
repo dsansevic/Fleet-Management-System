@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .placeholder-italic::placeholder{
+       font-style: italic;
+    }
+  }
+
 html {
     scrollbar-gutter: stable;
 }

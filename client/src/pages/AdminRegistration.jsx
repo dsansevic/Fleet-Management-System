@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import FormInputField from "../components/FormInputField";
 import fleetflowLogo from '../assets/logo.png'; 
+import axios from "axios";
 
 function Register () {
   const [formData, setFormData] = useState({
@@ -17,13 +18,12 @@ function Register () {
     firstName: "",
     lastName: "",
     email: "",
-    oib: "",
+    oib:"",
     password: "",
     confirmPassword: "",
     acceptTerms: ""
   });
   const inputRef = useRef();
-  const [showOIBExplanation, setShowOIBExplanation] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
@@ -32,8 +32,8 @@ function Register () {
 
   const InputRedux = {
     email: {
-        regex: /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/,
-        message: "Email must be in format username@domain.tld and contain only letters (A-Z, a-z)."
+        regex: /^\S+@\S+\.\S+$/,
+        message: "Email must be in format username@domain.tld."
     },
     firstName: {
         regex: /^[A-Za-z\u00C0-\u00FF\u0100-\u017F]+(?:[-'\s][A-Za-z\u00C0-\u00FF\u0100-\u017F]+)*$/,
@@ -53,41 +53,48 @@ function Register () {
     }
   };
 
+  const checkAvailability = async (field, value) => {
+    try {
+        const response = await axios.post('http://localhost:3000/user/check-availability', {
+            [field]: value,
+        });
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                [field]: error.response.data.message,
+            }));
+        }
+    }
+};
   const validateInput = (name, value) => {
     let error = "";
-    if (value.trim() === "") {
+    if (value.trim() === "" && name != "oib") {
         error = "This field is required.";
-    } else if (InputRedux[name] && !InputRedux[name].regex.test(value)) 
+    } else if (InputRedux[name] && value.trim() !== "" && !InputRedux[name].regex.test(value)) 
         error = InputRedux[name].message;
 
     return error;
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, type, checked } = e.target;
 
+    const newValue = type === "checkbox" ? checked : value;
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
+
     const error = validateInput(name, value);
-
-    if (type === "checkbox") {
-        setFormData((prevState) => ({
-          ...prevState,
-          [name]: checked, 
-        })); 
-        return;
-    }
-    
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error
     }));
+
+    if (!error && (name === "email" || name === "oib")) {
+      await checkAvailability(name, value);
+  }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     setIsSubmitted(true);
@@ -115,15 +122,24 @@ function Register () {
     }
 
     if (!Object.values(errors).some((error) => error) && formData.acceptTerms) {
-      console.log(formData);
-
-      // povezivanje s backendom
-    }
-  };
+        try {
+            const response = await axios.post('http://localhost:3000/user/registration', {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: formData.email,
+              oib: formData.oib || undefined,
+              password: formData.password,
+            });
+            localStorage.setItem('token', response.data.token);
+          } catch (error) {
+            console.error(error);
+          }
+    };
+}
 
   return (
-    <div className="max-w-lg mx-auto mt-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
-       <div className="flex items-center justify-center mb-4">
+    <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
+       <div className="flex items-center justify-center mb-2">
           <h2 className="text-3xl font-semibold mr-2">Sign up to </h2>
             {/* dodat klik na logo  */}
           <img src={fleetflowLogo} alt="FleetFlow Logo" className="w-40 cursor-pointer" />
@@ -131,64 +147,66 @@ function Register () {
         <p className="text-center mb-2">Already have an account? <span className="text-linkText cursor-pointer">Log in</span></p>
         <form onSubmit={handleRegister}>
           <FormInputField
+            label="First name"
             name="firstName"
-            placeholder="First Name"
+            placeholder="Enter your first name"
             value={formData.firstName}
             onChange={handleInputChange}
             error={errors.firstName}
             ref={inputRef}
+            required={true}
           />
           <FormInputField
+            label="Last name"
             name="lastName"
-            placeholder="Last Name"
+            placeholder="Enter your last name"
             value={formData.lastName}
             onChange={handleInputChange}
             error={errors.lastName}
+            required={true}
           />
           <FormInputField
+            label="Email"
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="e.g. john.doe@example.com"
             value={formData.email}
             onChange={handleInputChange}
             error={errors.email}
+            required={true}
           />
-          <span
-            className="text-linkText cursor-pointer text-sm"
-            onClick={() => setShowOIBExplanation(!showOIBExplanation)}
-          >
-            Why do we need your OIB?
-          </span>
-          <div className="text-sm mb-2">
-            {showOIBExplanation && (
-              <div className="mt-2 text-gray-600 bg-gray-100 p-3 border border-gray-300 rounded-md">
-                <p className="font-semibold">Why do we need your OIB?</p>
-                <p>Your OIB is required to ensure the uniqueness of your account. It helps us avoid duplicate accounts and ensures efficient management within the system. Rest assured, your OIB will be securely stored and processed in compliance with data protection laws (GDPR).</p>
-              </div>
-            )}
-          </div>
           <FormInputField
+            label="OIB"
             name="oib"
-            placeholder="OIB"
+            placeholder="11 digits, optional"
             value={formData.oib}
             onChange={handleInputChange}
+            required={false}
             error={errors.oib}
           />
+          <div className="text-xs mb-2 text-gray-600 bg-gray-100 p-2 border rounded-md">
+            <p>Providing your OIB is optional, but it can significantly enhance your experience if 
+              you are connected to multiple companies, allowing you to access them without repeated logins. 
+              Rest assured, your OIB will be securely stored and processed in compliance with data protection laws (GDPR).</p>
+          </div>
           <FormInputField
+            label="Password"
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder="Use strong password"
             value={formData.password}
             onChange={handleInputChange}
             error={errors.password}
+            required={true}
             />
           <FormInputField
             name="confirmPassword"
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Re-enter your password"
             value={formData.confirmPassword}
             onChange={handleInputChange}
             error={errors.confirmPassword}
+            required={true}
             />
           <div className="mb-4 flex items-center">
             <input
@@ -209,15 +227,16 @@ function Register () {
             </label>
           </div>
           <span className="text-errorText text-sm">{errors.acceptTerms}</span>
-
+          <div className="flex justify-center items-center mt-4">
           <button
             type="submit"
-            className={`w-full py-3 ${!formData.acceptTerms || Object.values(errors).some((error) => error) || formData.password !== formData.confirmPassword
-              ? "bg-gray-400"
+            className={`w-fit py-3 px-7 ${!formData.acceptTerms || Object.values(errors).some((error) => error) || formData.password !== formData.confirmPassword
+              ? "bg-gray-400 cursor-default"
               : "bg-linkText hover:bg-blue-600"} text-white rounded-md`}
           >
             Register
           </button>
+          </div>
         </form>
       </div>
   );
