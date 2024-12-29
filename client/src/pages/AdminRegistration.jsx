@@ -140,7 +140,7 @@ function Register () {
   return (
     <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
        <div className="flex items-center justify-center mb-2">
-          <h2 className="text-3xl font-semibold mr-2">Sign up to </h2>
+          <h1 className="text-3xl font-semibold mr-2">Sign up to </h1>
             {/* dodat klik na logo  */}
           <img src={fleetflowLogo} alt="FleetFlow Logo" className="w-40 cursor-pointer" />
         </div>

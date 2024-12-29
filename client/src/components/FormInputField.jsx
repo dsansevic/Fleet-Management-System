@@ -9,7 +9,8 @@ function FormInputField({
   value, 
   onChange, 
   error, 
-  required 
+  required, 
+  handleCapsLockOn
 }, ref) {
   const [showPassword, setShowPasswod] = useState(false);
 
@@ -28,6 +29,7 @@ function FormInputField({
           className={`w-full p-2 text-sm placeholder-italic  ${error ? 'border-red-500' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
           ref={ref}
           required={required}
+          onKeyUp={handleCapsLockOn}
           aria-required="true"
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${name}-error` : undefined}

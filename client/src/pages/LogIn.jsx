@@ -1,0 +1,111 @@
+import axios from "axios";
+import { useState, useRef, useEffect } from "react";
+import FormInputField from "../components/FormInputField";
+
+function LogIn() {
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+  });
+  const [capsLockIsOn, setCapsLockIsOn] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [logInError, setLogInError] = useState("");
+
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleInputChange = (e) => {
+    setInput((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const checkCapsLock = (event) => {
+    if (event.getModifierState('CapsLock')) {
+        setCapsLockIsOn(true);
+    } else {
+        setCapsLockIsOn(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (input.email && input.password) {
+      try {
+        const response = await axios.post("http://localhost:3000/user/login", input);
+        
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem("token", response.data.token);
+        console.log("Token saved:", sessionStorage.getItem("token"));
+
+        console.log("Login successful");
+      } catch (error) {
+            setLogInError("Invalid email or password.");
+      }
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
+      <div className="flex items-center justify-center mb-4">
+        <h2 className="text-3xl font-semibold mr-2">Welcome Back!</h2>
+      </div>
+      <form onSubmit={handleSubmit}>
+        {logInError}
+        <FormInputField
+          label="Email"
+          name="email"
+          type="email"
+          placeholder="e.g. john.doe@example.com"
+          value={input.email}
+          onChange={handleInputChange}
+          ref={inputRef}
+          required={true}
+        />
+        <FormInputField
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          value={input.password}
+          onChange={handleInputChange}
+          required={true}
+          handleCapsLockOn={checkCapsLock}
+        />
+        {capsLockIsOn && (
+            <p className='text-errorText text-sm'>Caps Lock is ON!</p>
+        )}
+        <div className="flex justify-between items-center mb-4">
+        <label htmlFor="rememberMe" className="text-sm">
+            <input
+                type="checkbox"
+                name="rememberMe"
+                className="mr-1"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            Remember me
+        </label>
+        <span className="text-linkText text-sm cursor-pointer">Forgot your password?</span>
+        </div>
+        <p className="text-center mb-4">
+        Don't have an account? <span className="text-linkText cursor-pointer">Create one</span>
+        </p>
+        <div className="flex justify-center items-center mt-4">
+          <button
+            type="submit"
+            className="w-fit py-3 px-7 bg-linkText hover:bg-blue-600 text-white rounded-md"
+          >
+            Continue
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default LogIn;

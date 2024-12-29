@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
   
       const isValidPassword = await user.validatePassword(password);
       if (!isValidPassword) 
-        return res.status(400).send('Invalid credentials');
+        return res.status(400).json({ message:'Invalid credentials'})
       
       const token = generateToken(user);
       res.status(200).json({ message: 'Login successful', token, user: { id: user._id, email: user.email } });
