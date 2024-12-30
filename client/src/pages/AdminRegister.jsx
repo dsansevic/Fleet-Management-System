@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import FormInputField from "../components/FormInputField";
-import fleetflowLogo from '../assets/logo.png'; 
+import FormInputField from "@components/form/FormInputField";
+import fleetflowLogo from '@assets/logo.png'; 
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-function Register () {
+function AdminRegister () {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -141,10 +142,15 @@ function Register () {
     <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
        <div className="flex items-center justify-center mb-2">
           <h1 className="text-3xl font-semibold mr-2">Sign up to </h1>
-            {/* dodat klik na logo  */}
-          <img src={fleetflowLogo} alt="FleetFlow Logo" className="w-40 cursor-pointer" />
+          <Link to="/" >
+            <img src={fleetflowLogo} alt="FleetFlow" className="w-40 cursor-pointer" />
+          </Link>
         </div>
-        <p className="text-center mb-2">Already have an account? <span className="text-linkText cursor-pointer">Log in</span></p>
+        <p className="text-center mb-2">Already have an account? 
+        <Link to="/login">
+          <span className="text-brand-base cursor-pointer"> Log in</span>
+        </Link>
+        </p>
         <form onSubmit={handleRegister}>
           <FormInputField
             label="First name"
@@ -219,20 +225,20 @@ function Register () {
             <label className="text-sm">
               I agree to the{" "}
               <span
-                className="text-linkText cursor-pointer"
+                className="text-brand-base cursor-pointer"
                 // onClick={() => setShowTermsLink(!showTermsLink)}
               >
                 terms and conditions
               </span>.
             </label>
           </div>
-          <span className="text-errorText text-sm">{errors.acceptTerms}</span>
+          <span className="text-error text-sm">{errors.acceptTerms}</span>
           <div className="flex justify-center items-center mt-4">
           <button
             type="submit"
             className={`w-fit py-3 px-7 ${!formData.acceptTerms || Object.values(errors).some((error) => error) || formData.password !== formData.confirmPassword
               ? "bg-gray-400 cursor-default"
-              : "bg-linkText hover:bg-blue-600"} text-white rounded-md`}
+              : "bg-brand-dark hover:bg-brand-base"} text-white rounded-md`}
           >
             Register
           </button>
@@ -242,4 +248,4 @@ function Register () {
   );
 };
 
-export default Register;
+export default AdminRegister;

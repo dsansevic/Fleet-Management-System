@@ -7,9 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        linkText: '#3b82f6',
-        errorText: '#ef4444'
-      }
+        background: "var(--background)", 
+        foreground: "var(--foreground)",
+
+        brand: {
+          light: "var(--brand-light)", 
+          base: "var(--brand-base)",  
+          dark: "var(--brand-dark)",  
+        },
+
+        text: {
+          primary: "var(--text-primary)", 
+          secondary: "var(--text-secondary)",
+        },
+
+        error: "var(--error)", 
+      },
     },
   },
   plugins: [],

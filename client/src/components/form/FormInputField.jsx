@@ -16,7 +16,7 @@ function FormInputField({
 
   return (
     <div className="mb-2 relative">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-600">
+      <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
         {label} {label && required && <span className="text-red-500" title="This field is required">*</span>}
       </label>
       <div className="relative">
@@ -26,7 +26,7 @@ function FormInputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-full p-2 text-sm placeholder-italic  ${error ? 'border-red-500' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
+          className={`w-full p-2 text-sm placeholder-italic  ${error ? 'border-error' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
           ref={ref}
           required={required}
           onKeyUp={handleCapsLockOn}
@@ -44,7 +44,7 @@ function FormInputField({
           </button>
         )}
       </div>
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-error text-xs mt-1">{error}</p>}
     </div>
   );
 }

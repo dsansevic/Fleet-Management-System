@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
-import FormInputField from "../components/FormInputField";
+import FormInputField from "@components/form/FormInputField";
+import { Link } from "react-router-dom";
 
 function LogIn() {
   const [input, setInput] = useState({
@@ -77,7 +78,7 @@ function LogIn() {
           handleCapsLockOn={checkCapsLock}
         />
         {capsLockIsOn && (
-            <p className='text-errorText text-sm'>Caps Lock is ON!</p>
+            <p className='text-error text-sm'>Caps Lock is ON!</p>
         )}
         <div className="flex justify-between items-center mb-4">
         <label htmlFor="rememberMe" className="text-sm">
@@ -90,15 +91,17 @@ function LogIn() {
             />
             Remember me
         </label>
-        <span className="text-linkText text-sm cursor-pointer">Forgot your password?</span>
+        <span className="text-brand-base text-sm cursor-pointer">Forgot your password?</span>
         </div>
         <p className="text-center mb-4">
-        Don't have an account? <span className="text-linkText cursor-pointer">Create one</span>
+          <Link to="/register">
+            Don't have an account? <span className="text-brand-base cursor-pointer">Create one</span>
+          </Link>
         </p>
         <div className="flex justify-center items-center mt-4">
           <button
             type="submit"
-            className="w-fit py-3 px-7 bg-linkText hover:bg-blue-600 text-white rounded-md"
+            className="w-fit py-3 px-7 bg-brand-dark hover:bg-brand-light text-white rounded-md"
           >
             Continue
           </button>
