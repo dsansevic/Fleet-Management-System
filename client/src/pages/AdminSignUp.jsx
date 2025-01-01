@@ -4,7 +4,7 @@ import fleetflowLogo from '@assets/logo.png';
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function AdminRegister () {
+function AdminSignUp () {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -124,7 +124,7 @@ function AdminRegister () {
 
     if (!Object.values(errors).some((error) => error) && formData.acceptTerms) {
         try {
-            const response = await axios.post('http://localhost:3000/user/registration', {
+            const response = await axios.post('http://localhost:3000/user/signup', {
               firstName: formData.firstName,
               lastName: formData.lastName,
               email: formData.email,
@@ -248,4 +248,4 @@ function AdminRegister () {
   );
 };
 
-export default AdminRegister;
+export default AdminSignUp;

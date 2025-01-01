@@ -15,7 +15,7 @@ function RootLayout() {
               className="px-4 py-2 border border-brand-dark text-brand-dark uppercase text-sm tracking-wide transition">
             Sign in</NavLink>
             <NavLink 
-              to="register"
+              to="signup"
               className="px-4 py-2 bg-brand-dark text-white uppercase text-sm tracking-wide transition">
             Sign up</NavLink>
           </div>
