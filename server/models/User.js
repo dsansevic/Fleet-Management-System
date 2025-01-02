@@ -26,13 +26,17 @@ const userSchema = new Schema({
         required: true, 
         minlength: 8
     },
-    oib: {
-        type: String,
-        match: /^\d{11}$/
+    role: {
+      type: String,
+      enum: ['employee', 'admin'],
+      default: 'employee',
+      required: true,
     },
+    company: { 
+      type: Schema.Types.ObjectId, ref: 'Company', 
+    }
 });
 
-// TREBA DODAT ENKRIPCIJU OIBA !!
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) 

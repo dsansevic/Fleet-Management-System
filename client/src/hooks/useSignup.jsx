@@ -7,7 +7,7 @@ const useSignup = () => {
     const {dispatch} = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
 
-    const signup = async (firstName, lastName, email, oib, password) => {
+    const signup = async (firstName, lastName, email, password, role) => {
         setIsLoading(true);
 
         try {
@@ -16,15 +16,15 @@ const useSignup = () => {
                 lastName,
                 email,
                 password,
-                ...(oib && { oib }),
+                role
             };
 
             const response = await axios.post('http://localhost:3000/user/signup', userInfo);
-            const {user, token, role} = response.data;
+            const {user, token, userRole} = response.data;
             
             dispatch({
               type: 'LOGIN',
-              payload: { user, token, role },
+              payload: { user, token, userRole },
             });
         
             localStorage.setItem('token', token);

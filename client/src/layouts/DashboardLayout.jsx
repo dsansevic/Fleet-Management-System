@@ -4,12 +4,12 @@ import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
 import { useAuthContext } from "@hooks/useAuthContext";
 
 const DashboardLayout = () => {
-    const {role} = useAuthContext();
+    const {userRole} = useAuthContext();
     return (
         <div className="flex h-screen"> 
-            {role === "admin" ? (
+            {userRole === "admin" ? (
                 <AdminDashboardSideBar />
-            ) : role === "user" ? (
+            ) : userRole === "user" ? (
                 <UserDashboardSideBar />
             ) : null}
 

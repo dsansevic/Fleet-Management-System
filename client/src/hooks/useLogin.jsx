@@ -2,7 +2,7 @@ import { useAuthContext } from "./useAuthContext";
 import { useState } from "react";
 import axios from "axios";
 
-const useLogin = (user, token, role) => {
+const useLogin = () => {
     const {dispatch} = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
@@ -17,11 +17,11 @@ const useLogin = (user, token, role) => {
             }
 
             const response = await axios.post('http://localhost:3000/user/login', userInfo);
-            const {user, token, role} = response.data;
+            const {user, token, userRole} = response.data;
 
             dispatch({
               type: 'LOGIN',
-              payload: { user, token, role },
+              payload: { userRole, token, userRole },
             });
         
             const storage = rememberMe ? localStorage : sessionStorage;

@@ -6,19 +6,19 @@ const generateToken = (user) =>
 
 
 const signUp = async (req, res) => {
-    const { firstName, lastName, email, oib, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
 
     try {
         if (!firstName || !lastName || !email || !password) {
-            return res.status(400).json({ message: 'Fill in all required fields.' });
+            return res.status(400).json({ message: 'All fields are required!.' });
         }
 
-        const newUser = new User({ firstName, lastName, email, oib, password });
+        const newUser = new User({ firstName, lastName, email, password, role });
         await newUser.save();
 
         const token = generateToken(newUser);
 
-        res.status(201).json({ message: 'Sign up successful', token, user: { id: newUser._id, firstName: newUser.firstName} });
+        res.status(201).json({ message: 'Sign up successful', token, user: { id: newUser._id, firstName: newUser.firstName}, userRole: newUser.role });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -39,16 +39,16 @@ const logIn = async (req, res) => {
       
       const token = generateToken(user);
 
-      res.status(200).json({ message: 'Login successful', token, user: { id: user._id, firstName: user.firstName }, role: user.role });
+      res.status(200).json({ message: 'Login successful', token, user: { id: user._id, firstName: user.firstName }, userRole: user.role });
 
     } catch (error) {
       res.status(500).send(error.message);
     }
 }
 
-// to check if the oib/email is taken
+// to check if the email is taken
 const checkAvailability = async (req, res) => {
-    const { email, oib } = req.body;
+    const { email } = req.body;
 
     if (email) {
         const existingUserByEmail = await User.findOne({ email });
@@ -56,14 +56,6 @@ const checkAvailability = async (req, res) => {
             return res.status(400).json({ message: 'This email is already registered. If this is your email, you can log in or reset your password.' });
         }
     }
-
-    if (oib) {
-        const existingUserByOIB = await User.findOne({ oib });
-        if (existingUserByOIB) {
-            return res.status(400).json({ message: 'It seems like this OIB is already in use. If this doesn’t seem right, please contact our support team!' });
-        }
-    }
-
     res.status(200).json({ message: 'Available' });
 }
 

@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 const initialState = {
     user: null,
     token: null,
-    role: null,
+    userRole: null,
 };
 
 export const authReducer = (state, action) => {
@@ -14,7 +14,7 @@ export const authReducer = (state, action) => {
             return {
                 user: action.payload.user,
                 token: action.payload.token,
-                role: action.payload.role,
+                userRole: action.payload.userRole,
             };
         case 'LOGOUT':
             return initialState;

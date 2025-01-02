@@ -2,13 +2,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "@hooks/useAuthContext";
 
 const PrivateRoutes = ({ requiredRole }) => {
-    const { role, token } = useAuthContext();
+    const { userRole, token } = useAuthContext();
 
     if (!token) {
         return <Navigate to="/login" />;
     }
 
-    if (requiredRole && role !== requiredRole) {
+    if (requiredRole && userRole !== requiredRole) {
         return <Navigate to="/403" />;
     }
 

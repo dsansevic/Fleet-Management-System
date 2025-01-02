@@ -8,8 +8,7 @@ function FormInputField({
   placeholder, 
   value, 
   onChange, 
-  error, 
-  required, 
+  error,  
   handleCapsLockOn
 }, ref) {
   const [showPassword, setShowPasswod] = useState(false);
@@ -17,7 +16,7 @@ function FormInputField({
   return (
     <div className="mb-2 relative">
       <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
-        {label} {label && required && <span className="text-red-500" title="This field is required">*</span>}
+        {label} {label && <span className="text-red-500" title="This field is required">*</span>}
       </label>
       <div className="relative">
         <input
@@ -28,7 +27,7 @@ function FormInputField({
           onChange={onChange}
           className={`w-full p-2 text-sm placeholder-italic  ${error ? 'border-error' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
           ref={ref}
-          required={required}
+          required
           onKeyUp={handleCapsLockOn}
           aria-required="true"
           aria-invalid={error ? "true" : "false"}

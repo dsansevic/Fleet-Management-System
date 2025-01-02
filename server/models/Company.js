@@ -13,6 +13,9 @@ const companySchema = new Schema({
         unique: true,
         match: /^\d{11}$/
     },
+    employees: [
+        { type: Schema.Types.ObjectId, ref: 'User'}
+    ]
 });
 
 module.exports = mongoose.model('Company', companySchema);

@@ -4,14 +4,12 @@ import FormInputField from "@components/form/FormInputField";
 import fleetflowLogo from '@assets/logo.png'; 
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "@contexts/AuthContext";
 
 function AdminSignUp () {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    oib: "",
     password: "",
     confirmPassword: "",
     acceptTerms: false
@@ -21,7 +19,6 @@ function AdminSignUp () {
     firstName: "",
     lastName: "",
     email: "",
-    oib:"",
     password: "",
     confirmPassword: "",
     acceptTerms: ""
@@ -49,10 +46,6 @@ function AdminSignUp () {
         regex: /^[A-Za-z\u00C0-\u00FF\u0100-\u017F]+(?:[-'\s][A-Za-z\u00C0-\u00FF\u0100-\u017F]+)*$/,
         message: "Please enter your surname."
     },
-    oib: {
-        regex: /^\d{11}$/,
-        message: "Please enter a valid OIB (11 digits)."
-    },
     password: {
         regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
         message: "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
@@ -75,9 +68,9 @@ function AdminSignUp () {
 };
   const validateInput = (name, value) => {
     let error = "";
-    if (value.trim() === "" && name != "oib") {
+    if (value.trim() === "") {
         error = "This field is required.";
-    } else if (InputRedux[name] && value.trim() !== "" && !InputRedux[name].regex.test(value)) 
+    } else if (InputRedux[name] && !InputRedux[name].regex.test(value)) 
         error = InputRedux[name].message;
 
     return error;
@@ -95,7 +88,7 @@ function AdminSignUp () {
       [name]: error
     }));
 
-    if (!error && (name === "email" || name === "oib")) {
+    if (!error && name === "email") {
       await checkAvailability(name, value);
   }
   };
@@ -126,13 +119,12 @@ function AdminSignUp () {
     }
 
     if (!Object.values(errors).some((error) => error) && formData.acceptTerms) {
-      const { firstName, lastName, email, oib, password } = formData;
+      const { firstName, lastName, email, password } = formData;
 
-      const success = await signup(firstName, lastName, email, oib || undefined, password);
+      const success = await signup(firstName, lastName, email, password, "admin");
       
       if (success)
-        navigate('/dashboard');
-              
+        navigate('/dashboard');   
     };
 }
 
@@ -158,7 +150,6 @@ function AdminSignUp () {
             onChange={handleInputChange}
             error={errors.firstName}
             ref={inputRef}
-            required={true}
           />
           <FormInputField
             label="Last name"
@@ -167,7 +158,6 @@ function AdminSignUp () {
             value={formData.lastName}
             onChange={handleInputChange}
             error={errors.lastName}
-            required={true}
           />
           <FormInputField
             label="Email"
@@ -177,22 +167,7 @@ function AdminSignUp () {
             value={formData.email}
             onChange={handleInputChange}
             error={errors.email}
-            required={true}
           />
-          <FormInputField
-            label="OIB"
-            name="oib"
-            placeholder="11 digits, optional"
-            value={formData.oib}
-            onChange={handleInputChange}
-            required={false}
-            error={errors.oib}
-          />
-          <div className="text-xs mb-2 text-gray-600 bg-gray-100 p-2 border rounded-md">
-            <p>Providing your OIB is optional, but it can significantly enhance your experience if 
-              you are connected to multiple companies, allowing you to access them without repeated logins. 
-              Rest assured, your OIB will be securely stored and processed in compliance with data protection laws (GDPR).</p>
-          </div>
           <FormInputField
             label="Password"
             name="password"
@@ -201,7 +176,6 @@ function AdminSignUp () {
             value={formData.password}
             onChange={handleInputChange}
             error={errors.password}
-            required={true}
             />
           <FormInputField
             name="confirmPassword"
@@ -210,7 +184,6 @@ function AdminSignUp () {
             value={formData.confirmPassword}
             onChange={handleInputChange}
             error={errors.confirmPassword}
-            required={true}
             />
           <div className="mb-4 flex items-center">
             <input
