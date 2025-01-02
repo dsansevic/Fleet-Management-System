@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
+import useLogin from "@hooks/UseLogin";
 import FormInputField from "@components/form/FormInputField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LogIn() {
   const [input, setInput] = useState({
@@ -10,9 +11,12 @@ function LogIn() {
   });
   const [capsLockIsOn, setCapsLockIsOn] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [logInError, setLogInError] = useState("");
+
+  const { login, isLoading, error } = useLogin();
 
   const inputRef = useRef();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -36,16 +40,10 @@ function LogIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.email && input.password) {
-      try {
-        const response = await axios.post("http://localhost:3000/user/login", input);
-        
-        const storage = rememberMe ? localStorage : sessionStorage;
-        storage.setItem("token", response.data.token);
-        console.log("Token saved:", sessionStorage.getItem("token"));
+      const success = await login(input.email, input.password, rememberMe);
 
-        console.log("Login successful");
-      } catch (error) {
-            setLogInError("Invalid email or password.");
+      if (success) {
+          navigate("/dashboard");
       }
     }
   };
@@ -56,7 +54,6 @@ function LogIn() {
         <h2 className="text-3xl font-semibold mr-2">Welcome Back!</h2>
       </div>
       <form onSubmit={handleSubmit}>
-        {logInError}
         <FormInputField
           label="Email"
           name="email"
@@ -78,7 +75,7 @@ function LogIn() {
           handleCapsLockOn={checkCapsLock}
         />
         {capsLockIsOn && (
-            <p className='text-error text-sm'>Caps Lock is ON!</p>
+            <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>
         )}
         <div className="flex justify-between items-center mb-4">
         <label htmlFor="rememberMe" className="text-sm">
@@ -98,12 +95,14 @@ function LogIn() {
             Don't have an account? <span className="text-brand-base cursor-pointer">Create one</span>
           </Link>
         </p>
+        <p className="text-error text-xs mt-1">{error}</p>
         <div className="flex justify-center items-center mt-4">
           <button
             type="submit"
             className="w-fit py-3 px-7 bg-brand-dark hover:bg-brand-light text-white rounded-md"
+            disabled={isLoading}
           >
-            Continue
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </div>
       </form>

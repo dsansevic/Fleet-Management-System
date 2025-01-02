@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import useSignup from "@hooks/useSignup";
 import FormInputField from "@components/form/FormInputField";
 import fleetflowLogo from '@assets/logo.png'; 
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "@contexts/AuthContext";
 
 function AdminSignUp () {
   const [formData, setFormData] = useState({
@@ -24,8 +26,11 @@ function AdminSignUp () {
     confirmPassword: "",
     acceptTerms: ""
   });
+
   const inputRef = useRef();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
+
+  const { signup, isLoading } = useSignup();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -98,8 +103,6 @@ function AdminSignUp () {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    setIsSubmitted(true);
-
     if (!formData.acceptTerms) {
       setErrors((prevState) => ({
         ...prevState,
@@ -123,18 +126,13 @@ function AdminSignUp () {
     }
 
     if (!Object.values(errors).some((error) => error) && formData.acceptTerms) {
-        try {
-            const response = await axios.post('http://localhost:3000/user/signup', {
-              firstName: formData.firstName,
-              lastName: formData.lastName,
-              email: formData.email,
-              oib: formData.oib || undefined,
-              password: formData.password,
-            });
-            localStorage.setItem('token', response.data.token);
-          } catch (error) {
-            console.error(error);
-          }
+      const { firstName, lastName, email, oib, password } = formData;
+
+      const success = await signup(firstName, lastName, email, oib || undefined, password);
+      
+      if (success)
+        navigate('/dashboard');
+              
     };
 }
 
@@ -235,12 +233,13 @@ function AdminSignUp () {
           <span className="text-error text-sm">{errors.acceptTerms}</span>
           <div className="flex justify-center items-center mt-4">
           <button
-            type="submit"
+            type="submit" 
             className={`w-fit py-3 px-7 ${!formData.acceptTerms || Object.values(errors).some((error) => error) || formData.password !== formData.confirmPassword
               ? "bg-gray-400 cursor-default"
               : "bg-brand-dark hover:bg-brand-base"} text-white rounded-md`}
-          >
-            Register
+            disabled={isLoading}
+            >
+                {isLoading ? "Signing in..." : "Sign up"}
           </button>
           </div>
         </form>
