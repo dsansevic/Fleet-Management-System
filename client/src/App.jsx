@@ -5,12 +5,13 @@ import AdminSignUp from '@pages/AdminSignUp';
 import LogIn from '@pages/LogIn'
 import NotFound from '@pages/NotFound';
 import DashBoard from '@pages/Dashboard';
+import ForbiddenPage from '@pages/ForbiddenPage';
 
 import PageTitle from '@utils/PageTitle';
+import PrivateRoutes from '@utils/PrivateRoutes'
 
 import RootLayout from '@layouts/RootLayout';
-
-import PrivateRoutes from '@utils/PrivateRoutes'
+import DashboardLayout from '@layouts/DashboardLayout';
 
 function App() {
 
@@ -39,10 +40,15 @@ function App() {
           </>
         }/>
 
-        {/* just for testing */}
         <Route element={<PrivateRoutes />}>
-            <Route path="/dashboard" element={<DashBoard />} />
-          </Route>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route index element={<DashBoard />} />
+                <Route path="active-reservations" element={<div>Settings Page</div>} />
+                <Route path="reports" element={<div>Reports Page</div>} />
+            </Route>
+        </Route>
+
+        <Route path="/403" element={<ForbiddenPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     )
