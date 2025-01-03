@@ -1,12 +1,12 @@
 import {createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
 
 import HomePage from '@pages/HomePage';
-import AdminSignUp from '@pages/AdminSignUp';
-import LogIn from '@pages/LogIn'
-import NotFound from '@pages/NotFound';
-import UserDashboard from '@pages/UserDashboard';
-import AdminDashboard from '@pages/AdminDashboard';
-import ForbiddenPage from '@pages/ForbiddenPage';
+import AdminSignUp from '@pages/auth/AdminSignUp';
+import LogIn from '@pages/auth/LogIn'
+import UserDashboard from '@pages/dashboard/UserDashboard';
+import AdminDashboard from '@pages/dashboard/AdminDashboard';
+import ForbiddenPage from '@pages/errors/ForbiddenPage';
+import NotFound from '@pages/errors/NotFound';
 
 import PageTitle from '@utils/PageTitle';
 import PrivateRoutes from '@utils/PrivateRoutes'

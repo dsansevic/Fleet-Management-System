@@ -8,7 +8,7 @@ import { useState } from "react";
 const UserNavbar = () => {
     const logout = useLogout();
     const {user} = useAuthContext();
-    const [menuOpen, setMenuOpen] = useState(false); // Upravljanje vidljivošću menija
+    const [menuOpen, setMenuOpen] = useState(false); 
 
     const toggleMenu = () => {
         setMenuOpen((prev) => !prev);

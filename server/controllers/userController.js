@@ -35,7 +35,6 @@ const signUp = async (req, res) => {
 }
 
 const logIn = async (req, res) => {
-  console.log("U login header")
     const { email, password } = req.body;
 
     try {
@@ -68,7 +67,6 @@ const logIn = async (req, res) => {
 }
 
 const logout = (req, res) => {
-  console.log("Jel islo u logout provi")
     res.clearCookie("accessToken");
     res.status(200).json({ message: "Logged out successfully" });
 };

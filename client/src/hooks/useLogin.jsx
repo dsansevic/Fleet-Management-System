@@ -12,8 +12,6 @@ const useLogin = () => {
 
         try {
             const response = await apiClient.post("/user/login", { email, password });
-            // const response = await apiClient.get("/user/verify-session");
-            console.log(response.data.user, "u useloginu")
             dispatch({ type: "LOGIN", payload: response.data.user });
             setIsLoading(false); 
             return true;
