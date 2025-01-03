@@ -40,8 +40,7 @@ function LogIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.email && input.password) {
-      const success = await login(input.email, input.password, rememberMe);
-
+      const success = await login(input.email, input.password);
       if (success) {
           navigate("/dashboard");
       }

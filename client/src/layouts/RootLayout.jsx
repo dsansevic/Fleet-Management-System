@@ -5,10 +5,10 @@ import GuestNavbar from '@components/navigations/GuestNavbar';
 import UserNavbar from '@components/navigations/UserNavbar';
 
 function RootLayout() {
-  const {userRole } = useAuthContext();
+  const {user } = useAuthContext();
 
   const userBasedNavbar = () => {
-    if (!userRole) {
+    if (!user ) {
         return <GuestNavbar />;
     }
     return <UserNavbar />;

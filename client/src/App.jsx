@@ -4,7 +4,8 @@ import HomePage from '@pages/HomePage';
 import AdminSignUp from '@pages/AdminSignUp';
 import LogIn from '@pages/LogIn'
 import NotFound from '@pages/NotFound';
-import DashBoard from '@pages/Dashboard';
+import UserDashboard from '@pages/UserDashboard';
+import AdminDashboard from '@pages/AdminDashboard';
 import ForbiddenPage from '@pages/ForbiddenPage';
 
 import PageTitle from '@utils/PageTitle';
@@ -13,7 +14,10 @@ import PrivateRoutes from '@utils/PrivateRoutes'
 import RootLayout from '@layouts/RootLayout';
 import DashboardLayout from '@layouts/DashboardLayout';
 
+import { useAuthContext } from '@hooks/useAuthContext';
+
 function App() {
+  const {user} = useAuthContext();
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -42,7 +46,14 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
-                <Route index element={<DashBoard />} />
+                <Route index element={
+                            user?.role === "admin" ? (
+                                <AdminDashboard />
+                            ) : (
+                                <UserDashboard />
+                            )
+                        }
+                />
                 <Route path="active-reservations" element={<div>Settings Page</div>} />
                 <Route path="reports" element={<div>Reports Page</div>} />
             </Route>

@@ -1,16 +1,21 @@
 const express = require("express");
 const cors = require("cors")
 const mongoose = require('mongoose');
+const cookieParser = require("cookie-parser");
 
 const userRoutes = require("./routes/user");
+const errorHandler = require("./middleware/errorHandler")
+require('dotenv').config();
 
 const app = express();
-app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cookieParser());
 app.set('case sensitive routing', true);
 
-require('dotenv').config();
+
 mongoose.connect(process.env.DATABASE_URI);
 
 const db = mongoose.connection;
@@ -27,6 +32,8 @@ app.use("/user", userRoutes);
 app.use((req, res) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found.` });
 });
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

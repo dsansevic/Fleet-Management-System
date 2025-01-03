@@ -1,35 +1,20 @@
 import { useAuthContext } from "./useAuthContext";
 import { useState } from "react";
-import axios from "axios";
+import apiClient from "@api/apiClient";
 
 const useSignup = () => {
-
     const {dispatch} = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
 
-    const signup = async (firstName, lastName, email, password, role) => {
+    const signup = async (firstName, lastName, email, password, userRoleProp) => {
         setIsLoading(true);
 
         try {
-            const userInfo = {
-                firstName,
-                lastName,
-                email,
-                password,
-                role
-            };
-
-            const response = await axios.post('http://localhost:3000/user/signup', userInfo);
-            const {user, token, userRole} = response.data;
-            
-            dispatch({
-              type: 'LOGIN',
-              payload: { user, token, userRole },
-            });
-        
-            localStorage.setItem('token', token);
+            await apiClient.post("/user/signup", { firstName, lastName, email, password, role: userRoleProp });
+            const response = await apiClient.get("/user/verify-session"); 
+      
+            dispatch({ type: "LOGIN", payload: response.data }); 
             setIsLoading(false);
-
             return true;
               
         } catch (error) {
