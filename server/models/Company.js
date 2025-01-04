@@ -13,6 +13,10 @@ const companySchema = new Schema({
         unique: true,
         match: /^\d{11}$/
     },
+    admin: { 
+        type: Schema.Types.ObjectId, ref: 'User',
+        required: true,
+    },
     employees: [
         { type: Schema.Types.ObjectId, ref: 'User'}
     ]

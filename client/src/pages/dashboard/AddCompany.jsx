@@ -2,6 +2,7 @@ import { useState } from "react";
 import FormInputField from "@components/form/FormInputField"
 import SubmitButton from "@components/form/SubmitButton";
 import { validateField } from "@utils/inputValidation"
+import apiClient from "@api/apiClient";
 
 const AddCompany = () => {
     const [name, setName] = useState("");
@@ -14,14 +15,36 @@ const AddCompany = () => {
         setNameError(validateField("name", e.target.value));
     }
     
-    const handleOibChange = (e) => {
+    const handleOibChange = async (e) => {
         setOib(e.target.value);
         setOibError(validateField("oib", e.target.value));
+
+        await checkAvailability(e.target.value);
     }
 
-    const handleSubmit = (e) => {
+    const checkAvailability = async (value) => {
+        try {
+            const response = await apiClient.post('http://localhost:3000/company/check-availability', {
+                oib: value,
+            });
+        } catch (error) {
+            if (error.response && error.response.status === 400)
+                setOibError(error.response.data.message)
+            }
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(name, oib);
+
+        if (isSubmitDisabled) return
+
+        try {
+            const response = await apiClient.post("/company/add-company", { name, oib });
+            setName("")
+            setOib("");
+        } catch (error) {
+            console.log(error)
+        } 
     }
 
     const isSubmitDisabled = !name || !oib || nameError || oibError;

@@ -39,13 +39,13 @@ function AdminSignUp () {
   const checkAvailability = async (value) => {
     try {
         const response = await axios.post('http://localhost:3000/user/check-availability', {
-            oib: value,
+            email: value,
         });
     } catch (error) {
         if (error.response && error.response.status === 400) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                oib: error.response.data.message,
+                email: error.response.data.message,
             }));
         }
     }
