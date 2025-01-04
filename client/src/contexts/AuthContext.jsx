@@ -34,8 +34,7 @@ export const AuthContextProvider = ({ children }) => {
       const fetchUser = async () => {
         try {
           const response = await apiClient.get("/user/verify-session");
-          dispatch({ type: "LOGIN", payload: response.data });
-          console.log(response.data, "auth.context")
+          dispatch({ type: "LOGIN", payload: response.data.user });
         } catch {
           dispatch({ type: "AUTH_LOADED" });
         }

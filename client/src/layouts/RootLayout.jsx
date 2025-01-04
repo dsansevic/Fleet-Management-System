@@ -15,11 +15,11 @@ function RootLayout() {
   };
 
   return (
-    <div>
-        {userBasedNavbar()}
-        <main>
-            <Outlet />
-        </main>
+    <div className="flex flex-col h-screen">
+      {userBasedNavbar()}
+      <main className="flex-1 overflow-hidden">
+        <Outlet />
+      </main>
     </div>
   );
 }

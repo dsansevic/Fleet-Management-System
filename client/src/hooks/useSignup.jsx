@@ -10,10 +10,9 @@ const useSignup = () => {
         setIsLoading(true);
 
         try {
-            await apiClient.post("/user/signup", { firstName, lastName, email, password, role: userRoleProp });
-            const response = await apiClient.get("/user/verify-session"); 
+            const response = await apiClient.post("/user/signup", { firstName, lastName, email, password, role: userRoleProp });
       
-            dispatch({ type: "LOGIN", payload: response.data }); 
+            dispatch({ type: "LOGIN", payload: response.data.user });
             setIsLoading(false);
             return true;
               

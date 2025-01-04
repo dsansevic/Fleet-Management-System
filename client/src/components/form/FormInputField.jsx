@@ -9,14 +9,23 @@ function FormInputField({
   value, 
   onChange, 
   error,  
-  handleCapsLockOn
+  onCapsLock
 }, ref) {
   const [showPassword, setShowPasswod] = useState(false);
+
+
+  const handleKeyUp = (e) => {
+    if (onCapsLock && e.getModifierState('CapsLock')) {
+      onCapsLock(true);
+    } else if (onCapsLock) {
+      onCapsLock(false);
+    }
+  };
 
   return (
     <div className="mb-2 relative">
       <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
-        {label} {label && <span className="text-red-500" title="This field is required">*</span>}
+        {label} {label && <span className="text-error" title="This field is required">*</span>}
       </label>
       <div className="relative">
         <input
@@ -25,10 +34,10 @@ function FormInputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-full p-2 text-sm placeholder-italic  ${error ? 'border-error' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
+          className={`w-96 p-2 text-sm placeholder-italic  ${error ? 'border-error' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
           ref={ref}
           required
-          onKeyUp={handleCapsLockOn}
+          onKeyUp={handleKeyUp}
           aria-required="true"
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${name}-error` : undefined}

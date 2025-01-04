@@ -13,9 +13,8 @@ const UserNavbar = () => {
     const toggleMenu = () => {
         setMenuOpen((prev) => !prev);
     };
-
     return (
-        <div className="border-b sticky top-0  border-lightgreen bg-white z-50 ">
+        <div className="border-b sticky top-0  border-lightgreen bg-white z-20 ">
             <nav className="container mx-auto px-64 py-2 flex items-center justify-between">
                 <NavLink to="/dashboard">
                 <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-12 w-auto " />

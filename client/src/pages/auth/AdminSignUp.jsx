@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import useSignup from "@hooks/useSignup";
 import FormInputField from "@components/form/FormInputField";
+import SubmitButton from "@components/form/SubmitButton";
 import fleetflowLogo from '@assets/logo.png'; 
+import { validateField } from "@utils/inputValidation";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,6 +25,7 @@ function AdminSignUp () {
     confirmPassword: "",
     acceptTerms: ""
   });
+  const [capsLockIsOn, setCapsLockIsOn] = useState(false);
 
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -33,47 +36,19 @@ function AdminSignUp () {
     inputRef.current?.focus();
   }, []);
 
-  const InputRedux = {
-    email: {
-        regex: /^\S+@\S+\.\S+$/,
-        message: "Email must be in format username@domain.tld."
-    },
-    firstName: {
-        regex: /^[A-Za-z\u00C0-\u00FF\u0100-\u017F]+(?:[-'\s][A-Za-z\u00C0-\u00FF\u0100-\u017F]+)*$/,
-        message: "Please enter your first name."
-      },      
-    lastName: {
-        regex: /^[A-Za-z\u00C0-\u00FF\u0100-\u017F]+(?:[-'\s][A-Za-z\u00C0-\u00FF\u0100-\u017F]+)*$/,
-        message: "Please enter your surname."
-    },
-    password: {
-        regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-        message: "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
-    }
-  };
-
-  const checkAvailability = async (field, value) => {
+  const checkAvailability = async (value) => {
     try {
         const response = await axios.post('http://localhost:3000/user/check-availability', {
-            [field]: value,
+            oib: value,
         });
     } catch (error) {
         if (error.response && error.response.status === 400) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                [field]: error.response.data.message,
+                oib: error.response.data.message,
             }));
         }
     }
-};
-  const validateInput = (name, value) => {
-    let error = "";
-    if (value.trim() === "") {
-        error = "This field is required.";
-    } else if (InputRedux[name] && !InputRedux[name].regex.test(value)) 
-        error = InputRedux[name].message;
-
-    return error;
   };
 
   const handleInputChange = async (e) => {
@@ -82,51 +57,56 @@ function AdminSignUp () {
     const newValue = type === "checkbox" ? checked : value;
     setFormData((prev) => ({ ...prev, [name]: newValue }));
 
-    const error = validateInput(name, value);
+    const error = validateField(name, value);
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: error
     }));
 
+    if (name === "password" || name === "confirmPassword") {
+      const passwordsMismatch =
+          (name === "password" && formData.confirmPassword && value !== formData.confirmPassword) ||
+          (name === "confirmPassword" && value !== formData.password);
+
+      setErrors((prevErrors) => ({
+          ...prevErrors,
+          confirmPassword: passwordsMismatch ? "Passwords do not match." : ""
+      }));
+    }
+    
     if (!error && name === "email") {
-      await checkAvailability(name, value);
-  }
+      await checkAvailability(value);
+    }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!formData.acceptTerms) {
-      setErrors((prevState) => ({
-        ...prevState,
-        acceptTerms: "You must accept the terms and conditions."
-      }));
-      return;
-    } 
-    else {
-      setErrors((prevState) => ({
-        ...prevState,
-        acceptTerms: ""
-      }));
-    }
+    setErrors((prevState) => ({
+      ...prevState,
+      acceptTerms: formData.acceptTerms
+        ? ""
+        : "You must accept the terms and conditions."
+    }));
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        confirmPassword: "Passwords do not match."
-      }));
-      return;
-    }
+    if (notReadyToSend) return 
+    
+    const { firstName, lastName, email, password } = formData;
 
-    if (!Object.values(errors).some((error) => error) && formData.acceptTerms) {
-      const { firstName, lastName, email, password } = formData;
+    const success = await signup(firstName, lastName, email, password, "admin");
+    
+    if (success)
+      navigate('/dashboard');   
+  }
+  const handleCapsLock = (isCapsOn) => {
+    setCapsLockIsOn(isCapsOn);
+  };
 
-      const success = await signup(firstName, lastName, email, password, "admin");
-      
-      if (success)
-        navigate('/dashboard');   
-    };
-}
+  const hasErrors = Object.values(errors).some((error) => error);
+  const hasEmptyFields = Object.values(formData).some((value) => value === "");
+  const passwordsMismatch = formData.password !== formData.confirmPassword;
+  const isSubmitDisabled = hasErrors || hasEmptyFields || passwordsMismatch;
+  const notReadyToSend = isSubmitDisabled || !formData.acceptTerms
 
   return (
     <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
@@ -176,6 +156,7 @@ function AdminSignUp () {
             value={formData.password}
             onChange={handleInputChange}
             error={errors.password}
+            onCapsLock={handleCapsLock}
             />
           <FormInputField
             name="confirmPassword"
@@ -184,7 +165,11 @@ function AdminSignUp () {
             value={formData.confirmPassword}
             onChange={handleInputChange}
             error={errors.confirmPassword}
+            onCapsLock={handleCapsLock}
             />
+          {capsLockIsOn && (
+            <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>
+          )}
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"
@@ -200,20 +185,14 @@ function AdminSignUp () {
                 // onClick={() => setShowTermsLink(!showTermsLink)}
               >
                 terms and conditions
-              </span>.
+              </span>.  <span className="text-error" title="This field is required">*</span>
             </label>
           </div>
-          <span className="text-error text-sm">{errors.acceptTerms}</span>
+          <p className="text-error text-sm">{errors.acceptTerms}</p>
           <div className="flex justify-center items-center mt-4">
-          <button
-            type="submit" 
-            className={`w-fit py-3 px-7 ${!formData.acceptTerms || Object.values(errors).some((error) => error) || formData.password !== formData.confirmPassword
-              ? "bg-gray-400 cursor-default"
-              : "bg-brand-dark hover:bg-brand-base"} text-white rounded-md`}
-            disabled={isLoading}
-            >
-                {isLoading ? "Signing in..." : "Sign up"}
-          </button>
+            <SubmitButton readyToSend={notReadyToSend}>
+              {isLoading ? "Signing in..." : "Sign up"}
+            </SubmitButton>
           </div>
         </form>
       </div>

@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require('jsonwebtoken');
 
 const generateToken = (user) =>
-    jwt.sign({ id: user._id, role: user.role}, process.env.JWT_SECRET, { expiresIn: '1h' });
+    jwt.sign({ id: user._id, role: user.role, firstName: user.firstName}, process.env.JWT_SECRET, { expiresIn: '1h' });
 
 
 const signUp = async (req, res) => {
@@ -77,7 +77,10 @@ const verifySession = (req, res) => {
       if (!token) return res.status(401).json({ message: "Unauthorized" });
 
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      res.status(200).json({ id: decodedToken.id, firstName: decodedToken.firstName, role: decodedToken.role });
+      console.log(decodedToken)
+      res.status(200).json({
+        message: 'Authorised',
+        user: { id: decodedToken.id, firstName: decodedToken.firstName, role: decodedToken.role }});
   } catch (error) {
       res.status(401).json({ message: "Unauthorized" });
   }
