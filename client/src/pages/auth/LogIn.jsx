@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import useLogin from "@hooks/UseLogin";
 import FormInputField from "@components/form/FormInputField";
-import SubmitButton from "@components/form/SubmitButton";
+import SubmitButton from "@components/ui/SubmitButton";
 import { Link, useNavigate } from "react-router-dom";
 
 function LogIn() {
@@ -72,7 +72,7 @@ function LogIn() {
         )}
         <span className="text-brand-base text-sm cursor-pointer">Forgot your password?</span>
         <p className="text-center mb-4">
-          <Link to="/register">
+          <Link to="/signup">
             Don't have an account? <span className="text-brand-base cursor-pointer">Create one</span>
           </Link>
         </p>

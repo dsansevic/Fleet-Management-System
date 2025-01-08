@@ -1,6 +1,6 @@
 import { useAuthContext } from "./useAuthContext";
 import { useNavigate } from "react-router-dom";
-import apiClient from "@api/apiClient";
+import  { apiClient } from "@api/apiClient";
 
 const useLogout = () => {
     const {dispatch} = useAuthContext();
@@ -10,7 +10,7 @@ const useLogout = () => {
         await apiClient.post("/user/logout");
         dispatch({ type: "LOGOUT" }); 
 
-        navigate("/login");
+        navigate("/login", { replace: true });
       } catch (error) {
         console.error("Failed to log out:", error);
       }

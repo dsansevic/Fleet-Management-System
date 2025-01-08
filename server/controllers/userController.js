@@ -1,9 +1,17 @@
 const User = require("../models/User");
+const Company = require("../models/Company");
+const mongoose = require('mongoose');
+
 const jwt = require('jsonwebtoken');
 
 const generateToken = (user) =>
-    jwt.sign({ id: user._id, role: user.role, firstName: user.firstName}, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    jwt.sign({ 
+      id: user._id, 
+      role: user.role, 
+      firstName: user.firstName, 
+      companyId: user.company
+    }, 
+    process.env.JWT_SECRET, { expiresIn: '1h' });
 
 const signUp = async (req, res) => {
     const { firstName, lastName, email, password, role } = req.body;
@@ -28,17 +36,70 @@ const signUp = async (req, res) => {
             message: 'Sign up successful',
             user: { id: newUser._id, firstName: newUser.firstName, role: newUser.role },
         });
-
-    } catch (error) {
-        res.status(500).send(error.message);
     }
+    catch (error) {
+      console.error('Error during sign up:', error);
+      return res.status(500).json({ message: 'An unexpected error occurred. Please try again later.' });
+    }
+}
+
+const userCompanySignUp = async (req, res) => {
+  const { firstName, lastName, email, password, companyName } = req.body;
+
+  let newUser = null;
+  let newCompany = null;
+  
+  try {
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      role: 'admin'
+    });
+    await newUser.save();
+    
+    const newCompany = new Company({
+      name: companyName,
+      admin: newUser._id,
+    });
+    await newCompany.save();
+
+    newUser.company = newCompany._id;
+    await newUser.save();
+    
+    const token = generateToken(newUser);
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      maxAge: 3600000,
+      sameSite: 'strict',
+      secure: false,
+    });
+  
+    res.status(201).json({
+      message: 'Sign up successful',
+      user: { id: newUser._id, firstName: newUser.firstName, role: newUser.role, companyId: newUser.company },
+  });
+
+  } catch (error) {
+
+    if (newUser?._id) {
+      await User.findByIdAndDelete(newUser._id);
+    }
+    if (newCompany?._id) {
+      await Company.findByIdAndDelete(newCompany._id);
+    }
+    res.status(500).json({
+      message: 'Something went wrong. Please try again.',
+      error: error.message,
+    });
+  }
 }
 
 const logIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-
       const user = await User.findOne({ email });
       if (!user) 
         return res.status(400).json({ message:'Invalid credentials'})
@@ -58,7 +119,7 @@ const logIn = async (req, res) => {
 
       res.status(201).json({
           message: 'Login successful',
-          user: { id: user._id, firstName: user.firstName, role: user.role }
+          user: { id: user._id, firstName: user.firstName, role: user.role, companyId: user.company }
       });
 
     } catch (error) {
@@ -74,15 +135,23 @@ const logout = (req, res) => {
 const verifySession = (req, res) => {
   try {
       const token = req.cookies.accessToken;
-      if (!token) return res.status(401).json({ message: "Unauthorized" });
+      if (!token) {
+        return res.status(401).json({ message: 'You are not logged in. Please log in to continue.' });      }
 
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decodedToken)
+
       res.status(200).json({
         message: 'Authorised',
-        user: { id: decodedToken.id, firstName: decodedToken.firstName, role: decodedToken.role }});
+        user: { id: decodedToken.id, firstName: decodedToken.firstName, role: decodedToken.role, companyId: decodedToken.company }});
+
   } catch (error) {
-      res.status(401).json({ message: "Unauthorized" });
+    console.error('Session verification error:', error);
+
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Your login has expired. Please log in again.' });
+    } else {
+      return res.status(401).json({ message: 'Your login is invalid. Please log in again.' });
+    }
   }
 };
 
@@ -99,4 +168,4 @@ const checkAvailability = async (req, res) => {
     res.status(200).json({ message: 'Available' });
 }
 
-module.exports = {signUp, logIn, logout, verifySession, checkAvailability}
+module.exports = {signUp, userCompanySignUp, logIn, logout, verifySession, checkAvailability}

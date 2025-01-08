@@ -1,5 +1,5 @@
 import { createContext, useReducer, useEffect } from 'react';
-import apiClient from '@api/apiClient'
+import {apiClient} from '@api/apiClient'
 
 export const AuthContext = createContext();
 
@@ -31,17 +31,17 @@ export const AuthContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
   
     useEffect(() => {
-      const fetchUser = async () => {
-        try {
-          const response = await apiClient.get("/user/verify-session");
-          dispatch({ type: "LOGIN", payload: response.data.user });
-        } catch {
-          dispatch({ type: "AUTH_LOADED" });
-        }
-      };
-  
-      fetchUser();
-    }, []);
+        const fetchUser = async () => {
+          try {
+            const response = await apiClient.get("/user/verify-session");
+            dispatch({ type: "LOGIN", payload: response.data.user });
+          } catch {
+            dispatch({ type: "AUTH_LOADED" });
+          }
+        };
+      
+        fetchUser();
+      }, [dispatch]);
 
     return (
         <AuthContext.Provider value={{ ...state, dispatch }}>

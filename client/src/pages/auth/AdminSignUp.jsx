@@ -1,202 +1,154 @@
-import { useState, useEffect, useRef, useContext } from "react";
-import useSignup from "@hooks/useSignup";
-import FormInputField from "@components/form/FormInputField";
-import SubmitButton from "@components/form/SubmitButton";
-import fleetflowLogo from '@assets/logo.png'; 
+import FormInputField from "@components/form/FormInputField"
 import { validateField } from "@utils/inputValidation";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import SubmitButton from "@components/ui/SubmitButton";
+import { useState, useRef, useEffect } from "react";
+import {publicApiClient} from '@api/apiClient'
 
-function AdminSignUp () {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: false
-  });
+function AdminSignUp({ userData, setUserData, onNext }) {
 
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: ""
-  });
-  const [capsLockIsOn, setCapsLockIsOn] = useState(false);
+    const [userErrors, setUserErrors] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+    
+    const [capsLockIsOn, setCapsLockIsOn] = useState(false);
+    const [errorAlert, setErrorAlert] = useState("");
+    const inputRef = useRef();
 
-  const inputRef = useRef();
-  const navigate = useNavigate();
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
-  const { signup, isLoading } = useSignup();
+    const handleCapsLock = (isCapsOn) => setCapsLockIsOn(isCapsOn);  
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    const hasErrors = Object.values(userErrors).some((error) => error);
+    const hasEmptyFields = Object.values(userData).some((value) => value === "");
+    const isSubmitDisabled = hasErrors || hasEmptyFields
 
-  const checkAvailability = async (value) => {
-    try {
-        const response = await axios.post('http://localhost:3000/user/check-availability', {
-            email: value,
-        });
-    } catch (error) {
-        if (error.response && error.response.status === 400) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: error.response.data.message,
+    const handleInputChange = async (e) => {
+        const { name, value } = e.target;
+        
+        setUserData((prev) => ({ ...prev, [name]: value }));
+
+        const error = validateField(name, value);
+        setUserErrors((prev) => ({ ...prev, [name]: error }));
+        
+        if (name === "password" || name === "confirmPassword") {
+            const passwordsMismatch =
+                (name === "password" && userData.confirmPassword && value !== userData.confirmPassword) ||
+                (name === "confirmPassword" && value !== userData.password);
+
+            setUserErrors((prev) => ({
+                ...prev,
+                confirmPassword: passwordsMismatch ? "Passwords do not match." : "",
             }));
         }
-    }
-  };
 
-  const handleInputChange = async (e) => {
-    const { name, value, type, checked } = e.target;
+        if (name === "email" && !error) {
+            await checkAvailability(value);
+        }
+    };
 
-    const newValue = type === "checkbox" ? checked : value;
-    setFormData((prev) => ({ ...prev, [name]: newValue }));
+    const checkAvailability = async (value) => {
+        try {
+            await publicApiClient.post('/user/check-availability', {
+                email: value });
+        } catch (error) {
+            if (error.response?.status === 400) {
+                setUserErrors((prev) => ({
+                    ...prev,
+                    email: error.response.data.message,
+                }));
+            }
+        }
+    };
 
-    const error = validateField(name, value);
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error
-    }));
+    const handleNext = (e) => {
+        e.preventDefault();
 
-    if (name === "password" || name === "confirmPassword") {
-      const passwordsMismatch =
-          (name === "password" && formData.confirmPassword && value !== formData.confirmPassword) ||
-          (name === "confirmPassword" && value !== formData.password);
+        const hasErrors = Object.values(userErrors).some((error) => error);
+        if (hasErrors) {
+            setErrorAlert("Please fix all errors before proceeding.");
+            setTimeout(() => {
+                setErrorAlert("");
+              }, "3000");
+            return;
+        }
+            
 
-      setErrors((prevErrors) => ({
-          ...prevErrors,
-          confirmPassword: passwordsMismatch ? "Passwords do not match." : ""
-      }));
-    }
-    
-    if (!error && name === "email") {
-      await checkAvailability(value);
-    }
-  };
+        onNext();
+    };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+    return (
+        <div className="flex gap-9 p-6 bg-white rounded-lg shadow-md">
+            <div className="w-full md:w-2/5 mb-6 bg-background p-4 rounded-lg border-l-4 border-brand-dark">
+                <h2 className="font-bold text-brand-dark text-xl">STEP 1: Sign up</h2>
+                <p className="text-gray-700 mt-2">
+                    Let's start by setting up your account.
+                    Once you've completed this step, you'll move on to adding your company details.
+                </p>
+            </div>
 
-    setErrors((prevState) => ({
-      ...prevState,
-      acceptTerms: formData.acceptTerms
-        ? ""
-        : "You must accept the terms and conditions."
-    }));
+            <form onSubmit={handleNext} className="w-full md:w-3/5">
+                <FormInputField
+                    label="First Name"
+                    name="firstName"
+                    placeholder="Enter your first name"
+                    value={userData.firstName}
+                    onChange={handleInputChange}
+                    error={userErrors.firstName}
+                    ref={inputRef}
+                />
+                <FormInputField
+                    label="Last Name"
+                    name="lastName"
+                    placeholder="Enter your last name"
+                    value={userData.lastName}
+                    onChange={handleInputChange}
+                    error={userErrors.lastName}
+                />
+                <FormInputField
+                    label="Email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={userData.email}
+                    onChange={handleInputChange}
+                    error={userErrors.email}
+                />
+                <FormInputField
+                    label="Password"
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={userData.password}
+                    onChange={handleInputChange}
+                    error={userErrors.password}
+                    onCapsLock={handleCapsLock}
+                />
+                {capsLockIsOn && (
+                    <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>)}
 
-    if (notReadyToSend) return 
-    
-    const { firstName, lastName, email, password } = formData;
-
-    const success = await signup(firstName, lastName, email, password, "admin");
-    
-    if (success)
-      navigate('/dashboard');   
-  }
-  const handleCapsLock = (isCapsOn) => {
-    setCapsLockIsOn(isCapsOn);
-  };
-
-  const hasErrors = Object.values(errors).some((error) => error);
-  const hasEmptyFields = Object.values(formData).some((value) => value === "");
-  const passwordsMismatch = formData.password !== formData.confirmPassword;
-  const isSubmitDisabled = hasErrors || hasEmptyFields || passwordsMismatch;
-  const notReadyToSend = isSubmitDisabled || !formData.acceptTerms
-
-  return (
-    <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
-       <div className="flex items-center justify-center mb-2">
-          <h1 className="text-3xl font-semibold mr-2">Sign up to </h1>
-          <Link to="/" >
-            <img src={fleetflowLogo} alt="FleetFlow" className="w-40 cursor-pointer" />
-          </Link>
+                <FormInputField
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Re-enter your password"
+                    value={userData.confirmPassword}
+                    onChange={handleInputChange}
+                    error={userErrors.confirmPassword}
+                    onCapsLock={handleCapsLock}
+                />
+                <div className="text-center mb-2">
+                    <p className='text-error text-sm mt-1'>{errorAlert}</p>
+                    <SubmitButton readyToSend={isSubmitDisabled}>
+                                            Continue
+                    </SubmitButton>
+                </div>
+            </form>
         </div>
-        <p className="text-center mb-2">Already have an account? 
-        <Link to="/login">
-          <span className="text-brand-base cursor-pointer"> Log in</span>
-        </Link>
-        </p>
-        <form onSubmit={handleRegister}>
-          <FormInputField
-            label="First name"
-            name="firstName"
-            placeholder="Enter your first name"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            error={errors.firstName}
-            ref={inputRef}
-          />
-          <FormInputField
-            label="Last name"
-            name="lastName"
-            placeholder="Enter your last name"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            error={errors.lastName}
-          />
-          <FormInputField
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="e.g. john.doe@example.com"
-            value={formData.email}
-            onChange={handleInputChange}
-            error={errors.email}
-          />
-          <FormInputField
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="Use strong password"
-            value={formData.password}
-            onChange={handleInputChange}
-            error={errors.password}
-            onCapsLock={handleCapsLock}
-            />
-          <FormInputField
-            name="confirmPassword"
-            type="password"
-            placeholder="Re-enter your password"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            error={errors.confirmPassword}
-            onCapsLock={handleCapsLock}
-            />
-          {capsLockIsOn && (
-            <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>
-          )}
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              name="acceptTerms"
-              checked={formData.acceptTerms}
-              onChange={handleInputChange}
-              className="mr-2"
-            />
-            <label className="text-sm">
-              I agree to the{" "}
-              <span
-                className="text-brand-base cursor-pointer"
-                // onClick={() => setShowTermsLink(!showTermsLink)}
-              >
-                terms and conditions
-              </span>.  <span className="text-error" title="This field is required">*</span>
-            </label>
-          </div>
-          <p className="text-error text-sm">{errors.acceptTerms}</p>
-          <div className="flex justify-center items-center mt-4">
-            <SubmitButton readyToSend={notReadyToSend}>
-              {isLoading ? "Signing in..." : "Sign up"}
-            </SubmitButton>
-          </div>
-        </form>
-      </div>
-  );
-};
-
+    );
+}
 export default AdminSignUp;

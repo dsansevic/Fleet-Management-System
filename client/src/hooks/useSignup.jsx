@@ -1,6 +1,6 @@
 import { useAuthContext } from "./useAuthContext";
 import { useState } from "react";
-import apiClient from "@api/apiClient";
+import { apiClient } from "@api/apiClient";
 
 const useSignup = () => {
     const {dispatch} = useAuthContext();

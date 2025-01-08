@@ -7,12 +7,6 @@ const companySchema = new Schema({
         trim: true, 
         required: true 
     },
-    oib: {
-        type: String,
-        required: true,
-        unique: true,
-        match: /^\d{11}$/
-    },
     admin: { 
         type: Schema.Types.ObjectId, ref: 'User',
         required: true,

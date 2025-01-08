@@ -2,11 +2,11 @@ const express = require("express");
 const cors = require("cors")
 const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
-
-const userRoutes = require("./routes/user");
-const vehicleRoutes = require("./routes/company")
 const errorHandler = require("./middleware/errorHandler")
 require('dotenv').config();
+
+const userRoutes = require("./routes/user");
+// const companyRoutes = require("./routes/company")
 
 const app = express();
 app.use(express.json());
@@ -30,7 +30,7 @@ db.once('open', function() {
 
 app.use("/user", userRoutes);
 
-app.use("/company", vehicleRoutes);
+// app.use("/company", companyRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found.` });

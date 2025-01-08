@@ -14,7 +14,9 @@ export default defineConfig({
         "@layouts": path.resolve(__dirname, "src/layouts"),
         "@contexts": path.resolve(__dirname, "src/contexts"),
         "@hooks": path.resolve(__dirname, "src/hooks"),
-        "@api": path.resolve(__dirname, "src/api")
+        "@api": path.resolve(__dirname, "src/api"),
+        "@auth": path.resolve(__dirname, "src/auth")
+
     },
   },
 })

@@ -1,13 +1,19 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ForbiddenImage from '@assets/forbidden.png';
+import { useAuthContext } from "@hooks/useAuthContext";
 
 const ForbiddenPage = () => {
     const navigate = useNavigate();
+    const { user } = useAuthContext();
 
+    let page = user?.role === "admin" ? "dashboard" : "home page"
+    
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate("/");
+            if (user?.role === "admin")
+                navigate("/dashboard");
+            else navigate("/")
         }, 5000);
 
         return () => clearTimeout(timer);
@@ -25,7 +31,7 @@ const ForbiddenPage = () => {
             </h1>
             <p className="text-lg text-gray-600 mb-8">
                 You don’t have permission to access this page. <br />
-                Redirecting you to the home page in 5 seconds...
+                Redirecting you to {page} in 5 seconds...
             </p>
         </div>
     );

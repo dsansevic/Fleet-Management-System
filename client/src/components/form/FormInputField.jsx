@@ -11,8 +11,7 @@ function FormInputField({
   error,  
   onCapsLock
 }, ref) {
-  const [showPassword, setShowPasswod] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleKeyUp = (e) => {
     if (onCapsLock && e.getModifierState('CapsLock')) {
@@ -23,10 +22,11 @@ function FormInputField({
   };
 
   return (
-    <div className="mb-2 relative">
+    <div className="mb-4 relative w-full">
       <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
         {label} {label && <span className="text-error" title="This field is required">*</span>}
       </label>
+
       <div className="relative">
         <input
           type={type === "password" && showPassword ? "text" : type}
@@ -34,7 +34,9 @@ function FormInputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-96 p-2 text-sm placeholder-italic  ${error ? 'border-error' : 'border-gray-300'} border rounded-md pr-10`} // pr-10 dodaje prostor za ikonu
+          className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-md pr-10
+            ${error ? 'border-error' : 'border-gray-300'} 
+            border focus:outline-none focus:ring focus:ring-brand-light`}
           ref={ref}
           required
           onKeyUp={handleKeyUp}
@@ -45,14 +47,15 @@ function FormInputField({
         {type === "password" && (
           <button
             type="button"
-            onClick={() => setShowPasswod(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
           >
             {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         )}
       </div>
-      {error && <p className="text-error text-xs mt-1">{error}</p>}
+
+      {error && <p id={`${name}-error`} className="text-error text-xs mt-1">{error}</p>}
     </div>
   );
 }
