@@ -18,7 +18,20 @@ const registerEmployee = async (req, res) => {
 
     try {
         if (!firstName || !lastName || !email || !password) {
-            return res.status(400).json({ message: 'All fields are required!.' });
+            return res.status(400).json({ message: 'All fields are required!' });
+        }
+        const companyId = req.cookies.companyId;
+
+        if (!companyId) {
+            return res.status(400).json({ message: 'Company ID is required in cookies!' });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(companyId)) {
+            return res.status(400).json({ message: 'Invalid company ID!' });
+        }
+        const company = await Company.findById(companyId);
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found!' });
         }
 
         const newUser = new User({
@@ -26,14 +39,24 @@ const registerEmployee = async (req, res) => {
           lastName,
           email,
           password,
-          role: 'employee'
+          role: 'employee',
+          company: companyId
         });
         await newUser.save();
 
-        res.status(201).json({
-            message: 'Sign up successful',
-            user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email },
-        });
+        try {
+          company.employees.push(newUser._id);
+          await company.save();
+
+          res.status(201).json({
+              message: 'Employee registered successfully',
+              user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email },
+          });
+        } catch (companyError) {
+            await newUser.remove();
+            console.error('Error updating company:', companyError);
+            return res.status(500).json({ message: 'Failed to update company. Canceled user creation.' });
+        }
     }
     catch (error) {
       console.error('Error during employee registration:', error);
