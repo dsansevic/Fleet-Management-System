@@ -13,32 +13,30 @@ const generateToken = (user) =>
     }, 
     process.env.JWT_SECRET, { expiresIn: '1h' });
 
-const signUp = async (req, res) => {
-    const { firstName, lastName, email, password, role } = req.body;
+const registerEmployee = async (req, res) => {
+    const { firstName, lastName, email, password} = req.body;
 
     try {
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ message: 'All fields are required!.' });
         }
 
-        const newUser = new User({ firstName, lastName, email, password, role });
-        await newUser.save();
-
-        const token = generateToken(newUser);
-        res.cookie('accessToken', token, {
-          httpOnly: true,
-          maxAge: 3600000,
-          sameSite: 'strict',
-          secure: false,
+        const newUser = new User({
+          firstName,
+          lastName,
+          email,
+          password,
+          role: 'employee'
         });
+        await newUser.save();
 
         res.status(201).json({
             message: 'Sign up successful',
-            user: { id: newUser._id, firstName: newUser.firstName, role: newUser.role },
+            user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email },
         });
     }
     catch (error) {
-      console.error('Error during sign up:', error);
+      console.error('Error during employee registration:', error);
       return res.status(500).json({ message: 'An unexpected error occurred. Please try again later.' });
     }
 }
@@ -168,4 +166,26 @@ const checkAvailability = async (req, res) => {
     res.status(200).json({ message: 'Available' });
 }
 
-module.exports = {signUp, userCompanySignUp, logIn, logout, verifySession, checkAvailability}
+const getEmployees = async (req, res) => {
+  try {
+    let employees = await User.find({ role: "employee" });
+
+    if (employees.length === 0) {
+      return res.status(404).json({ message: "No registered employees." });
+    }
+
+    res.status(200).json(employees);
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while fetching employees.", error: error.message });
+  }
+};
+
+module.exports = {
+  registerEmployee,
+  userCompanySignUp, 
+  logIn, 
+  logout, 
+  verifySession, 
+  checkAvailability,
+  getEmployees
+}

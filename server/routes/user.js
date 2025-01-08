@@ -1,19 +1,17 @@
 const express = require("express");
 
 const {
-    signUp, 
+    registerEmployee, 
     userCompanySignUp,
     logIn, 
     logout,
     checkAvailability, 
-    verifySession
+    verifySession,
+    getEmployees
 } = require("../controllers/userController");
 const checkAuth = require("../middleware/checkAuth");
 const checkRole = require("../middleware/checkRole");
 const router = express.Router();
-
-// user signup route
-router.post('/signup', signUp);
 
 // admin signup route
 router.post('/admin-company-signup', userCompanySignUp);
@@ -28,5 +26,8 @@ router.post('/logout', logout)
 router.post('/check-availability', checkAvailability);
 
 router.get('/verify-session', checkAuth, verifySession);
+
+router.get('/employees', checkAuth, checkRole("admin"), getEmployees);
+router.post('/employees', checkAuth, checkRole("admin"), registerEmployee);
 
 module.exports = router;
