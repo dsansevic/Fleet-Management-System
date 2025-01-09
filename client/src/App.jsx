@@ -7,6 +7,7 @@ import UserDashboard from '@pages/dashboard/UserDashboard';
 import AdminDashboard from '@pages/dashboard/AdminDashboard';
 import ForbiddenPage from '@pages/errors/ForbiddenPage';
 import NotFound from '@pages/errors/NotFound';
+import Vehicles from './pages/dashboard/admin/vehicles/Vehicles';
 
 import PageTitle from '@utils/PageTitle';
 
@@ -57,9 +58,9 @@ function App() {
                             )
                         }
                 />
+                <Route path="/dashboard/vehicles" element={<Vehicles />} />  
             </Route>
-        </Route>
-
+        </Route>              
         <Route path="/403" element={<ForbiddenPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>

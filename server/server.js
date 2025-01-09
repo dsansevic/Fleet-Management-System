@@ -6,6 +6,8 @@ const errorHandler = require("./middleware/errorHandler")
 require('dotenv').config();
 
 const userRoutes = require("./routes/user");
+const vehicleRoutes = require("./routes/vehicle");
+
 // const companyRoutes = require("./routes/company")
 
 const app = express();
@@ -30,7 +32,7 @@ db.once('open', function() {
 
 app.use("/user", userRoutes);
 
-// app.use("/company", companyRoutes);
+app.use("/vehicle", vehicleRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found.` });

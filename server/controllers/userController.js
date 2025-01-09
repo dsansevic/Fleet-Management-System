@@ -20,10 +20,10 @@ const registerEmployee = async (req, res) => {
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ message: 'All fields are required!' });
         }
-        const companyId = req.cookies.companyId;
+        const companyId = req.user.companyId; 
 
         if (!companyId) {
-            return res.status(400).json({ message: 'Company ID is required in cookies!' });
+            return res.status(400).json({ message: "Company ID is required." });
         }
 
         if (!mongoose.Types.ObjectId.isValid(companyId)) {
@@ -50,7 +50,7 @@ const registerEmployee = async (req, res) => {
 
           res.status(201).json({
               message: 'Employee registered successfully',
-              user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email },
+              user: { id: newUser._id, firstName: newUser.firstName, email: newUser.email, companyId: newUser.company },
           });
         } catch (companyError) {
             await newUser.remove();
@@ -121,7 +121,7 @@ const logIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email })
       if (!user) 
         return res.status(400).json({ message:'Invalid credentials'})
   
@@ -130,7 +130,7 @@ const logIn = async (req, res) => {
         return res.status(400).json({ message:'Invalid credentials'})
       
       const token = generateToken(user);
-
+      
       res.cookie('accessToken', token, {
         httpOnly: true,
         maxAge: 3600000, // 1h
