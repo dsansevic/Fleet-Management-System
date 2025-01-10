@@ -25,9 +25,9 @@ function RootLayout() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen w-full">
       {userBasedNavbar()}
-      <main className="flex-1">
+      <main className="container flex-1">
         <Outlet />
       </main>
     </div>

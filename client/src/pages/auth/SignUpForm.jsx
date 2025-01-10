@@ -30,7 +30,7 @@ const SignUpForm = () => {
             const response = await apiClient.post("/user/admin-company-signup", dataToSend);
             setSignUpError("")
             dispatch({ type: "LOGIN", payload: response.data.user });
-            navigate("/dashboard");
+            navigate("/dashboard-admin");
         } catch (error) {
             console.error("Error during registration:", error);
 

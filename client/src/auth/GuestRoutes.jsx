@@ -5,7 +5,12 @@ const GuestRoutes = () => {
     const { user } = useAuthContext();
 
     if (user) {
-        return <Navigate to="/dashboard" replace />;
+        if (user.role === "admin")
+            return <Navigate to="/dashboard-admin" replace />;
+        if (user.role === "user")
+            return <Navigate to="/dashboard-user" replace />;
+        
+        return <Navigate to="/" replace />;
     }
 
     return <Outlet />;

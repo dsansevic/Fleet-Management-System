@@ -34,7 +34,7 @@ const Employees = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto p-4 ml-80">
+        <div className="mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6">Employees</h1>
             <div className="mb-4">
                 <SubmitButton type = "button" onClick={() => setIsAddNewVisible(!isAddNewVisible)}>

@@ -1,11 +1,14 @@
 import { useAuthContext } from "./useAuthContext";
 import { useState } from "react";
 import { apiClient } from "@api/apiClient";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const useLogin = () => {
     const {dispatch} = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const login = async (email, password ) => {
         setIsLoading(true);
@@ -14,8 +17,7 @@ const useLogin = () => {
             const response = await apiClient.post("/user/login", { email, password });
             dispatch({ type: "LOGIN", payload: response.data.user });
             setIsLoading(false); 
-            return true;
-            
+            return response.data.user;          
         } catch (e) {
             setError(e.response?.data?.message || "Invalid credentials");
             setIsLoading(false);

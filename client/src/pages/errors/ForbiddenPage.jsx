@@ -6,13 +6,11 @@ import { useAuthContext } from "@hooks/useAuthContext";
 const ForbiddenPage = () => {
     const navigate = useNavigate();
     const { user } = useAuthContext();
-
-    let page = user?.role === "admin" ? "dashboard" : "home page"
     
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (user?.role === "admin")
-                navigate("/dashboard");
+            if (user?.role === "user")
+                navigate("/dashboard-user");
             else navigate("/")
         }, 5000);
 

@@ -35,11 +35,13 @@ function LogIn() {
 
     if (isSubmitDisabled) return;
 
-    const success = await login(input.email, input.password);
-    if (success) {
-        navigate("/dashboard");
+      const result = await login(input.email, input.password);
+      
+      if (result.role === "admin")
+        navigate("/dashboard-admin") 
+      else if (result.role === "user"){ 
+        navigate("/dashboard-user")}
     }
-  };
   
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
