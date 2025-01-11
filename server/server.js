@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const userRoutes = require("./routes/user");
 const vehicleRoutes = require("./routes/vehicle");
+const reservationRoutes = require("./routes/reservation");
 
 // const companyRoutes = require("./routes/company")
 
@@ -18,6 +19,10 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser());
 app.set('case sensitive routing', true);
 
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store"); 
+    next();
+});
 
 mongoose.connect(process.env.DATABASE_URI);
 
@@ -33,6 +38,8 @@ db.once('open', function() {
 app.use("/user", userRoutes);
 
 app.use("/vehicle", vehicleRoutes);
+
+app.use("/reservation", reservationRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found.` });

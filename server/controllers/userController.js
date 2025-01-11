@@ -155,24 +155,29 @@ const logout = (req, res) => {
 
 const verifySession = (req, res) => {
   try {
-      const token = req.cookies.accessToken;
-      if (!token) {
-        return res.status(401).json({ message: 'You are not logged in. Please log in to continue.' });      }
-
-      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
+      const user = req.user;
+      // double check
+      if (!user) {
+        return res.status(401).json({
+          message: 'You are not logged in. Please log in to continue.',
+        });
+      }
       res.status(200).json({
         message: 'Authorised',
-        user: { id: decodedToken.id, firstName: decodedToken.firstName, role: decodedToken.role, companyId: decodedToken.company }});
+        user: {
+          id: user.id,
+          firstName: user.firstName,
+          role: user.role,
+          companyId: user.companyId
+        },
+      });
 
-  } catch (error) {
-    console.error('Session verification error:', error);
+  }  catch (error) {
+      console.error('Session verification error:', error);
 
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Your login has expired. Please log in again.' });
-    } else {
-      return res.status(401).json({ message: 'Your login is invalid. Please log in again.' });
-    }
+      return res.status(500).json({
+      message: 'An unexpected error occurred. Please try again later.',
+    });
   }
 };
 

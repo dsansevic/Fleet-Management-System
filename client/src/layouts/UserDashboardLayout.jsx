@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import UserDashboard from "@pages/dashboard/UserDashboard";
+import AddReservation from "@pages/dashboard/user/reservations/AddReservation";
 import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
 import PageTitle from "@utils/PageTitle";
 
@@ -42,6 +43,15 @@ const UserDashboardLayout = () => {
                             <>
                                 
                                 <PageTitle title="past reservations" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="new-reservation"
+                        element={
+                            <>
+                                <AddReservation />
+                                <PageTitle title="New reservation" />
                             </>
                         }
                     />

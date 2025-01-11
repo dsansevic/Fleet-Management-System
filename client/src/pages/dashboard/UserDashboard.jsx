@@ -1,8 +1,13 @@
+import { useAuthContext } from "@hooks/useAuthContext";
+
 const UserDashboard = () => {
+    const { user } = useAuthContext();
+
     return (
-        <div>
-            <h1>Welcome to User Dashboard</h1>
-            <p>Here you can track your reservations.</p>
+        <div className="p-6 bg-white shadow-md rounded-md h-full">
+            <h1 className="text-2xl font-bold text-gray-700 mb-4">
+                Welcome, {user?.firstName}!
+            </h1>
         </div>
     );
 };
