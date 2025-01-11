@@ -47,7 +47,7 @@ function App() {
             <Route path="/dashboard-admin/*" element={<AdminDashboardLayout />} />
         </Route>
 
-        <Route element={<PrivateRoutes requiredRole="user" />}>
+        <Route element={<PrivateRoutes requiredRole="employee" />}>
             <Route path="/dashboard-user/*" element={<UserDashboardLayout />} />
         </Route>        
         

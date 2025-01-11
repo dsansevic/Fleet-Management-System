@@ -9,7 +9,7 @@ const DashboardLayout = () => {
         <div className="flex h-screen"> 
             {user?.role === "admin" ? (
                 <AdminDashboardSideBar />
-            ) : user?.role  === "user" ? (
+            ) : user?.role  === "employee" ? (
                 <UserDashboardSideBar />
             ) : null}
 

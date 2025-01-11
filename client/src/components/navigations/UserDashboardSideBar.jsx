@@ -3,52 +3,29 @@ import useLogout from "@hooks/useLogout";
 
 const UserDashboardSideBar = () => {
     
-    const navigationSections = [
-        {
-            title: "My Reservations",
-            links: [
-                { to: "/active-reservations", label: "Active Reservations" },
-                { to: "/previous-reservations", label: "Previous Reservations" },
-            ],
-        },
-        {
-            links: [
-                { to: "/help", label: "Help" },
-            ],
-        },
+    const navigationLinks = [
+        { to: "/dashboard-user/new-reservation", label: "Create reservation" },
+        { to: "/dashboard-user/active-reservations", label: "Active reservations" },
+        { to: "/dashboard-user/past-reservations", label: "Past reservations" },
+        { to: "/dashboard-user/damage-report", label: "Damage report" },
+        { to: "/dashboard-user/help", label: "Help" }
     ];
 
     return (
-        <aside className="h-full bg-white w-64 p-6 flex flex-col shadow-lg">
-            <button className="mb-6 bg-brand-light px-4 py-2 rounded hover:bg-brand-base text-white font-semibold">
-                + Add New Reservation
-            </button>
-            
-            <nav className="flex flex-col space-y-6">
-                {navigationSections.map((section, index) => (
-                    <div key={index}>
-                        {section.title && (
-                            <h2 className="text-lg font-semibold text-gray-700 mb-2">{section.title}</h2>
-                        )}
-                        <div className="flex flex-col space-y-2 pl-4">
-                            {section.links.map((link, idx) => (
-                                <NavLink
-                                    key={idx}
-                                    to={link.to}
-                                    className={({ isActive }) =>
-                                        `hover:text-brand-base ${isActive ? "text-brand-base font-bold" : "text-gray-600"} ${link.className || ""}`
-                                    }
-                                >
-                                    {link.label}
-                                </NavLink>
-                            ))}
-                        </div>
-                        {index !== navigationSections.length && (
-                            <hr className="border-t border-gray-300 mt-4" />
-                        )}
-                    </div>
+        <aside className="h-[calc(100vh-4rem)] bg-white w-64 p-6 flex flex-col shadow-lg sticky top-16">
+                        <nav className="flex flex-col space-y-4">
+                {navigationLinks.map((link, index) => (
+                    <NavLink
+                        key={index}
+                        to={link.to}
+                        className={({ isActive }) =>
+                            `hover:text-brand-light flex pb-1 border-b ${isActive ? "text-brand-base font-bold" : "text-gray-600"}`
+                        }
+                    >
+                        {link.label}
+                    </NavLink>
                 ))}
-            </nav>
+            </nav> 
         </aside>
     );
 };

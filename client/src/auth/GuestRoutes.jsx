@@ -7,7 +7,7 @@ const GuestRoutes = () => {
     if (user) {
         if (user.role === "admin")
             return <Navigate to="/dashboard-admin" replace />;
-        if (user.role === "user")
+        if (user.role === "employee")
             return <Navigate to="/dashboard-user" replace />;
         
         return <Navigate to="/" replace />;

@@ -11,7 +11,6 @@ const AdminDashboardSideBar = () => {
 
     return (
         <aside className="h-[calc(100vh-4rem)] bg-white w-64 p-6 flex flex-col shadow-lg sticky top-16">
-            {/* <aside className="h-screen bg-white w-64 p-6 shadow-lg"></aside> */}
             <nav className="flex flex-col space-y-4">
                 {navigationLinks.map((link, index) => (
                     <NavLink

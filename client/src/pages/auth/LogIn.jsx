@@ -39,7 +39,7 @@ function LogIn() {
       
       if (result.role === "admin")
         navigate("/dashboard-admin") 
-      else if (result.role === "user"){ 
+      else if (result.role === "employee"){ 
         navigate("/dashboard-user")}
     }
   
