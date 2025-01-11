@@ -1,4 +1,5 @@
 const Reservation = require("../models/Reservation");
+const Notification = require("../models/Notification");
 
 const addReservation = async (req, res) => {
     const { startTime, endTime, purpose, additionalDetails } = req.body;
@@ -14,6 +15,17 @@ const addReservation = async (req, res) => {
         });
 
         await newReservation.save();
+
+        const notificationMessage = `New reservation created by ${req.user.firstName}: ${purpose}.`;
+        const notification = new Notification({
+            type: "reservation",
+            message: notificationMessage,
+            sender: req.user.id,
+            company: req.user.companyId,
+            reservation: newReservation._id,
+        });
+
+        await notification.save();
 
         res.status(201).json({ 
             message: "Reservation created successfully", 
