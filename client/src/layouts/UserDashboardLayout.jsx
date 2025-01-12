@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import UserDashboard from "@pages/dashboard/UserDashboard";
 import AddReservation from "@pages/dashboard/user/reservations/AddReservation";
+import InactiveReservations from "@pages/dashboard/user/reservations/InactiveReservations";
+import ActiveReservations from "@pages/dashboard/user/reservations/ActiveReservations";
+import ReservationDetails from "@pages/dashboard/user/reservations/ReservationDetails";
 import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
 import PageTitle from "@utils/PageTitle";
 
@@ -32,17 +35,17 @@ const UserDashboardLayout = () => {
                         path="active-reservations"
                         element={
                             <>
-                                
+                                <ActiveReservations />
                                 <PageTitle title="Active reservations" />
                             </>
                         }
                     />
                     <Route
-                        path="past-reservations"
+                        path="inactive-reservations"
                         element={
                             <>
-                                
-                                <PageTitle title="past reservations" />
+                                <InactiveReservations />
+                                <PageTitle title="Inactive reservations" />
                             </>
                         }
                     />
@@ -55,6 +58,15 @@ const UserDashboardLayout = () => {
                             </>
                         }
                     />
+                    <Route
+                        path="/:id"
+                        element={
+                            <>
+                                <ReservationDetails /> 
+                                <PageTitle title="Details" />
+                            </>
+                        }
+                    /> 
                     <Route
                         path="damage-repost"
                         element={

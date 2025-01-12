@@ -4,7 +4,7 @@ import TextAreaField from "@components/form/TextAreaField";
 import SubmitButton from "@components/ui/SubmitButton";
 import { addReservation } from "@api/reservations";
 import { validateField } from "@utils/inputValidation";
-import { validateNotInPast } from "@utils/dateValidation";
+import { validateReservationField } from "@utils/validateReservationField";
 
 const AddReservation = () => {
     const [newReservation, setNewReservation] = useState({
@@ -35,34 +35,18 @@ const AddReservation = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewReservation((prev) => ({ ...prev, [name]: value }));
-
+    
         if (name === "startTime" || name === "endTime") {
-            const errorInPast = validateNotInPast(value);
-
-            if (errorInPast) {
-                setReservationErrors((prev) => ({
-                    ...prev,
-                    [name]: errorInPast,
-                }));
-                return;
-            }
-
-            if (name === "endTime" && newReservation.startTime) {
-                const startDate = new Date(newReservation.startTime);
-                const endDate = new Date(value);
-
-                if (endDate <= startDate) {
-                    setReservationErrors((prev) => ({
-                        ...prev,
-                        endTime: "End time must be after start time.",
-                    }));
-                    return;
-                }
-            }
+            const error = validateReservationField(name, value, newReservation);
+            setReservationErrors((prev) => ({ ...prev, [name]: error || "" }));
+            return;
         }
-
-        const error = validateField(name, value);
-        setReservationErrors((prev) => ({ ...prev, [name]: error }));
+    
+        if (name === "purpose") {
+            const error = validateField(name, value);
+            setReservationErrors((prev) => ({ ...prev, purpose: error || "" }));
+            return;
+        }
     };
 
     const handleAddReservation = async (e) => {

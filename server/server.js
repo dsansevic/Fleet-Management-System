@@ -3,6 +3,7 @@ const cors = require("cors")
 const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/errorHandler")
+const updateReservationStatus = require("./cron/updateReservationStatus");
 require('dotenv').config();
 
 const userRoutes = require("./routes/user");
@@ -34,6 +35,8 @@ db.on('error', (error) => {
 db.once('open', function() {
  console.log('Connected to MongoDB');
 });
+
+updateReservationStatus();
 
 app.use("/user", userRoutes);
 
