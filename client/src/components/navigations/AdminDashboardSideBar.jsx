@@ -7,6 +7,7 @@ const AdminDashboardSideBar = () => {
         { to: "/dashboard-admin/pending-reservations", label: "Pending reservations" },
         { to: "/dashboard-admin/vehicles", label: "Vehicles" },
         { to: "/dashboard-admin/help", label: "Help" },
+        { to: "/dashboard-admin/damage-reports", label: "Damage reports" },
     ];
 
     return (

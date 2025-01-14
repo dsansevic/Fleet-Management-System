@@ -4,6 +4,7 @@ import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
 import Employees from "@pages/dashboard/admin/employees/Employees";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
+import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
 import PageTitle from "@utils/PageTitle";
 
@@ -45,7 +46,16 @@ const AdminDashboardLayout = () => {
                         element={
                             <>
                                 <PendingReservations />
-                                <PageTitle title="Employees" />
+                                <PageTitle title="Pending reservations" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="damage-reports"
+                        element={
+                            <>
+                                <DamageReports />
+                                <PageTitle title="Damage reports" />
                             </>
                         }
                     />
