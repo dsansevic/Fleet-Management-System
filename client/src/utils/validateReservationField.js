@@ -5,8 +5,8 @@ export const validateReservationField = (name, value, reservationData) => {
         const now = new Date();
         const startTime = new Date(value);
 
-        if (startTime.getTime() - now.getTime() < 30 * 60 * 1000) {
-            return "Start time must be at least 30 minutes in the future.";
+        if (startTime.getTime() - now.getTime() < 2 * 60 * 60 * 1000) {
+            return "Start time must be at least 2 hours in the future.";
         }
 
         const errorInPast = validateNotInPast(value);
@@ -31,6 +31,15 @@ export const validateReservationField = (name, value, reservationData) => {
         const errorInPast = validateNotInPast(value);
         if (errorInPast) {
             return errorInPast;
+        }
+    }
+
+    if (name === "newEndTime") {
+        const startTime = new Date(reservationData.startTime);
+        const newEndTime = new Date(value);
+        
+        if (newEndTime <= startTime) {
+            return "New end time must be after the current start time.";
         }
     }
 

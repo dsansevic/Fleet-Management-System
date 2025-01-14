@@ -16,6 +16,7 @@ const GetReservationStatus = (status) => {
                 message: "This reservation has been approved and is ready to use.",
             };
         case "pending":
+        case "pending-reapproval":
             return {
                 label: "Pending",
                 icon: <ClockIcon className="h-6 w-6 text-yellow-500" />,

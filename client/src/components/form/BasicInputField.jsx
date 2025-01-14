@@ -5,7 +5,7 @@ const BasicInputField = ({ label, name, type, value, error, onChange }) => {
         <input
             type={type}
             name={name}
-            value={type === "datetime-local" ? new Date(value).toISOString().slice(0, -1) : value}
+            value={type}
             className={`w-full text-sm border p-2 rounded ${error ? "border-error" : ""}`}
             onChange={onChange}
         />

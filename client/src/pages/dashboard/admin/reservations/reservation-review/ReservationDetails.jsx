@@ -55,6 +55,16 @@ const ReservationDetails = ({ reservation }) => {
                     <p className="text-md font-medium text-gray-800">{reservation.additionalDetails}</p>
                 </div>
             )}
+            {reservation.newEndTime?.trim() && (
+                <div className="mt-4 p-4 rounded-sm bg-orange-200">
+                    <h4 className="text-md font-medium text-gray-800">
+                        {reservation.user?.firstName} wants to change the end time to 
+                    </h4>
+                    <p className="text-md font-semibold text-gray-800">
+                        {formatDate(reservation.newEndTime)}
+                    </p>
+                </div>
+            )}
             </div>
         </section>
     );

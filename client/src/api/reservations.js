@@ -42,10 +42,31 @@ export const fetchReservationById = async (id) => {
 
 export const updateReservation = async (id, reservationData) => {
     try {
+        console.log("prije slanja: ", reservationData)
         const response = await apiClient.patch(`/reservation/${id}`, reservationData);
         return response.data;
     } catch (error) {
         console.error("Error updating reservation:", error.response?.data || error.message);
         throw error.response?.data || { message: "Failed to update reservation." };
+    }
+};
+
+export const updateReservationStatus = async (id, reservationData) => {
+    try {
+        const response = await apiClient.patch(`/reservation/${id}/status`, reservationData);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating reservation status:", error.response?.data || error.message);
+        throw error.response?.data || { message: "Failed to update reservation." };
+    }
+};
+
+export const handleReapproval = async (id, data) => {
+    try {
+        const response = await apiClient.patch(`/reservation/${id}/reapproval`, data);
+        return response.data;
+    } catch (error) {
+        console.error("Error handling reapproval:", error);
+        throw error.response?.data || { message: "Failed to handle reapproval." };
     }
 };

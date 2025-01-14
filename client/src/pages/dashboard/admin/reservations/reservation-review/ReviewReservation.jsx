@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { fetchReservationById, updateReservation } from "@api/reservations";
+import { fetchReservationById, updateReservationStatus, handleReapproval } from "@api/reservations";
 import { getVehicles } from "@api/vehicles";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -14,6 +14,7 @@ const ReviewReservation = () => {
     const navigate = useNavigate();
 
     const [reservation, setReservation] = useState([]);
+    const [status, setStatus] = useState("")
     const [vehicles, setVehicles] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -27,11 +28,12 @@ const ReviewReservation = () => {
             try {
                 setLoading(true);
                 const res = await fetchReservationById(id);
-                if (res.status !== "pending") {
+                if (res.status !== "pending" && res.status !== "pending-reapproval") {
                     navigate("/dashboard-admin");
                     return;
                 }
                 setReservation(res);
+                setStatus(res.status)
                 const veh = await getVehicles();
                 setVehicles(veh);
             } catch (error) {
@@ -53,19 +55,25 @@ const ReviewReservation = () => {
         }
     };
 
-    const handleReservationUpdate = async (status, additionalData = {}) => {
+    const handleReservationUpdate = async (action, additionalData = {}) => {
         try {
             setLoading(true);
-            await updateReservation(id, { status, ...additionalData });
-
-            if (status === "approved") {
-                setConfirmationMessage("Reservation approved successfully!");
-                setSelectedVehicle(null);
-            } else if (status === "declined") {
-                setConfirmationMessage("Reservation rejected successfully.");
-                setRejectReason("");
+    
+            if (status === "pending-reapproval") {
+                const response = await handleReapproval(id, { action });
+                setConfirmationMessage(`Reservation ${action}d successfully!`);
+                setReservation(response.reservation);
+            } else if (status === "pending") {
+                const response = await updateReservationStatus(id, { status: action, ...additionalData });
+                setConfirmationMessage(`Reservation ${action === "approved" ? "approved" : "rejected"} successfully!`);
+                if (action === "approved") {
+                    setSelectedVehicle(null);
+                } else if (action === "declined") {
+                    setRejectReason("");
+                }
+                setReservation(response.reservation);
             }
-
+    
             setApproveError("");
         } catch (err) {
             setError(err.message || "An error occurred while updating the reservation.");
@@ -73,21 +81,30 @@ const ReviewReservation = () => {
             setLoading(false);
         }
     };
+    
 
     const handleApprove = () => {
-        if (!selectedVehicle) {
-            setApproveError("Please select a vehicle to approve the reservation.");
-            return;
+        if (status === "pending") {
+            if (!selectedVehicle) {
+                setApproveError("Please select a vehicle to approve the reservation.");
+                return;
+            }
+            handleReservationUpdate("approved", { vehicle: selectedVehicle._id });
+        } else if (status === "pending-reapproval") {
+            handleReservationUpdate("approve");
         }
-        handleReservationUpdate("approved", { vehicle: selectedVehicle._id });
     };
-
+    
     const handleReject = () => {
-        if (!rejectReason) {
-            setApproveError("Please provide a reason for rejection.");
-            return;
+        if (status === "pending") {
+            if (!rejectReason) {
+                setApproveError("Please provide a reason for rejection.");
+                return;
+            }
+            handleReservationUpdate("declined", { rejectReason });
+        } else if (status === "pending-reapproval") {
+            handleReservationUpdate("reject");
         }
-        handleReservationUpdate("declined", {rejectReason: rejectReason});
     };
 
     const handleDecideLater = () => {
@@ -118,6 +135,7 @@ const ReviewReservation = () => {
                 </div>
             ) : (
             <>
+            {(status === "pending-reapproval") && <p>Decide if you want to approve the change:</p>}
                 <ApprovalSection
                     onApprove={handleApprove}
                     onReject={handleReject}
@@ -126,6 +144,7 @@ const ReviewReservation = () => {
                     setRejectReason={setRejectReason}
                     approveError={approveError}
                 />
+                {(status === "pending") && (
                 <DragDropContext onDragEnd={handleDragEnd}>
                     <h3 className="text-xl font-bold text-gray-800 mb-4">
                         Assign a vehicle to {reservation.user?.firstName}
@@ -133,6 +152,7 @@ const ReviewReservation = () => {
                     <VehicleDragAndDropList groupedVehicles={groupedVehicles} />
                     <SelectedVehicle selectedVehicle={selectedVehicle} />
                 </DragDropContext>
+                )}
             </>
         )}
         </div>

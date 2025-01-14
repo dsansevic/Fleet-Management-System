@@ -1,5 +1,6 @@
 const Reservation = require("../models/Reservation");
 const Notification = require("../models/Notification");
+const Vehicle = require("../models/Vehicle");
 
 const addReservation = async (req, res) => {
     const { startTime, endTime, purpose, additionalDetails } = req.body;
@@ -46,7 +47,7 @@ const getActiveReservations = async (req, res) => {
         const activeReservations = await Reservation.find({
             company: req.user.companyId,
             user: req.user.id,
-            status: { $in: ["approved", "pending", "live"] },
+            status: { $in: ["approved", "pending", "live", "pending-reapproval"] },
             endTime: { $gte: currentDate },
         }).sort({ startTime: 1 });
 
@@ -96,34 +97,36 @@ const updateReservation = async (req, res) => {
         if (!reservation) {
             return res.status(404).json({ message: "Reservation not found." });
         }
+        console.log(req.body)
+        const { NewEndTime } = req.body;
 
-        const now = new Date();
-        if (new Date(reservation.startTime) <= new Date(now.getTime() + 60 * 60 * 1000)) {
-            return res
-                .status(400)
-                .json({ message: "Cannot update a reservation less than 1 hour before it starts." });
+        if (!NewEndTime) {
+            return res.status(400).json({ message: "New end time is required." });
         }
 
-        const allowedFields = [
-            "startTime",
-            "endTime",
-            "additionalDetails",
-            "purpose",
-            "status",
-            "rejectReason",
-            "vehicle"
-        ];
+        const now = new Date();
+        const newEndTime = new Date(NewEndTime);
+        const startTime = new Date(reservation.startTime);
+       
+        if (startTime - now < 90 * 60 * 1000) {
+            return res.status(403).json({
+                message: "Cannot change reservation less than 90 minutes before it starts.",
+            });
+        }
 
-        allowedFields.forEach((field) => {
-            if (req.body[field] !== undefined) {
-                reservation[field] = field.includes("Time") ? new Date(req.body[field]) : req.body[field];
-            }
-        });
+        if (newEndTime <= startTime) {
+            return res.status(400).json({
+                message: "New end time must be after the current start time.",
+            });
+        }
+
+        reservation.newEndTime = newEndTime;
+        reservation.status = "pending-reapproval";
 
         await reservation.save();
 
         res.status(200).json({
-            message: "Reservation updated successfully.",
+            message: "Change request submitted successfully.",
             reservation,
         });
     } catch (error) {
@@ -131,14 +134,112 @@ const updateReservation = async (req, res) => {
     }
 };
 
+const updateReservationStatus = async (req, res) => {
+    try {
+        const { status, vehicle, rejectReason } = req.body;
+        const reservation = await Reservation.findById(req.params.id);
+
+        if (!reservation) {
+            return res.status(404).json({ message: "Reservation not found." });
+        }
+
+        const now = new Date();
+        const startTime = new Date(reservation.startTime);
+
+        if (startTime - now < 60 * 60 * 1000) {
+            return res.status(400).json({ message: "Cannot update reservation status less than 1 hour before start time." });
+        }
+
+        if (!["approved", "declined"].includes(status)) {
+            return res.status(400).json({ message: "Allowed status values are 'approved' or 'declined'." });
+        }
+
+        if (status === "declined" && rejectReason) {
+            reservation.rejectReason = rejectReason;
+        }
+        if (status === "approved") {
+            if (!vehicle) {
+                return res.status(400).json({ message: "A vehicle must be assigned when approving a reservation." });
+            }
+            const assignedVehicle = await Vehicle.findById(vehicle);
+            if (!assignedVehicle) {
+                return res.status(404).json({ message: "Assigned vehicle not found." });
+            }
+            if (assignedVehicle.company.toString() !== reservation.company.toString()) {
+                return res.status(403).json({ message: "Vehicle does not belong to the company." });
+            }
+            reservation.vehicle = vehicle;
+        }
+
+        reservation.status = status;
+
+        await reservation.save();
+
+        res.status(200).json({
+            message: `Reservation status updated to ${status}.`,
+            reservation,
+        });
+    } catch (error) {
+        console.error(`Error updating reservation status for ID: ${req.params.id}`, error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+const handleReapproval = async (req, res) => {
+    try {
+        console.log("noslo je")
+        const reservation = await Reservation.findById(req.params.id);
+
+        if (!reservation || reservation.status !== "pending-reapproval") {
+            return res.status(404).json({ message: "Reservation not found or not awaiting reapproval." });
+        }
+
+        const { action } = req.body;
+
+        const allowedActions = ["approve", "reject"];
+        if (!allowedActions.includes(action)) {
+            return res.status(400).json({ message: "Invalid action. Allowed actions are 'approve' or 'reject'." });
+        }
+
+        if (action === "approve") {
+            reservation.endTime = reservation.newEndTime; 
+            reservation.newEndTime = null; 
+        } else if (action === "reject") {
+            reservation.newEndTime = null; 
+        }
+        reservation.status = "approved";
+
+        await reservation.save();
+
+        res.status(200).json({ message: `Reservation ${action}d successfully.`, reservation });
+    } catch (error) {
+        console.error("Error handling reapproval:", error);
+        res.status(500).json({ message: "Failed to handle reapproval.", error: error.message });
+    }
+};
 
 const getPendingReservations = async (req, res) => {
-    const { status } = req.query;
     try {
-        const reservations = await Reservation.find({ status })
-            .populate("user", "firstName email") 
-            .populate("vehicle", "make model"); 
-        res.status(200).json(reservations);
+        const now = new Date();
+        const reviewDeadline = new Date(now.getTime() + 60 * 60 * 1000);
+
+        const pendingReservations = await Reservation.find({
+            status: "pending",
+            startTime: { $gte: reviewDeadline },
+        })
+            .populate("user", "firstName email")
+            .populate("vehicle", "make model");
+
+        const reapprovalReservations = await Reservation.find({
+            status: "pending-reapproval",
+        })
+            .populate("user", "firstName email")
+            .populate("vehicle", "make model");
+
+        res.status(200).json({
+            pending: pendingReservations,
+            pendingReapproval: reapprovalReservations,
+        });
     } catch (error) {
         console.error("Error fetching reservations:", error);
         res.status(500).json({ message: "Failed to fetch reservations" });
@@ -151,5 +252,7 @@ module.exports
         getInactiveReservations, 
         getReservationById,
         updateReservation,
-        getPendingReservations    
+        getPendingReservations, 
+        updateReservationStatus,
+        handleReapproval   
     }

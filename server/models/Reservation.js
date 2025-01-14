@@ -39,7 +39,7 @@ const reservationSchema = new Schema({
     },
     status: {
       type: String,
-      enum: ["pending", "approved", "declined", "canceled", "expired", "completed", "live"],
+      enum: ["pending", "approved", "declined", "canceled", "expired", "completed", "live", "pending-reapproval"],
       default: 'pending'
     },
     additionalDetails: {
@@ -49,7 +49,8 @@ const reservationSchema = new Schema({
     rejectReason: {
       type: String,
       trim: true
-    }
+    },
+    newEndTime: { type: Date }, 
 });
 
 module.exports = mongoose.model('Reservation', reservationSchema);

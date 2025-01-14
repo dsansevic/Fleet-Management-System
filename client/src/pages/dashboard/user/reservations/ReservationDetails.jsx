@@ -4,6 +4,7 @@ import { fetchReservationById, updateReservation } from "@api/reservations";
 import GetReservationStatus from "@utils/GetReservationStatus";
 import EditReservationForm from "./EditReservationForm";
 import { ArrowLeftIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/20/solid";
+import { formatDate } from "@utils/formatDate";
 import Modal from "@components/ui/Modal";
 
 const ReservationDetails = () => {
@@ -27,13 +28,14 @@ const ReservationDetails = () => {
         loadReservation();
     }, [id]);
 
-    const timeDifferenceInHours = (date) =>
-        (new Date(date) - new Date()) / (1000 * 60 * 60);
+    const timeDifferenceInMinutes = (date) =>
+        (new Date(date) - new Date()) / (1000 * 60);
 
-    const handleUpdate = async (updatedData) => {
+    const handleUpdate = async (NewEndTime) => {
         setIsUpdating(true);
         try {
-            const updatedReservation = await updateReservation(id, updatedData);
+            console.log("u kompo", NewEndTime)
+            const updatedReservation = await updateReservation(id, { NewEndTime });
             setReservation(updatedReservation.reservation);
             setIsEditing(false);
         } catch (error) {
@@ -70,9 +72,10 @@ const ReservationDetails = () => {
     }
 
     const statusInfo = GetReservationStatus(reservation.status);
+
     const canEditOrCancel =
-        timeDifferenceInHours(reservation.startTime) > 1 &&
-        ["approved", "pending"].includes(reservation.status);
+        timeDifferenceInMinutes(reservation.startTime) > 90 &&
+        ["approved", "pending", "pending-reapproval"].includes(reservation.status);
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
@@ -100,12 +103,24 @@ const ReservationDetails = () => {
                 </div>
                 <p>
                     <span className="font-bold">Start Time:</span>{" "}
-                    {new Date(reservation.startTime).toLocaleString()}
+                    {formatDate(reservation.startTime)}
                 </p>
                 <p>
                     <span className="font-bold">End Time:</span>{" "}
-                    {new Date(reservation.endTime).toLocaleString()}
+                    {formatDate(reservation.endTime)}
                 </p>
+                {reservation.newStartTime && (
+                    <p>
+                        <span className="font-bold">Proposed Start Time:</span>{" "}
+                        {formatDate(reservation.newStartTime)}
+                    </p>
+                )}
+                {reservation.newEndTime && (
+                    <p>
+                        <span className="font-bold">Proposed End Time:</span>{" "}
+                        {formatDate(reservation.newEndTime)}
+                    </p>
+                )}
                 {reservation.additionalDetails && (
                     <p>
                         <span className="font-medium">Additional Details:</span>{" "}
@@ -120,7 +135,9 @@ const ReservationDetails = () => {
                         onCancel={() => setIsEditing(false)}
                     />
                 ) : canEditOrCancel ? (
-                    <div className="flex space-x-4 mt-6">
+                    <>
+                    <span className="font-semibold">You can edit this reservation 90 minutes before it starts.</span>
+                    <div className="flex space-x-4">
                         <button
                             className="bg-brand-base text-white px-4 py-2 rounded shadow hover:bg-brand-light flex items-center space-x-2"
                             onClick={() => setIsEditing(true)}
@@ -136,6 +153,7 @@ const ReservationDetails = () => {
                             <span>Cancel reservation</span>
                         </button>
                     </div>
+                    </>
                 ) : (
                     <div className="flex items-center space-x-2 text-red-600">
                         <XCircleIcon className="h-5 w-5" />
