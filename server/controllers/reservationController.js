@@ -228,13 +228,13 @@ const getPendingReservations = async (req, res) => {
             startTime: { $gte: reviewDeadline },
         })
             .populate("user", "firstName email")
-            .populate("vehicle", "make model");
+            .populate("vehicle", "brand model");
 
         const reapprovalReservations = await Reservation.find({
             status: "pending-reapproval",
         })
             .populate("user", "firstName email")
-            .populate("vehicle", "make model");
+            .populate("vehicle", "brand model");
 
         res.status(200).json({
             pending: pendingReservations,
@@ -246,6 +246,25 @@ const getPendingReservations = async (req, res) => {
     }
 };
 
+const getLiveOrCompletedReservations = async (req, res) => {
+    try {
+        const reservations = await Reservation.find({
+            company: req.user.companyId,
+            status: { $in: ["live", "completed"] },
+        })
+            .populate("vehicle", "brand model")
+            .sort({ startTime: 1 });
+
+        res.status(200).json(reservations);
+    } catch (error) {
+        console.error("Error fetching live or completed reservations:", error);
+        res.status(500).json({
+            message: "Failed to fetch live or completed reservations",
+            error: error.message,
+        });
+    }
+};
+
 module.exports 
     = { addReservation, 
         getActiveReservations, 
@@ -254,5 +273,6 @@ module.exports
         updateReservation,
         getPendingReservations, 
         updateReservationStatus,
-        handleReapproval   
+        handleReapproval,
+        getLiveOrCompletedReservations   
     }

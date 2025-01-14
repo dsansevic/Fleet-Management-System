@@ -3,6 +3,7 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import { fetchReservationById, updateReservationStatus, handleReapproval } from "@api/reservations";
 import { getVehicles } from "@api/vehicles";
 import { useParams, useNavigate } from "react-router-dom";
+import SuccessMessage from "@components/ui/SuccessMessage";
 
 import ReservationDetails from "./ReservationDetails";
 import VehicleDragAndDropList from "./VehicleDragAndDropList";
@@ -130,9 +131,7 @@ const ReviewReservation = () => {
         <div className="max-w-5xl mx-auto mt-6 p-6 bg-white rounded shadow">
             <ReservationDetails reservation={reservation} />
             {confirmationMessage ? (
-                <div className="my-6 p-4 bg-blue-100 text-blue-800 rounded shadow">
-                    {confirmationMessage}
-                </div>
+                <SuccessMessage message={confirmationMessage} />
             ) : (
             <>
             {(status === "pending-reapproval") && <p>Decide if you want to approve the change:</p>}

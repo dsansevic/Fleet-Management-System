@@ -8,7 +8,7 @@ const UserDashboardSideBar = () => {
         { to: "/dashboard-user/new-reservation", label: "Create reservation" },
         { to: "/dashboard-user/active-reservations", label: "Active reservations" },
         { to: "/dashboard-user/inactive-reservations", label: "Inactive reservations" },
-       // { to: "/dashboard-user/damage-report", label: "Damage report" },
+        { to: "/dashboard-user/damage-report", label: "Damage report" },
     ];
 
     return (

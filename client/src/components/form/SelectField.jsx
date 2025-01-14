@@ -1,12 +1,14 @@
-const SelectField = ({ 
+import { forwardRef } from "react";
+
+const SelectField = forwardRef(({ 
     label, 
     name, 
     value, 
     onChange, 
     error, 
     options, 
-    placeholder 
-}) => {
+    placeholder,
+}, ref) => {
     return (
         <div className="mb-4 relative w-full">
             {label && (
@@ -20,6 +22,7 @@ const SelectField = ({
                     name={name}
                     value={value}
                     onChange={onChange}
+                    ref={ref}
                     className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-md
                         ${error ? 'border-error' : 'border-gray-300'} 
                         border focus:outline-none focus:ring focus:ring-brand-light`}
@@ -39,6 +42,6 @@ const SelectField = ({
             {error && <p className="text-error text-xs mt-1">{error}</p>}
         </div>
     );
-};
+});
 
 export default SelectField;

@@ -9,7 +9,8 @@ const {
     updateReservation,
     getPendingReservations,
     updateReservationStatus,
-    handleReapproval
+    handleReapproval,
+    getLiveOrCompletedReservations
 } = require("../controllers/reservationController");
 
 const router = express.Router();
@@ -22,6 +23,8 @@ router.get("/pending", checkRole("admin"), getPendingReservations);
 router.get("/active", checkRole("employee"), getActiveReservations);
 
 router.get("/inactive", checkRole("employee"), getInactiveReservations);
+
+router.get("/live-or-completed", checkRole("employee"), getLiveOrCompletedReservations);
 
 router.get("/:id", getReservationById);
 

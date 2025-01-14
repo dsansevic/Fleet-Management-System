@@ -1,4 +1,4 @@
-const TextAreaField = ({ label, name, value, onChange, placeholder, rows = 4 }) => {
+const TextAreaField = ({ label, name, value, onChange, placeholder, rows = 4, ref }) => {
     return (
         <div className="mb-4">
             <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
@@ -10,7 +10,7 @@ const TextAreaField = ({ label, name, value, onChange, placeholder, rows = 4 }) 
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className="mt-1 block p-1 w-full rounded-md shadow-sm shadow-gray-300 focus:ring-brand-base focus:border-brand-base sm:text-sm"
+                className="mt-1 block p-1 w-full border border-gray-300 rounded-md shadow-sm shadow-gray-300 focus:ring-brand-base focus:border-brand-base sm:text-sm"
             />
         </div>
     );

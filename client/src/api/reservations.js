@@ -70,3 +70,13 @@ export const handleReapproval = async (id, data) => {
         throw error.response?.data || { message: "Failed to handle reapproval." };
     }
 };
+
+export const fetchLiveOrCompletedReservations = async () => {
+    try {
+        const response = await apiClient.get("/reservation/live-or-completed");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching live or completed reservations:", error);
+        throw new Error("Failed to fetch live or completed reservations.");
+    }
+};

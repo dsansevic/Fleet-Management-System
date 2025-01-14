@@ -4,6 +4,7 @@ import AddReservation from "@pages/dashboard/user/reservations/AddReservation";
 import InactiveReservations from "@pages/dashboard/user/reservations/InactiveReservations";
 import ActiveReservations from "@pages/dashboard/user/reservations/ActiveReservations";
 import ReservationDetails from "@pages/dashboard/user/reservations/ReservationDetails";
+import DamageReport from "@pages/dashboard/user/DamageReport";
 import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
 import PageTitle from "@utils/PageTitle";
 
@@ -59,6 +60,15 @@ const UserDashboardLayout = () => {
                         }
                     />
                     <Route
+                        path="damage-report"
+                        element={
+                            <>
+                                <DamageReport />
+                                <PageTitle title="Damage report" />
+                            </>
+                        }
+                    />   
+                    <Route
                         path="/:id"
                         element={
                             <>
@@ -66,16 +76,7 @@ const UserDashboardLayout = () => {
                                 <PageTitle title="Details" />
                             </>
                         }
-                    /> 
-                    <Route
-                        path="damage-repost"
-                        element={
-                            <>
-                                
-                                <PageTitle title="Damage report" />
-                            </>
-                        }
-                    />                    
+                    />                  
                 </Routes>
             </div>
         </div>
