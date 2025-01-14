@@ -41,7 +41,7 @@ const getVehicle = async (req, res) => {
         if (!companyId) {
             return res.status(400).json({ message: "Company ID is required." });
         }
-        const vehicles = await Vehicle.find({ company: companyId });
+        const vehicles = await Vehicle.find({ company: companyId }).sort({ brand: 1 });;
 
         if (!vehicles.length) {
             return res.status(404).json({ message: "No vehicles registered." });

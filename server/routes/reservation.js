@@ -6,7 +6,8 @@ const {
     getActiveReservations, 
     getInactiveReservations, 
     getReservationById,
-    updateReservation
+    updateReservation,
+    getPendingReservations
 } = require("../controllers/reservationController");
 
 const router = express.Router();
@@ -14,11 +15,13 @@ router.use(checkAuth);
 
 router.post("/", checkRole("employee"), addReservation);
 
+router.get("/", checkRole("admin"), getPendingReservations);
+
 router.get("/active", checkRole("employee"), getActiveReservations);
 
 router.get("/inactive", checkRole("employee"), getInactiveReservations);
 
-router.get("/:id", checkRole("employee"), getReservationById);
+router.get("/:id", getReservationById);
 
 router.patch("/:id", updateReservation);
 

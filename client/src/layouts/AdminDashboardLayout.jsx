@@ -2,6 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import AdminDashboard from "@pages/dashboard/AdminDashboard";
 import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
 import Employees from "@pages/dashboard/admin/employees/Employees";
+import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
+import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
 import PageTitle from "@utils/PageTitle";
 
@@ -35,6 +37,24 @@ const AdminDashboardLayout = () => {
                             <>
                                 <Employees />
                                 <PageTitle title="Employees" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="pending-reservations"
+                        element={
+                            <>
+                                <PendingReservations />
+                                <PageTitle title="Employees" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="review-reservation/:id"
+                        element={
+                            <>
+                                <ReviewReservation />
+                                <PageTitle title="Reservation" />
                             </>
                         }
                     />

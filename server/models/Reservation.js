@@ -45,6 +45,10 @@ const reservationSchema = new Schema({
     additionalDetails: {
       type: String,
       trim: true,
+    },
+    rejectReason: {
+      type: String,
+      trim: true
     }
 });
 

@@ -90,11 +90,8 @@ const getReservationById = async (req, res) => {
 };
 
 const updateReservation = async (req, res) => {
-    const { id } = req.params;
-    const { startTime, endTime, additionalDetails, purpose, status } = req.body;
-
     try {
-        const reservation = await Reservation.findById(id);
+        const reservation = await Reservation.findById(req.params.id);
 
         if (!reservation) {
             return res.status(404).json({ message: "Reservation not found." });
@@ -104,14 +101,24 @@ const updateReservation = async (req, res) => {
         if (new Date(reservation.startTime) <= new Date(now.getTime() + 60 * 60 * 1000)) {
             return res
                 .status(400)
-                .json({ message: "Cannot edit a reservation less than 1 hour before it starts." });
+                .json({ message: "Cannot update a reservation less than 1 hour before it starts." });
         }
 
-        if (startTime) reservation.startTime = new Date(startTime);
-        if (endTime) reservation.endTime = new Date(endTime);
-        if (additionalDetails) reservation.additionalDetails = additionalDetails;
-        if (purpose) reservation.purpose = purpose;
-        if (status) reservation.status = status;
+        const allowedFields = [
+            "startTime",
+            "endTime",
+            "additionalDetails",
+            "purpose",
+            "status",
+            "rejectReason",
+            "vehicle"
+        ];
+
+        allowedFields.forEach((field) => {
+            if (req.body[field] !== undefined) {
+                reservation[field] = field.includes("Time") ? new Date(req.body[field]) : req.body[field];
+            }
+        });
 
         await reservation.save();
 
@@ -124,10 +131,25 @@ const updateReservation = async (req, res) => {
     }
 };
 
+
+const getPendingReservations = async (req, res) => {
+    const { status } = req.query;
+    try {
+        const reservations = await Reservation.find({ status })
+            .populate("user", "firstName email") 
+            .populate("vehicle", "make model"); 
+        res.status(200).json(reservations);
+    } catch (error) {
+        console.error("Error fetching reservations:", error);
+        res.status(500).json({ message: "Failed to fetch reservations" });
+    }
+};
+
 module.exports 
     = { addReservation, 
         getActiveReservations, 
         getInactiveReservations, 
         getReservationById,
-        updateReservation    
+        updateReservation,
+        getPendingReservations    
     }

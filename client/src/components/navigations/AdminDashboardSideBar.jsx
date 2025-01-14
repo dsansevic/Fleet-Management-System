@@ -4,7 +4,7 @@ const AdminDashboardSideBar = () => {
     
     const navigationLinks = [
         { to: "/dashboard-admin/employees", label: "Employees" },
-        { to: "/dashboard-admin/reservations", label: "Reservations" },
+        { to: "/dashboard-admin/pending-reservations", label: "Pending reservations" },
         { to: "/dashboard-admin/vehicles", label: "Vehicles" },
         { to: "/dashboard-admin/help", label: "Help" },
     ];
