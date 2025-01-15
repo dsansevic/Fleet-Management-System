@@ -77,18 +77,17 @@ function AdminSignUp({ userData, setUserData, onNext }) {
               }, "3000");
             return;
         }
-            
 
         onNext();
     };
 
     return (
-        <div className="flex gap-9 p-6 bg-white rounded-lg shadow-md">
+        <div className="flex gap-9 p-4 bg-white rounded-lg shadow-md">
             <div className="w-full md:w-2/5 mb-6 bg-background p-4 rounded-lg border-l-4 border-brand-dark">
                 <h2 className="font-bold text-brand-dark text-xl">STEP 1: Sign up</h2>
                 <p className="text-gray-700 mt-2">
                     Let's start by setting up your account.
-                    Once you've completed this step, you'll move on to adding your company details.
+                    Once you've completed this step, you'll move on to adding your company.
                 </p>
             </div>
 
@@ -141,7 +140,7 @@ function AdminSignUp({ userData, setUserData, onNext }) {
                     error={userErrors.confirmPassword}
                     onCapsLock={handleCapsLock}
                 />
-                <div className="text-center mb-2">
+                <div className="text-center mb-8">
                     <p className='text-error text-sm mt-1'>{errorAlert}</p>
                     <SubmitButton readyToSend={isSubmitDisabled}>
                                             Continue

@@ -46,7 +46,7 @@ function LogIn() {
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="max-w-md mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
+    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-gray-300 relative z-10">
       <div className="flex items-center justify-center mb-4">
         <h2 className="text-3xl font-semibold mr-2">Welcome Back!</h2>
       </div>
@@ -72,13 +72,12 @@ function LogIn() {
         {capsLockIsOn && (
             <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>
         )}
-        <span className="text-brand-base text-sm cursor-pointer">Forgot your password?</span>
         <p className="text-center mb-4">
           <Link to="/signup">
-            Don't have an account? <span className="text-brand-base cursor-pointer">Create one</span>
+            Don't have an account? <span className="text-brand-dark cursor-pointer hover:text-brand-lighter">Create one</span>
           </Link>
         </p>
-        <p className="text-error text-xs mt-1">{error}</p>
+        <p className="text-error text-sm text-center mt-1">{error}</p>
         <div className="flex justify-center items-center mt-4">
           <SubmitButton readyToSend={isSubmitDisabled}>
             {isLoading ? "Logging in..." : "Login"}

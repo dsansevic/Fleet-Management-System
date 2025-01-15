@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AdminSignUp from "./AdminSignUp";
 import AddCompany from "./AddCompany";
 import fleetflowLogo from '@assets/logo.png'; 
@@ -43,7 +43,7 @@ const SignUpForm = () => {
     }   
 
     return (
-        <div className="w-1/2 mx-auto my-7 bg-white p-6 rounded-lg shadow-lg relative z-10">
+        <div className="max-w-2xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-gray-300 relative z-10">
             <div className="flex items-center justify-center mb-2 ">
             <h1 className="text-3xl font-semibold mr-2">Get started with </h1>
                 <Link to="/" >

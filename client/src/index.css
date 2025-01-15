@@ -32,11 +32,11 @@ button:active {
     @apply transform scale-95;
 }
 
-@layer utilities {
+/* @layer utilities {
     .placeholder-italic::placeholder{
        font-style: italic;
     }
-}
+} */
 
 body {
     font-family: 'Poppins', sans-serif;

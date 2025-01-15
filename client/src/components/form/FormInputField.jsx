@@ -23,7 +23,7 @@ function FormInputField({
 
   return (
     <div className="mb-4 relative w-full">
-      <label htmlFor={name} className="block text-sm font-medium text-brand-dark">
+      <label htmlFor={name} className="block text-sm font-medium text-brand-darkest">
         {label} {label && <span className="text-error" title="This field is required">*</span>}
       </label>
 
@@ -48,7 +48,7 @@ function FormInputField({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
           >
             {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>

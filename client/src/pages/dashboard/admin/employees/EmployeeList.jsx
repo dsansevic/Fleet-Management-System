@@ -1,5 +1,3 @@
-import React from "react";
-
 const EmployeeList = ({ employees, error, loading }) => {
     if (loading) {
         return <div className="text-center text-gray-600">Loading employees...</div>;
