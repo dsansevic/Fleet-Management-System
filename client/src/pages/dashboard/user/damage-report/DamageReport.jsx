@@ -84,7 +84,7 @@ const DamageReport = () => {
                 On this page, you can view the history of your submitted damage reports. 
                 Use the table below to track the status of your reports, view details, or submit a new report if necessary.
             </p>
-            <LinkButton to ="new" label="Add new report" className="bg-brand-base"></LinkButton>
+            <LinkButton to ="new" label="Add new report" className="bg-white border-gray-400"></LinkButton>
             <h2 className="font-semibold py-2">Your damage report history:</h2>
             <Table
                         headers={tableHeaders}

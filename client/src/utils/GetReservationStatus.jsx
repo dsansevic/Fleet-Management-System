@@ -13,7 +13,7 @@ const GetReservationStatus = (status) => {
                 label: "Approved",
                 icon: <CheckCircleIcon className="h-6 w-6 text-green-500" />,
                 color: "text-green-600",
-                message: "This reservation has been approved and is ready to use.",
+                message: "This reservation has been approved!",
             };
         case "resolved":
             return {

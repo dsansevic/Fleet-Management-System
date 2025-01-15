@@ -47,6 +47,11 @@ const InactiveReservations = () => {
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-6">
                 Inactive Reservations
             </h2>
+            <p className="text-gray-600 mb-4">
+            Here you can find a list of all your past reservations, including completed, canceled, 
+            rejected or unresolved ones.<br/> You can check reservations details, but editing or reactivating 
+            them isn’t possible.
+            </p>
             {error ? (
                 <p className="text-red-600 bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (

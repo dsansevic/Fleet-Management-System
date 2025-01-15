@@ -25,6 +25,10 @@ const ActiveReservations = () => {
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-6">
                 Active Reservations
             </h2>
+            <p className="text-gray-600 mb-4">
+            Active reservations include upcoming bookings and those currently in progress. 
+            You can check the details of each reservation and, if needed, change the end time or cancel them up to <strong>90 minutes </strong> before the start time. 
+            </p>
             {error ? (
                 <p className="text-red-600 bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (

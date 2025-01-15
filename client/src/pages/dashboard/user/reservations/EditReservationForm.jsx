@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { validateReservationField } from "@utils/validateReservationField";
+import Button from "@components/ui/Button";
+import SubmitButton from "@components/ui/SubmitButton";
 
 const EditReservationForm = ({ reservation, onSave, onCancel }) => {
     const [newEndTime, setNewEndTime] = useState("");
@@ -33,20 +35,18 @@ const EditReservationForm = ({ reservation, onSave, onCancel }) => {
                 />
                 {newEndTimeError && <p className="text-error text-sm mt-1">{newEndTimeError}</p>}
             </div>                      
-            <div className="flex">
-                <button
-                    className={`bg-brand-base text-white px-4 py-2 rounded ${isSubmitDisabled ? "opacity-50" : ""}`}
+            <div className="flex justify-between">
+                <Button
+                    className="bg-gray-300 "
+                    onClick={onCancel}
+                    label = "Cancel"
+                />
+                <SubmitButton
                     onClick={() => onSave(newEndTime)}
-                    disabled={isSubmitDisabled}
+                    readyToSend={isSubmitDisabled}
                 >
                     Save Changes
-                </button>
-                <button
-                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded ml-2"
-                    onClick={onCancel}
-                >
-                    Cancel
-                </button>
+                </SubmitButton>
             </div>
         </div>
     );
