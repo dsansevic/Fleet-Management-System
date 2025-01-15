@@ -78,7 +78,7 @@ const DamageReportDetails = () => {
             A damage report has been submitted for the vehicle <strong>{report?.reservation?.vehicle?.brand} 
             {report?.reservation?.vehicle?.model} </strong> with license plate <strong>{report?.reservation?.vehicle?.licensePlate} </strong>. 
             The issue is related to the reservation for <strong> {report?.reservation?.purpose} </strong> 
-            from  <strong> {formatDate(report?.reservation?.startTime)}</strong>
+            from  <strong> {formatDate(report?.reservation?.startTime)} </strong>
             to <strong>  {formatDate(report?.reservation?.endTime)}</strong>. 
             Reported by <strong>{report?.reportedBy?.firstName} {report?.reportedBy?.lastName} </strong>
             on <strong>{formatDate(report?.createdAt)} </strong>. 

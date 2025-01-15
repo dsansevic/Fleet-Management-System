@@ -43,9 +43,9 @@ export const getUserDamageReport = async (id) => {
     }
 };
 
-export const updateDamageReportStatus = async (id, data) => {
+export const updateDamageReportStatus = async (id, adminMessage) => {
     try {
-        const response = await apiClient.patch(`/damage-report/${id}/status`, data);
+        const response = await apiClient.patch(`/damage-report/${id}/status`, adminMessage);
         return response.data;
     } catch (error) {
         console.error("Error updating damage report status:", error);

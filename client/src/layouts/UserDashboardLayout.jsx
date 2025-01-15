@@ -5,6 +5,7 @@ import InactiveReservations from "@pages/dashboard/user/reservations/InactiveRes
 import ActiveReservations from "@pages/dashboard/user/reservations/ActiveReservations";
 import ReservationDetails from "@pages/dashboard/user/reservations/ReservationDetails";
 import DamageReport from "@pages/dashboard/user/damage-report/DamageReport";
+import DamageReportDetails from "@pages/dashboard/user/damage-report/DamageReportDetails";
 import AddDamageReport from "@pages/dashboard/user/damage-report/AddDamageReport";
 import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
 import PageTitle from "@utils/PageTitle";
@@ -75,6 +76,15 @@ const UserDashboardLayout = () => {
                             <>
                                 <AddDamageReport />
                                 <PageTitle title="Add report" />
+                            </>
+                        }
+                    /> 
+                    <Route
+                        path="damage-report/:id"
+                        element={
+                            <>
+                                <DamageReportDetails />
+                                <PageTitle title="Report details" />
                             </>
                         }
                     />    

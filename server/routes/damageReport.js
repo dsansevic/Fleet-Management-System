@@ -19,7 +19,7 @@ router.get("/", checkRole("admin"), getDamageReports);
 
 router.get("/user", checkRole("employee"), getUserReports);
 
-router.get("/:id", checkRole("admin"), getDamageReportById);
+router.get("/:id", getDamageReportById);
 
 router.patch("/:id/status", checkRole("admin"), updateDamageReportStatus);
 

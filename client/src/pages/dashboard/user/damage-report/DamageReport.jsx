@@ -72,7 +72,8 @@ const DamageReport = () => {
 
     const sortReports = (key) => {
         if (!key) return;
-        sortData(filteredReports, key, sortConfig.ascending);
+        const sortedData = sortData(reports, key, sortConfig.ascending);
+        setReports(sortedData);
         setSortConfig({ key, ascending: !sortConfig.ascending });
     };
 

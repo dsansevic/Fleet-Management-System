@@ -20,7 +20,8 @@ const damageReportSchema = new mongoose.Schema(
             type: String,
             enum: ["pending", "in-progress", "resolved"],
             default: "pending",
-        }
+        },
+        adminMessage: { type: String}
     },
     { timestamps: true }
 );
