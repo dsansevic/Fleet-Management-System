@@ -7,13 +7,14 @@ import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-r
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
 import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageReportDetails";
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
+import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
 
 const AdminDashboardLayout = () => {
     return (
         <div className="flex h-full w-full flex-row">
             <AdminDashboardSideBar />
-            <div className="flex-1 bg-gray-100 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto bg-background">
                 <Routes>
                     <Route
                         index
@@ -78,6 +79,7 @@ const AdminDashboardLayout = () => {
                             </>
                         }
                     />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </div>

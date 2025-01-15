@@ -61,7 +61,7 @@ const ActiveReservations = () => {
 
                                 <div className="flex justify-end">
                                     <Link
-                                        to={`/dashboard-user/${res._id}`}
+                                        to={`/dashboard-user/reservation/${res._id}`}
                                         className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                                     >
                                         View Details

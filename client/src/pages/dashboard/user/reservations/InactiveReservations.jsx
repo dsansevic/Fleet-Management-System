@@ -90,7 +90,7 @@ const InactiveReservations = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <Link
-                                                to={`/dashboard-user/${res._id}`}
+                                                to={`/dashboard-user/reservation/${res._id}`}
                                                 className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                                             >
                                                 View Details

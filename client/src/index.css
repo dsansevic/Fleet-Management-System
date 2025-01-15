@@ -6,9 +6,13 @@
     --background: #f3f4f6; 
     --foreground: #344E41; 
   
-    --brand-light: #A3B18A;
-    --brand-base: #588157;
-    --brand-dark: #3A5A40;
+    --brand-light: #efacac;
+    --brand-lighter: #e05959;
+    --brand-base: #FF4136;
+    /* --brand-base: #f77f00; */
+    --brand-dark: #d62828;
+    --brand-darker: #b52222;
+    --brand-darkest: #621212;
 
     --text-primary: #1f2937;
     --text-secondary: #6b7280;

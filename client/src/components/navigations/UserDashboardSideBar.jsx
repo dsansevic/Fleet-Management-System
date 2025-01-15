@@ -12,7 +12,7 @@ const UserDashboardSideBar = () => {
     ];
 
     return (
-        <aside className="h-[calc(100vh-4rem)] bg-white w-64 p-6 flex flex-col shadow-lg sticky top-16">
+        <aside className="h-[calc(100vh-4rem)] bg-white w-64 p-6 flex flex-col shadow-lg shadow-gray-300 sticky top-16">
             <nav className="flex flex-col space-y-4">
                 {navigationLinks.map((link, index) => (
                     <NavLink

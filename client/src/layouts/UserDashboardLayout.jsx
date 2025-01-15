@@ -8,13 +8,14 @@ import DamageReport from "@pages/dashboard/user/damage-report/DamageReport";
 import DamageReportDetails from "@pages/dashboard/user/damage-report/DamageReportDetails";
 import AddDamageReport from "@pages/dashboard/user/damage-report/AddDamageReport";
 import UserDashboardSideBar from "@components/navigations/UserDashboardSideBar";
+import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
 
 const UserDashboardLayout = () => {
     return (
         <div className="flex h-full w-full flex-row">
             <UserDashboardSideBar />
-            <div className="flex-1 bg-gray-100 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto bg-background">
                 <Routes>
                     <Route
                         index
@@ -89,14 +90,15 @@ const UserDashboardLayout = () => {
                         }
                     />    
                     <Route
-                        path="/:id"
+                        path="reservation/:id"
                         element={
                             <>
                                 <ReservationDetails /> 
                                 <PageTitle title="Details" />
                             </>
                         }
-                    />                  
+                    />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </div>

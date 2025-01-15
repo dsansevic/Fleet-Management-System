@@ -12,8 +12,11 @@ export default {
 
         brand: {
           light: "var(--brand-light)", 
+          lighter: "var(--brand-lighter)",
           base: "var(--brand-base)",  
           dark: "var(--brand-dark)",  
+          darker: "var(--brand-darker)",
+          darkest:"var(--brand-darkest)"
         },
 
         text: {
