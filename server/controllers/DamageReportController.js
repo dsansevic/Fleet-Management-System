@@ -1,18 +1,19 @@
 const DamageReport = require("../models/DamageReport");
 const Reservation = require("../models/Reservation");
 
-const populateDamageReports = async (query, companyId) => {
-    return query
-        .populate({
-            path: "reservation",
-            select: "startTime endTime vehicle company",
-            match: { company: companyId },
-            populate: {
-                path: "vehicle",
-                select: "brand model licensePlate",
-            },
+const populateDamageReports = async (report, companyId, role) => {
+    report = report.populate({
+        path: "reservation",
+        select: "startTime endTime vehicle purpose",
+        match: { company: companyId },
+        populate: {
+            path: "vehicle",
+            select: "brand model licensePlate",
+            }
         })
-        .populate("reportedBy", "firstName lastName email");
+    if (role === "admin")
+            report = report.populate("reportedBy", "firstName lastName email");
+    return report;
 };
 
 const validateReservation = async (reservationId, userId) => {
@@ -25,6 +26,14 @@ const validateReservation = async (reservationId, userId) => {
     }
     return reservation;
 };
+
+const filterReports = (reports) => {
+    if (!reports) return [];
+    if (Array.isArray(reports)) {
+        return reports.filter((report) => report.reservation !== null);
+    }
+    return reports.reservation ? [reports] : [];
+}
 
 const addDamageReport = async (req, res) => {
     const { reservationId, description } = req.body;
@@ -52,11 +61,14 @@ const addDamageReport = async (req, res) => {
 
 const getDamageReports = async (req, res) => {
     try {
-        const companyId = req.user.companyId;
+        const {companyId, role} = req.user;
 
-        const reports = await populateDamageReports(DamageReport.find(), companyId);
-        const filteredReports = reports.filter((report) => report.reservation !== null);
+        const reports = await populateDamageReports(DamageReport.find(), companyId, role);
+        const filteredReports = filterReports(reports);
 
+        if (filteredReports.length === 0)
+            return res.status(404).json({message: "No damage reports found!"})   
+        
         res.status(200).json(filteredReports);
     } catch (error) {
         console.error("Error fetching damage reports:", error);
@@ -67,12 +79,13 @@ const getDamageReports = async (req, res) => {
 const getDamageReportById = async (req, res) => {
     try {
         const { id } = req.params;
+        const {role} = req.user
         const companyId = req.user.companyId;
 
-        const report = await populateDamageReports(DamageReport.findById(id), companyId);
+        const report = await populateDamageReports(DamageReport.findById(id), companyId, role);
 
-        if (!report || !report.reservation) {
-            return res.status(404).json({ message: "Damage report not found or not associated with your company." });
+        if (!report) {
+            return res.status(404).json({ message: "No damage report found!" });
         }
 
         res.status(200).json(report);
@@ -81,6 +94,24 @@ const getDamageReportById = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch damage report details.", error: error.message });
     }
 };
+
+const getUserReports = async (req, res) => {
+    try {
+        const {id, companyId, role} = req.user;
+
+        const reports = await populateDamageReports(DamageReport.find({reportedBy: id}), companyId, role);
+        
+        const filteredReports = filterReports(reports);
+
+        if (filteredReports.length === 0)
+            return res.status(404).json({message: "No damage reports found!"})   
+        
+        res.status(200).json(filteredReports);
+    } catch (error) {
+        console.log("Error fetching user's reports. ", error);
+        res.status(500).json({ message: "Failed to fetch user's damage reports."})
+    }
+}
 
 const updateDamageReportStatus = async (req, res) => {
     try {
@@ -112,5 +143,6 @@ module.exports = {
     addDamageReport,
     getDamageReports,
     getDamageReportById,
+    getUserReports,
     updateDamageReportStatus
 };

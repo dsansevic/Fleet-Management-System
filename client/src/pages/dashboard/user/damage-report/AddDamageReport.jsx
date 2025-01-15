@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import SelectField from "@components/form/SelectField";
 import TextAreaField from "@components/form/TextAreaField";
 import SubmitButton from "@components/ui/SubmitButton";
+import LinkButton from "@components/ui/LinkButton";
 import SuccessMessage from "@components/ui/SuccessMessage";
 import { createDamageReport } from "@api/damageReports";
 import { fetchLiveOrCompletedReservations } from "@api/reservations";
 
-const DamageReport = () => {
+const AddDamageReport = () => {
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState("");
     const [description, setDescription] = useState("");
@@ -92,7 +93,13 @@ const DamageReport = () => {
                 />
                 {error && <p className="text-error mb-4">{error}</p>}
                         
-                <div className="flex justify-end">
+                <div className="flex justify-between">
+                <LinkButton
+                    to={(-1)}
+                    label = "Go back"
+                >
+                    Cancel
+                </LinkButton>
                     <SubmitButton readyToSend={!description || !selectedReservation}>
                         Submit
                     </SubmitButton>
@@ -102,4 +109,4 @@ const DamageReport = () => {
     );
 };
 
-export default DamageReport;
+export default AddDamageReport;

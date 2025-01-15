@@ -11,9 +11,9 @@ const InactiveReservations = () => {
     const tableHeaders = [
         { name: "Purpose", key: "purpose", visibility: "" },
         { name: "Status", key: "status", visibility: "" },
-        { name: "See Details", key: null, visibility: "" },
         { name: "Start Time", key: "startTime", visibility: "hidden lg:table-cell" },
         { name: "End Time", key: "endTime", visibility: "hidden sm:table-cell" },
+        { name: "See Details", key: null, visibility: "" }
     ];
 
     useEffect(() => {
@@ -82,6 +82,12 @@ const InactiveReservations = () => {
                                             {status.icon}
                                             <span>{status.label}</span>
                                         </td>
+                                        <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                                            {new Date(res.startTime).toLocaleString()}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
+                                            {new Date(res.endTime).toLocaleString()}
+                                        </td>
                                         <td className="px-6 py-4">
                                             <Link
                                                 to={`/dashboard-user/${res._id}`}
@@ -89,12 +95,6 @@ const InactiveReservations = () => {
                                             >
                                                 View Details
                                             </Link>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                                            {new Date(res.startTime).toLocaleString()}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-gray-500 hidden sm:table-cell">
-                                            {new Date(res.endTime).toLocaleString()}
                                         </td>
                                     </tr>
                                 );

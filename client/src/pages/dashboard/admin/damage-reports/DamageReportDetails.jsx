@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchDamageReportById, updateDamageReportStatus } from "@api/damageReports";
+import { getDamageReportById, updateDamageReportStatus } from "@api/damageReports";
 import { updateVehicle } from "@api/vehicles"
 import SelectField from "@components/form/SelectField";
 import TextAreaField from "@components/form/TextAreaField";
 import Button from "@components/ui/Button";
 import SuccessMessage from "@components/ui/SuccessMessage"
+import {formatDate} from "@utils/formatDate"
 
 const DamageReportDetails = () => {
     const { id } = useParams();
@@ -19,7 +20,7 @@ const DamageReportDetails = () => {
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                const data = await fetchDamageReportById(id);
+                const data = await getDamageReportById(id);
                 setReport(data);
                 setStatus(data.status);
             } catch (error) {
@@ -72,11 +73,22 @@ const DamageReportDetails = () => {
                 Back
             </button>
             <div className="bg-white shadow-md border rounded-lg p-6 space-y-4 mt-4">
-                <h3 className="text-2xl font-semibold">Damage Report Details</h3>
-                <p><strong>Vehicle:</strong> {report.reservation.vehicle.brand} {report.reservation.vehicle.model}</p>
-                <p><strong>Reported By:</strong> {report.reportedBy.firstName} {report.reportedBy.lastName}</p>
-                <p><strong>Description:</strong> {report.description}</p>
-                <p><strong>Status:</strong> {report.status}</p>
+            <h3 className="text-2xl font-semibold">Damage Report</h3>
+            <p>
+            A damage report has been submitted for the vehicle <strong>{report?.reservation?.vehicle?.brand} 
+            {report?.reservation?.vehicle?.model} </strong> with license plate <strong>{report?.reservation?.vehicle?.licensePlate} </strong>. 
+            The issue is related to the reservation for <strong> {report?.reservation?.purpose} </strong> 
+            from  <strong> {formatDate(report?.reservation?.startTime)}</strong>
+            to <strong>  {formatDate(report?.reservation?.endTime)}</strong>. 
+            Reported by <strong>{report?.reportedBy?.firstName} {report?.reportedBy?.lastName} </strong>
+            on <strong>{formatDate(report?.createdAt)} </strong>. 
+            </p>
+            <p>
+                Issue description: <strong>{report?.description || "No description provided."}</strong>
+            </p>
+            <p>
+                Current status: <strong>{report?.status || "Unknown"}</strong>.
+            </p>
                 {success && <SuccessMessage message={success}/>}
                 {!success && (
                     <>
@@ -101,14 +113,13 @@ const DamageReportDetails = () => {
                             placeholder="Add a message for the user..."
                             rows={4}
                         />
-
+                        <p> If you think that the vehicle requires a technical inspection or repair, please mark it as 'Service'.</p>
                         <div className="flex space-x-4">
                             <Button label="Update Status" onClick={handleSubmit} />
                             <Button label="Mark Vehicle as Service" onClick={handleMarkAsService} className="bg-red-500 text-white" />
                         </div>
                     </>
                 )}
-
                 {error && <p className="text-red-500 mt-4">{error}</p>}
             </div>
         </div>

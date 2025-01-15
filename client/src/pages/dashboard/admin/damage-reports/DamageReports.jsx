@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import FilterDamageReports from "./FilterDamageReports";
-import DamageReportDetails from "./DamageReports"
 import { getDamageReport } from "@api/damageReports";
 import Table from "@components/ui/Table";
 import { sortData } from "@utils/sortData";
 import { capitalizedFirstLetter } from "@utils/capitalizedFirstLetter";
 import { Link } from "react-router-dom";
+import GetReservationStatus from "@utils/GetReservationStatus";
 
 const DamageReports = () => {
     const [reports, setReports] = useState([]);
@@ -43,38 +43,42 @@ const DamageReports = () => {
         setSortConfig({ key, ascending: !sortConfig.ascending });
     };
 
-    const rows = (report) => (
-        <tr
-            key={report._id}
-            className="border-b border-gray-300 hover:bg-gray-50"
-        >
-            <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                {report.reservation?.vehicle?.brand}{" "}
-                {report.reservation?.vehicle?.model}
-            </td>
-            <td className="px-6 py-4 text-sm font-medium capitalize">
-                {report.status}
-            </td>
-            <td className="px-6 py-4 text-sm text-gray-900">
-                {capitalizedFirstLetter(report.reportedBy?.firstName)}.{" "}
-                {report.reportedBy?.lastName}
-            </td>
-            <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                {new Date(report.createdAt).toLocaleString()}
-            </td>
-            <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                {report.description}
-            </td>
-            <td className="px-6 py-4">
-                <Link
-                    to={`/dashboard-admin/damage-reports/${report._id}`}
-                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                >
-                    View Details
-                </Link>
-            </td>
-        </tr>
-    );
+    const rows = (report) => {
+        const status = GetReservationStatus(report.status);
+        return (
+            <tr
+                key={report._id}
+                className="border-b border-gray-300 hover:bg-gray-50"
+            >
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    {report.reservation?.vehicle?.brand}{" "}
+                    {report.reservation?.vehicle?.model}
+                </td>
+                <td className="px-6 py-4 text-sm font-medium capitalize flex items-center gap-1">
+                    {status.icon}
+                    <span>{status.label}</span>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-900">
+                    {capitalizedFirstLetter(report.reportedBy?.firstName)}.{" "}
+                    {report.reportedBy?.lastName}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                    {new Date(report.createdAt).toLocaleString()}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                    {report.description}
+                </td>
+                <td className="px-6 py-4">
+                    <Link
+                        to={`${report._id}`}
+                        className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                    >
+                        View Details
+                    </Link>
+                </td>
+            </tr>
+        )
+    }
 
     return (
         <div className="p-12 mx-auto overflow-x-auto">

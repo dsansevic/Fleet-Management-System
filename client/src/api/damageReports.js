@@ -23,13 +23,23 @@ export const getDamageReport = async () => {
     }
 };
 
-export const fetchDamageReportById = async (id) => {
+export const getDamageReportById = async (id) => {
     try {
         const response = await apiClient.get(`/damage-report/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching damage report details:", error);
         throw new Error(error.response?.data?.message || "Failed to fetch damage report details.");
+    }
+};
+
+export const getUserDamageReport = async (id) => {
+    try {
+        const response = await apiClient.get("/damage-report/user");  
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw new Error(error.response?.data?.message || "Failed to fetch user's damage report.");
     }
 };
 

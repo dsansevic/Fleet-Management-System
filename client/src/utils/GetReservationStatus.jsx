@@ -15,6 +15,13 @@ const GetReservationStatus = (status) => {
                 color: "text-green-600",
                 message: "This reservation has been approved and is ready to use.",
             };
+        case "resolved":
+            return {
+                label: "Resolved",
+                icon: <CheckCircleIcon className="h-6 w-6 text-green-500" />,
+                color: "text-green-600",
+                message: "This reservation has been approved and is ready to use.",
+            };
         case "pending":
         case "pending-reapproval":
             return {
@@ -54,6 +61,13 @@ const GetReservationStatus = (status) => {
         case "live":
             return {
                 label: "Live",
+                icon: <PlayCircleIcon className="h-6 w-6 text-blue-500" />,
+                color: "text-blue-500",
+                message: "This reservation is currently active.",
+            };
+        case "in-progress":
+            return {
+                label: "In progress",
                 icon: <PlayCircleIcon className="h-6 w-6 text-blue-500" />,
                 color: "text-blue-500",
                 message: "This reservation is currently active.",
