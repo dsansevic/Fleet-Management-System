@@ -22,14 +22,16 @@ function App() {
       <Route path="/" element={<RootLayout />}>
         <Route 
           index
-          element={<>
+          element={
+          <>
             <HomePage />
             <PageTitle title="FleetFlow"/>
           </> 
         }/>
         <Route element={<GuestRoutes />}>
-          <Route  path="login" 
-            element={<>
+          <Route path="login" 
+            element={
+            <>
               <LogIn />
               <PageTitle title="Sign in"/>
             </>
@@ -62,4 +64,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

@@ -17,7 +17,7 @@ const AdminDashboardLayout = () => {
             <div className="flex-1 overflow-y-auto bg-background">
                 <Routes>
                     <Route
-                        index
+                        path="/"
                         element={
                             <>
                                 <AdminDashboard />

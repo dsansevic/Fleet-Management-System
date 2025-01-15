@@ -16,8 +16,8 @@ const UserNavbar = () => {
     };
     return (
         <div className="border-b sticky top-0 border-lightgreen bg-white z-20 ">
-            <nav className="container mx-auto px-10 py-2 flex items-center justify-between">
-                <NavLink to="/">
+            <nav className="container mx-auto px-14 py-2 flex items-center justify-between">
+                <NavLink to="/" className="invisible lg:visible md:visible">
                     <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />
                 </NavLink>
                 <div className="flex gap-4">
