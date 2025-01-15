@@ -5,6 +5,7 @@ import Employees from "@pages/dashboard/admin/employees/Employees";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
+import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageReportDetails";
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
 import PageTitle from "@utils/PageTitle";
 
@@ -56,6 +57,15 @@ const AdminDashboardLayout = () => {
                             <>
                                 <DamageReports />
                                 <PageTitle title="Damage reports" />
+                            </>
+                        }
+                    />
+                    <Route 
+                        path="/damage-reports/:id" 
+                        element={
+                            <>
+                                 <DamageReportDetails />
+                                 <PageTitle title="Report details" />
                             </>
                         }
                     />

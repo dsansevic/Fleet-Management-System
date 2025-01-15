@@ -19,3 +19,13 @@ export const addVehicles = async (data) => {
         throw new Error(errorMessage);
     }
 };
+
+export const updateVehicle = async (id, data) => {
+    try {
+        const response = await apiClient.patch(`/vehicle/${id}`, data);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating vehicle:", error);
+        throw error.response?.data || { message: "Failed to update vehicle." };
+    }
+};

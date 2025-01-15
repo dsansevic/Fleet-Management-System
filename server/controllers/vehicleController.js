@@ -54,4 +54,40 @@ const getVehicle = async (req, res) => {
     }
 };
 
-module.exports = { addVehicle, getVehicle };
+const updateVehicle = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+
+        const allowedFields = ["brand", "model", "licensePlate", "status", "capacity", "type", "vehicleInspection"];
+        const updateKeys = Object.keys(updates);
+
+        const isValidUpdate = updateKeys.every((key) => allowedFields.includes(key));
+
+        if (!isValidUpdate) {
+            return res.status(400).json({ message: "Invalid update fields." });
+        }
+
+        const vehicle = await Vehicle.findById(id);
+
+        if (!vehicle) {
+            return res.status(404).json({ message: "Vehicle not found." });
+        }
+
+        updateKeys.forEach((key) => {
+            vehicle[key] = updates[key];
+        });
+
+        await vehicle.save();
+
+        res.status(200).json({
+            message: "Vehicle updated successfully.",
+            vehicle,
+        });
+    } catch (error) {
+        console.error("Error updating vehicle:", error);
+        res.status(500).json({ message: "Failed to update vehicle.", error: error.message });
+    }
+};
+
+module.exports = { addVehicle, getVehicle, updateVehicle };

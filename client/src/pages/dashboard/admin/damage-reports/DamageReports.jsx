@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import FilterDamageReports from "./FilterDamageReports";
+import DamageReportDetails from "./DamageReports"
 import { getDamageReport } from "@api/damageReports";
 import Table from "@components/ui/Table";
 import { sortData } from "@utils/sortData";
