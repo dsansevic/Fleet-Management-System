@@ -9,12 +9,13 @@ import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageRep
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
 import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
+import Sidebar from "../components/navigations/Sidebar";
 
 const AdminDashboardLayout = () => {
     return (
-        <div className="flex h-full w-full flex-row">
+        <div className="flex h-full w-full">
             <AdminDashboardSideBar />
-            <div className="flex-1 overflow-y-auto bg-background">
+            <div className="flex-1 bg-background p-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
                 <Routes>
                     <Route
                         path="/"

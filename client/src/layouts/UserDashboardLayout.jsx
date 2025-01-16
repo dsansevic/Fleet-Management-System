@@ -13,9 +13,9 @@ import PageTitle from "@utils/PageTitle";
 
 const UserDashboardLayout = () => {
     return (
-        <div className="flex h-full w-full flex-row">
+        <div className="flex h-full w-full">
             <UserDashboardSideBar />
-            <div className="flex-1 overflow-y-auto bg-background">
+            <div className="flex-1 bg-background p-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
                 <Routes>
                     <Route
                         index
