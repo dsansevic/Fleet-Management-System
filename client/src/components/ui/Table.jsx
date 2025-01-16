@@ -1,4 +1,4 @@
-const Table = ({ headers, data, sortConfig, onSort, rows }) => {
+const Table = ({ headers, data, sortConfig, onSort, rows, emptyMessage }) => {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full border-collapse border border-gray-200 shadow-md bg-white">
@@ -24,7 +24,7 @@ const Table = ({ headers, data, sortConfig, onSort, rows }) => {
                     ) : (
                         <tr>
                             <td colSpan={headers.length} className="text-center py-4">
-                                No data available.
+                                {emptyMessage || "No data available"}
                             </td>
                         </tr>
                     )}

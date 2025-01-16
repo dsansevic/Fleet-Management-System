@@ -99,6 +99,7 @@ const DamageReports = () => {
                         sortConfig={sortConfig}
                         onSort={sortReports}
                         rows={rows}
+                        emptyMessage = "No reports have been submitted yet."
                     />
                 </>
             )}
