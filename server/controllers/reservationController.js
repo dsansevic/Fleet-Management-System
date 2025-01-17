@@ -43,15 +43,39 @@ const addReservation = async (req, res) => {
 
 const getActiveReservations = async (req, res) => {
     try {
+        const { page = 1, limit = 6 } = req.query;
         const currentDate = new Date();
+
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const totalReservations = await Reservation.countDocuments({
+            company: req.user.companyId,
+            user: req.user.id,
+            status: { $in: ["approved", "pending", "live", "pending-reapproval"] },
+            endTime: { $gte: currentDate },
+        });
+
+        if (totalReservations === 0) {
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+        }
+
         const activeReservations = await Reservation.find({
             company: req.user.companyId,
             user: req.user.id,
             status: { $in: ["approved", "pending", "live", "pending-reapproval"] },
             endTime: { $gte: currentDate },
-        }).sort({ startTime: 1 });
+        })
+        .sort({ startTime: 1 })
+        .skip(skip) 
+        .limit(limitNumber);
 
-        res.status(200).json(activeReservations);
+        res.status(200).json({
+            data: activeReservations,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalReservations / limitNumber),
+        });
     } catch (error) {
         console.error("Error fetching active reservations:", error);
         res.status(500).json({ message: "Failed to fetch active reservations", error: error.message });

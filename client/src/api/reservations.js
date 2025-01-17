@@ -10,9 +10,9 @@ export const addReservation = async (reservationData) => {
     }
 };
 
-export const fetchActiveReservations = async () => {
+export const fetchActiveReservations = async (page, limit) => {
     try {
-        const response = await apiClient.get("/reservation/active");
+        const response = await apiClient.get(`/reservation/active?page=${page}&limit=${limit}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching active reservations:", error);

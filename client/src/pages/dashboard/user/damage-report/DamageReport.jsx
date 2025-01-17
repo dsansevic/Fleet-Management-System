@@ -15,7 +15,7 @@ const DamageReport = () => {
     const [sortConfig, setSortConfig] = useState({ key: null, ascending: true });
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(
-        parseInt(sessionStorage.getItem("currentPage")) || 1
+        parseInt(sessionStorage.getItem("damageReportPage")) || 1
     );
     const reportsPerPage = 5;
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -87,7 +87,7 @@ const DamageReport = () => {
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
-        sessionStorage.setItem("currentPage", pageNumber);
+        sessionStorage.setItem("damageReportPage", pageNumber);
     };
 
     return(

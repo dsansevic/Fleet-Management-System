@@ -19,9 +19,13 @@ const UserDashboardLayout = () => {
     useEffect(() => {
         if (document.startViewTransition) {
             document.startViewTransition(() => {});
-        }            
+        }  
+        if (!location.pathname.startsWith("/dashboard-user/reservation/") && previousPath.current.startsWith("/dashboard-user/active-reservations")) {
+            sessionStorage.removeItem("activeReservationsPage");
+    }
+                  
         if (!location.pathname.startsWith("/dashboard-user/damage-report") && previousPath.current.startsWith("/dashboard-user/damage-report")) {
-            sessionStorage.removeItem("currentPage");
+            sessionStorage.removeItem("damageReportPage");
         }
 
         previousPath.current = location.pathname;
