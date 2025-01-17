@@ -6,6 +6,7 @@ import { sortData } from "@utils/sortData";
 import { capitalizedFirstLetter } from "@utils/capitalizedFirstLetter";
 import { Link } from "react-router-dom";
 import GetReservationStatus from "@utils/GetReservationStatus";
+import { getPreviewText } from "@utils/getPreviewText";
 
 const DamageReports = () => {
     const [reports, setReports] = useState([]);
@@ -27,12 +28,6 @@ const DamageReports = () => {
         { name: "Description", key: "description", visibility: "hidden lg:table-cell" },
         { name: "Details", key: null, visibility: "" },
     ];
-
-    const getDescription = (desc) => {
-        if (desc.length > 25) 
-            return `${desc.substring(0,25)}...`
-        return desc
-    }
 
     useEffect(() => {
         const loadDamageReports = async () => {
@@ -84,7 +79,7 @@ const DamageReports = () => {
                     {new Date(report.createdAt).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                    {getDescription(report.description)}
+                    {getPreviewText(report.description)}
                 </td>
                 <td className="px-6 py-4">
                     <Link

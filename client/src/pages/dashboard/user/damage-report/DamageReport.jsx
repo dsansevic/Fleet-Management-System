@@ -6,6 +6,7 @@ import { sortData } from "@utils/sortData"
 import LinkButton from "@components/ui/LinkButton"
 import Title from "@components/ui/Title";
 import GetReservationStatus from "@utils/GetReservationStatus";
+import { getPreviewText } from "@utils/getPreviewText";
 
 const DamageReport = () => {
     const [reports, setReports] = useState([])
@@ -27,12 +28,6 @@ const DamageReport = () => {
         { name: "Details", key: "details", visibility: ""},
     ]
 
-    const getDescription = (desc) => {
-        if (desc.length > 25) 
-            return `${desc.substring(0,25)}...`
-        return desc
-    }
-
     const rows = (report) => 
         { const status = GetReservationStatus(report.status);
         return (
@@ -52,7 +47,7 @@ const DamageReport = () => {
                     {new Date(report.createdAt).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                    {getDescription(report.description)}
+                    {getPreviewText(report.description)}
                 </td>
                 <td className="px-6 py-4">
                     <Link
