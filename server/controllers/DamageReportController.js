@@ -1,19 +1,27 @@
 const DamageReport = require("../models/DamageReport");
 const Reservation = require("../models/Reservation");
 
-const populateDamageReports = async (report, companyId, role) => {
-    report = report.populate({
-        path: "reservation",
-        select: "startTime endTime vehicle purpose",
-        match: { company: companyId },
-        populate: {
-            path: "vehicle",
-            select: "brand model licensePlate",
-            }
-        })
-    if (role === "admin")
-            report = report.populate("reportedBy", "firstName lastName email");
-    return report;
+const populateDamageReports = async (reports, companyId, role) => {
+    const populateOptions = [
+        {
+            path: "reservation",
+            select: "startTime endTime vehicle purpose",
+            match: { company: companyId },
+            populate: {
+                path: "vehicle",
+                select: "brand model licensePlate",
+            },
+        }
+    ];
+
+    if (role === "admin") {
+        populateOptions.push({
+            path: "reportedBy",
+            select: "firstName lastName email",
+        });
+    }
+
+    return await DamageReport.populate(reports, populateOptions);
 };
 
 const validateReservation = async (reservationId, userId) => {
@@ -26,14 +34,6 @@ const validateReservation = async (reservationId, userId) => {
     }
     return reservation;
 };
-
-const filterReports = (reports) => {
-    if (!reports) return [];
-    if (Array.isArray(reports)) {
-        return reports.filter((report) => report.reservation !== null);
-    }
-    return reports.reservation ? [reports] : [];
-}
 
 const addDamageReport = async (req, res) => {
     const { reservationId, description } = req.body;
@@ -62,14 +62,28 @@ const addDamageReport = async (req, res) => {
 const getDamageReports = async (req, res) => {
     try {
         const {companyId, role} = req.user;
+        const { page = 1, limit = 5 } = req.query;
 
-        const reports = await populateDamageReports(DamageReport.find(), companyId, role);
-        const filteredReports = filterReports(reports);
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
 
-        if (filteredReports.length === 0)
-            return res.status(404).json({message: "No damage reports found!"})   
-        
-        res.status(200).json(filteredReports);
+        const numberOfReports = await DamageReport.countDocuments();
+        if (numberOfReports === 0)
+            return res.status(404).json({message: "No damage reports found!"})  
+
+        let reports = await DamageReport.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limitNumber);
+
+        reports = await populateDamageReports(reports, companyId, role);
+         
+        res.status(200).json({
+            data: reports,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(numberOfReports / limitNumber),
+        });
     } catch (error) {
         console.error("Error fetching damage reports:", error);
         res.status(500).json({ message: "Failed to fetch damage reports.", error: error.message });
@@ -98,15 +112,30 @@ const getDamageReportById = async (req, res) => {
 const getUserReports = async (req, res) => {
     try {
         const {id, companyId, role} = req.user;
+        const { page = 1, limit = 5 } = req.query;
 
-        const reports = await populateDamageReports(DamageReport.find({reportedBy: id}), companyId, role);
-        
-        const filteredReports = filterReports(reports);
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
 
-        if (filteredReports.length === 0)
-            return res.status(404).json({message: "No damage reports found!"})   
+        const numberOfReports = await DamageReport.countDocuments({ reportedBy: id });
         
-        res.status(200).json(filteredReports);
+        if (numberOfReports === 0)
+            return res.status(404).json({message: "No damage reports found!"}) 
+
+        let reports = await DamageReport.find({ reportedBy: id })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limitNumber);
+
+        reports = await populateDamageReports(reports, companyId, role);
+  
+        res.status(200).json({
+            data: reports,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(numberOfReports / limitNumber),
+        });
+    
     } catch (error) {
         console.log("Error fetching user's reports. ", error);
         res.status(500).json({ message: "Failed to fetch user's damage reports."})

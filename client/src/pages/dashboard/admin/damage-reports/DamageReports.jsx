@@ -89,10 +89,10 @@ const DamageReports = () => {
                 <p className="text-red-600 bg-red-100 p-4 rounded-md">{error}</p>
             ) : (
                 <>
-                    <FilterDamageReports
+                    {/* <FilterDamageReports
                         reports={reports}
                         setFilteredReports={setFilteredReports}
-                    />
+                    /> */}
                     <Table
                         headers={tableHeaders}
                         data={filteredReports}

@@ -33,9 +33,9 @@ export const getDamageReportById = async (id) => {
     }
 };
 
-export const getUserDamageReport = async (id) => {
+export const getUserDamageReport = async (page, limit) => {
     try {
-        const response = await apiClient.get("/damage-report/user");  
+        const response = await apiClient.get(`/damage-report/user?page=${page}&limit=${limit}`);  
         return response.data;
     } catch (error) {
         console.error(error);

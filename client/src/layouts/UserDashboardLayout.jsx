@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { useRef, useEffect } from "react";
 import UserDashboard from "@pages/dashboard/UserDashboard";
 import AddReservation from "@pages/dashboard/user/reservations/AddReservation";
 import InactiveReservations from "@pages/dashboard/user/reservations/InactiveReservations";
@@ -12,6 +13,17 @@ import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
 
 const UserDashboardLayout = () => {
+    const location = useLocation();
+    const previousPath = useRef(location.pathname); 
+
+    useEffect(() => {            
+        if (!location.pathname.startsWith("/dashboard-user/damage-report") && previousPath.current.startsWith("/dashboard-user/damage-report")) {
+            sessionStorage.removeItem("currentPage");
+        }
+
+        previousPath.current = location.pathname;
+    }, [location.pathname]);
+
     return (
         <div className="flex h-full w-full">
             <UserDashboardSideBar />

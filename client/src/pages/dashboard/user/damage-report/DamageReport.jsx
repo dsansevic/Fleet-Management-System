@@ -12,6 +12,12 @@ const DamageReport = () => {
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, ascending: true });
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(
+        parseInt(sessionStorage.getItem("currentPage")) || 1
+    );
+    const reportsPerPage = 5;
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const tableHeaders = [
         { name: "Vehicle", key: "vehicle", visibility: ""},
@@ -21,15 +27,21 @@ const DamageReport = () => {
         { name: "Details", key: "details", visibility: ""},
     ]
 
+    const getDescription = (desc) => {
+        if (desc.length > 25) 
+            return `${desc.substring(0,25)}...`
+        return desc
+    }
+
     const rows = (report) => 
         { const status = GetReservationStatus(report.status);
         return (
             <tr
                 key={report._id}
-                className="border-b border-gray-300 hover:bg-gray-50"
+                className="border-b border-indigo-50 hover:bg-gray-50"
             >
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {report.reservation?.vehicle?.brand}{" "}
+                <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                    <strong>{report.reservation?.vehicle?.brand}</strong><br/>
                     {report.reservation?.vehicle?.model}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium capitalize flex items-center gap-1">
@@ -40,12 +52,12 @@ const DamageReport = () => {
                     {new Date(report.createdAt).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                    {report.description}
+                    {getDescription(report.description)}
                 </td>
                 <td className="px-6 py-4">
                     <Link
                         to={`${report._id}`}
-                        className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                        className="text-brand-dark hover:text-brand-base text-sm font-medium"
                     >
                         View Details
                     </Link>
@@ -54,27 +66,33 @@ const DamageReport = () => {
         )
     };
 
-    useEffect( ()=> {
+    useEffect(() => {
         const fetchUserReports = async () => {
             try {
                 setLoading(true);
-                const result = await getUserDamageReport();
-                console.log(result)
-                setReports(result);
-            } catch (error) {
-                setError(error.message)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchUserReports();
-    }, [])
 
+                const result = await getUserDamageReport(currentPage, reportsPerPage);
+                setReports(result.data);
+                setTotalPages(result.totalPages);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUserReports();
+    }, [currentPage]);
+    
     const sortReports = (key) => {
         if (!key) return;
         const sortedData = sortData(reports, key, sortConfig.ascending);
         setReports(sortedData);
         setSortConfig({ key, ascending: !sortConfig.ascending });
+    };
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        sessionStorage.setItem("currentPage", pageNumber);
     };
 
     return(
@@ -93,8 +111,18 @@ const DamageReport = () => {
                         onSort={sortReports}
                         rows={rows}
                         emptyMessage = "You haven't submitted any damage report yet"
-
             />
+            <div className="flex justify-center space-x-2 mt-4">
+                {pageNumbers.map(number => (
+                    <button
+                        key={number}
+                        onClick={() => paginate(number)}
+                        className={`px-3 py-1 rounded-md ${currentPage === number ? 'bg-brand-dark text-white' : 'bg-gray-300 text-gray-700'}`}
+                    >
+                        {number}
+                    </button>
+                ))}
+            </div>
         </div>
     )
 }
