@@ -13,9 +13,9 @@ export const createDamageReport = async (reservationId, description) => {
     }
 };
 
-export const getDamageReport = async () => {
+export const getDamageReport = async (page, limit) => {
     try {
-        const response = await apiClient.get("/damage-report")
+        const response = await apiClient.get(`/damage-report?page=${page}&limit=${limit}`)
         return response.data;
     } catch (error) {
         console.error("Error creating damage report:", error);

@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { useRef, useEffect } from "react";
 import AdminDashboard from "@pages/dashboard/AdminDashboard";
 import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
 import Employees from "@pages/dashboard/admin/employees/Employees";
@@ -9,9 +10,19 @@ import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageRep
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
 import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
-import Sidebar from "../components/navigations/Sidebar";
 
 const AdminDashboardLayout = () => {
+    const location = useLocation();
+    const previousPath = useRef(location.pathname); 
+
+    useEffect(() => {            
+        if (!location.pathname.startsWith("/dashboard-admin/damage-reports") && previousPath.current.startsWith("/dashboard-admin/damage-reports")) {
+            sessionStorage.removeItem("currentPage");
+        }
+
+        previousPath.current = location.pathname;
+    }, [location.pathname]);
+
     return (
         <div className="flex h-full w-full">
             <AdminDashboardSideBar />

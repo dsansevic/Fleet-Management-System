@@ -10,6 +10,8 @@ const useLogout = () => {
         await apiClient.post("/user/logout");
         dispatch({ type: "LOGOUT" }); 
 
+        sessionStorage.clear();
+
         navigate("/login", { replace: true });
       } catch (error) {
         console.error("Failed to log out:", error);

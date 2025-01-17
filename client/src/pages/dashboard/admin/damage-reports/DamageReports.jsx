@@ -12,6 +12,12 @@ const DamageReports = () => {
     const [filteredReports, setFilteredReports] = useState([]);
     const [error, setError] = useState("");
     const [sortConfig, setSortConfig] = useState({ key: null, ascending: true });
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(
+        parseInt(sessionStorage.getItem("currentPage")) || 1
+    );
+    const reportsPerPage = 5;
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const tableHeaders = [
         { name: "Vehicle", key: "vehicle", visibility: "" },
@@ -22,19 +28,31 @@ const DamageReports = () => {
         { name: "Details", key: null, visibility: "" },
     ];
 
+    const getDescription = (desc) => {
+        if (desc.length > 25) 
+            return `${desc.substring(0,25)}...`
+        return desc
+    }
+
     useEffect(() => {
         const loadDamageReports = async () => {
             try {
-                const damageReports = await getDamageReport();
-                setReports(damageReports);
-                setFilteredReports(damageReports);
+                const damageReports = await getDamageReport(currentPage, reportsPerPage);
+                setReports(damageReports.data);
+                setTotalPages(damageReports.totalPages);
+                setFilteredReports(damageReports.data);
             } catch (error) {
                 console.error("Error fetching damage reports:", error);
                 setError(error.message);
             }
         };
         loadDamageReports();
-    }, []);
+    }, [currentPage]);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        sessionStorage.setItem("currentPage", pageNumber);
+    };
 
     const sortReports = (key) => {
         if (!key) return;
@@ -66,7 +84,7 @@ const DamageReports = () => {
                     {new Date(report.createdAt).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
-                    {report.description}
+                    {getDescription(report.description)}
                 </td>
                 <td className="px-6 py-4">
                     <Link
@@ -101,6 +119,17 @@ const DamageReports = () => {
                         rows={rows}
                         emptyMessage = "No reports have been submitted yet."
                     />
+                    <div className="flex justify-center space-x-2 mt-4">
+                        {pageNumbers.map(number => (
+                            <button
+                                key={number}
+                                onClick={() => paginate(number)}
+                                className={`px-3 py-1 rounded-md ${currentPage === number ? 'bg-brand-dark text-white' : 'bg-gray-300 text-gray-700'}`}
+                            >
+                                {number}
+                            </button>
+                        ))}
+                    </div>
                 </>
             )}
         </div>

@@ -87,7 +87,7 @@ const DamageReportDetails = () => {
             from  <strong> {formatDate(report?.reservation?.startTime)}</strong>
             to <strong>  {formatDate(report?.reservation?.endTime)}</strong>. 
             </p>
-            <p>
+            <p className="break-words hyphens-auto">
                 Issue description: <strong>{report?.description || "No description provided."}</strong>
             </p>
             <p>
@@ -97,7 +97,7 @@ const DamageReportDetails = () => {
                 <p>{status.message}</p>}
 
             {report?.adminMessage && 
-                <p>
+                <p className="break-words hyphens-auto">
                     Admin left a message for you: {report?.adminMessage}
                 </p>
             }

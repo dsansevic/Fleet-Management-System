@@ -83,7 +83,7 @@ const DamageReportDetails = () => {
             Reported by <strong>{report?.reportedBy?.firstName} {report?.reportedBy?.lastName} </strong>
             on <strong>{formatDate(report?.createdAt)} </strong>. 
             </p>
-            <p>
+            <p className="break-words hyphens-auto">
                 Issue description: <strong>{report?.description || "No description provided."}</strong>
             </p>
             <p>
