@@ -1,41 +1,14 @@
-import { useEffect, useState } from "react";
 import { fetchActiveReservations } from "@api/reservations";
 import { Link } from "react-router-dom";
 import GetReservationStatus from "@utils/GetReservationStatus";
 import { formatDate } from "@utils/formatDate";
 import { getPreviewText } from "@utils/getPreviewText";
+import usePagination from "@hooks/usePagination";
+import Pagination from "@utils/Pagination"  
 
 const ActiveReservations = () => {
-    const [reservations, setReservations] = useState([]);
-    const [error, setError] = useState("");
-    const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(
-        parseInt(sessionStorage.getItem("activeReservationsPage")) || 1
-    );
-    const reservationsPerPage = 6;
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    useEffect(() => {
-        const loadReservations = async () => {
-            try {
-                setLoading(true);
-                const result = await fetchActiveReservations(currentPage, reservationsPerPage);
-                setReservations(result.data);
-                setTotalPages(result.totalPages);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadReservations();
-    }, [currentPage]);
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-        sessionStorage.setItem("activeReservationsPage", pageNumber);
-    };
+    const {data: reservations, error, loading, totalPages, currentPage, handlePageChange} 
+        = usePagination(fetchActiveReservations,"activeReservationsPage", 6 )
 
     return (
         <div className="p-4 sm:p-6 max-w-6xl mx-auto">
@@ -44,6 +17,7 @@ const ActiveReservations = () => {
                 Active reservations include upcoming bookings and those currently in progress. 
                 You can check the details of each reservation and, if needed, change the end time or cancel them up to <strong>90 minutes</strong> before the start time.
             </p>
+
             {loading ? (
                 <div className="flex justify-center py-10">
                     <div className="w-10 h-10 border-4 border-gray-300 border-t-brand-dark rounded-full animate-spin"></div>
@@ -95,17 +69,10 @@ const ActiveReservations = () => {
                         })}
                     </ul>
 
-                    <div className="flex justify-center space-x-2 mt-6">
-                        {pageNumbers.map(number => (
-                            <button
-                                key={number}
-                                onClick={() => handlePageChange(number)}
-                                className={`px-3 py-1 rounded-md ${currentPage === number ? 'bg-brand-dark text-white' : 'bg-gray-300 text-gray-700'}`}
-                            >
-                                {number}
-                            </button>
-                        ))}
-                    </div>
+                    <Pagination 
+                        totalPages={totalPages} 
+                        currentPage={currentPage} 
+                        handlePageChange={handlePageChange} />
                 </>
             )}
         </div>
