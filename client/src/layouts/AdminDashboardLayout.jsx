@@ -14,8 +14,12 @@ import PageTitle from "@utils/PageTitle";
 const AdminDashboardLayout = () => {
     const location = useLocation();
     const previousPath = useRef(location.pathname); 
+    
 
-    useEffect(() => {            
+    useEffect(() => {     
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {});
+        }        
         if (!location.pathname.startsWith("/dashboard-admin/damage-reports") && previousPath.current.startsWith("/dashboard-admin/damage-reports")) {
             sessionStorage.removeItem("currentPage");
         }

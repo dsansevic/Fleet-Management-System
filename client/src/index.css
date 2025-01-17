@@ -32,11 +32,10 @@ button:active {
     @apply transform scale-95;
 }
 
-/* @layer utilities {
-    .placeholder-italic::placeholder{
-       font-style: italic;
-    }
-} */
+::view-transition-group(root) {
+    animation-duration: 0.4s; 
+    animation-timing-function: ease-in-out;
+}
 
 body {
     font-family: 'Poppins', sans-serif;

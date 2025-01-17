@@ -16,7 +16,10 @@ const UserDashboardLayout = () => {
     const location = useLocation();
     const previousPath = useRef(location.pathname); 
 
-    useEffect(() => {            
+    useEffect(() => {
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {});
+        }            
         if (!location.pathname.startsWith("/dashboard-user/damage-report") && previousPath.current.startsWith("/dashboard-user/damage-report")) {
             sessionStorage.removeItem("currentPage");
         }
