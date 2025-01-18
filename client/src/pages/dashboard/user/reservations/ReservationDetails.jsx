@@ -113,14 +113,14 @@ const ReservationDetails = () => {
                     <>
                     <div className="flex justify-between">
                         <button
-                            className="bg-white text-brand-base px-4 py-2 rounded shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
+                            className="bg-white text-brand-base px-4 py-2 rounded-2xl shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
                             onClick={() => setIsEditing(true)}
                         >
                             <PencilSquareIcon className="h-5 w-5" />
                             <span>Update</span>
                         </button>
                         <button
-                            className="bg-white text-gray-500 px-4 py-2 rounded shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
+                            className="bg-white text-gray-500 px-4 py-2 rounded-2xl shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
                             onClick={() => setShowCancelConfirm(true)}
                         >
                             <XCircleIcon className="h-5 w-5" />

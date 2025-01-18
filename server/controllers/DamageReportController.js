@@ -96,13 +96,15 @@ const getDamageReportById = async (req, res) => {
         const {role} = req.user
         const companyId = req.user.companyId;
 
-        const report = await populateDamageReports(DamageReport.findById(id), companyId, role);
+        let report = await DamageReport.findById(id);
 
         if (!report) {
             return res.status(404).json({ message: "No damage report found!" });
         }
 
-        res.status(200).json(report);
+        const populatedReport = await populateDamageReports(report, companyId, role);
+
+        res.status(200).json(populatedReport);
     } catch (error) {
         console.error("Error fetching damage report details:", error);
         res.status(500).json({ message: "Failed to fetch damage report details.", error: error.message });

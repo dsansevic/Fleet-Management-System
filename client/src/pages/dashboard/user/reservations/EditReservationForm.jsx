@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { validateReservationField } from "@utils/validateReservationField";
 import Button from "@components/ui/Button";
 import SubmitButton from "@components/ui/SubmitButton";
@@ -6,6 +6,11 @@ import SubmitButton from "@components/ui/SubmitButton";
 const EditReservationForm = ({ reservation, onSave, onCancel }) => {
     const [newEndTime, setNewEndTime] = useState("");
     const [newEndTimeError, setNewEndTimeError] = useState("");
+    const inputRef = useRef();
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const handleInputChange = (e) => {
         const { value } = e.target;
@@ -25,7 +30,8 @@ const EditReservationForm = ({ reservation, onSave, onCancel }) => {
                 type="datetime-local"
                 name="newEndTime"
                 value={newEndTime}
-                className={`w-full text-sm border p-2 rounded ${
+                ref={inputRef}
+                className={`w-full text-sm border focus:outline-none focus:ring-1 focus:ring-brand-light p-2 rounded-md shadow ${
                     newEndTimeError ? "border-error" : ""
                 }`}
                 onChange={handleInputChange}

@@ -84,8 +84,14 @@ const getActiveReservations = async (req, res) => {
 
 const getInactiveReservations = async (req, res) => {
     try {
+        const { page = 1, limit = 6 } = req.query;
         const currentDate = new Date();
-        const pastReservations = await Reservation.find({
+
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const totalReservations = await Reservation.countDocuments({
             company: req.user.companyId,
             user: req.user.id,
             $or: [
@@ -93,8 +99,30 @@ const getInactiveReservations = async (req, res) => {
                 { status: "canceled" }, 
                 { status: "declined" }, 
             ],
-        }).sort({ endTime: -1 });
-        res.status(200).json(pastReservations);
+        })
+
+        if (totalReservations === 0) {
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+        }
+
+        const inactiveReservations = await Reservation.find({
+            company: req.user.companyId,
+            user: req.user.id,
+            $or: [
+                { endTime: { $lt: currentDate } },
+                { status: "canceled" }, 
+                { status: "declined" }, 
+            ],
+        })
+        .sort({ startTime: 1 })
+        .skip(skip) 
+        .limit(limitNumber);
+
+        res.status(200).json({
+            data: inactiveReservations,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalReservations / limitNumber),
+        });
     } catch (error) {
         console.error("Error fetching past reservations:", error);
         res.status(500).json({ message: "Failed to fetch past reservations", error: error.message });

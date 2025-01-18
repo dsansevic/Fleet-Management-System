@@ -22,7 +22,11 @@ const UserDashboardLayout = () => {
         }  
         if (!location.pathname.startsWith("/dashboard-user/reservation/") && previousPath.current.startsWith("/dashboard-user/active-reservations")) {
             sessionStorage.removeItem("activeReservationsPage");
-    }
+        }
+
+        if (!location.pathname.startsWith("/dashboard-user/reservation/") && previousPath.current.startsWith("/dashboard-user/inactive-reservations")) {
+            sessionStorage.removeItem("inactiveReservationsPage");
+        }
                   
         if (!location.pathname.startsWith("/dashboard-user/damage-report") && previousPath.current.startsWith("/dashboard-user/damage-report")) {
             sessionStorage.removeItem("damageReportPage");

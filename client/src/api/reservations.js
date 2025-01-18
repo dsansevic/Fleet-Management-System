@@ -20,9 +20,9 @@ export const fetchActiveReservations = async (page, limit) => {
     }
 };
 
-export const fetchInactiveReservations = async () => {
+export const fetchInactiveReservations = async (page, limit) => {
     try {
-        const response = await apiClient.get("/reservation/inactive");
+        const response = await apiClient.get(`/reservation/inactive?page=${page}&limit=${limit}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching past reservations:", error);
