@@ -68,14 +68,22 @@ const getDamageReports = async (req, res) => {
         const limitNumber = Math.max(1, parseInt(limit, 10));
         const skip = (pageNumber - 1) * limitNumber;
 
-        const numberOfReports = await DamageReport.countDocuments();
-        if (numberOfReports === 0)
-            return res.status(404).json({message: "No damage reports found!"})  
+        const reservations = await Reservation.find({ company: companyId }).select('_id');
+        if (reservations.length === 0) {
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+        }
+        const reservationIds = reservations.map(res => res._id);
 
-        let reports = await DamageReport.find()
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limitNumber);
+        const numberOfReports = await DamageReport.countDocuments({ reservation: { $in: reservationIds } })
+
+        if (numberOfReports === 0) {
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+        }
+
+        let reports = await DamageReport.find({ reservation: { $in: reservationIds } })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNumber);
 
         reports = await populateDamageReports(reports, companyId, role);
          
@@ -93,13 +101,19 @@ const getDamageReports = async (req, res) => {
 const getDamageReportById = async (req, res) => {
     try {
         const { id } = req.params;
-        const {role} = req.user
-        const companyId = req.user.companyId;
+        const { id: userId, role, companyId } = req.user;
 
-        let report = await DamageReport.findById(id);
-
+        const report = await DamageReport.findById(id).populate('reservation');
         if (!report) {
             return res.status(404).json({ message: "No damage report found!" });
+        }
+
+        if (role === "employee" && report.reportedBy.toString() !== userId) {
+            return res.status(403).json({ message: "Access denied: You cannot view this damage report." });
+        }
+
+        if (role === "admin" && report.reservation.company.toString() !== companyId) {
+            return res.status(403).json({ message: "Access denied: You cannot view this damage report." });
         }
 
         const populatedReport = await populateDamageReports(report, companyId, role);
@@ -148,11 +162,16 @@ const updateDamageReportStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status, adminMessage } = req.body;
+        const { companyId } = req.user;
 
-        const report = await DamageReport.findById(id);
+        const report = await DamageReport.findById(id).populate('reservation');
 
         if (!report) {
             return res.status(404).json({ message: "Damage report not found." });
+        }
+
+        if (report.reservation.company.toString() !== companyId) {
+            return res.status(403).json({ message: "Access denied: You cannot update this damage report." });
         }
 
         report.status = status || report.status;

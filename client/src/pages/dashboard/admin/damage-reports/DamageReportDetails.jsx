@@ -5,6 +5,7 @@ import { updateVehicle } from "@api/vehicles"
 import SelectField from "@components/form/SelectField";
 import TextAreaField from "@components/form/TextAreaField";
 import Button from "@components/ui/Button";
+import SubmitButton from "@components/ui/SubmitButton"
 import SuccessMessage from "@components/ui/SuccessMessage"
 import {formatDate} from "@utils/formatDate"
 
@@ -15,6 +16,7 @@ const DamageReportDetails = () => {
     const [status, setStatus] = useState("");
     const [adminMessage, setAdminMessage] = useState("");
     const [error, setError] = useState("");
+    const [fetchingError, setFetchingError] = useState("");
     const [success, setSuccess] = useState("");
 
     useEffect(() => {
@@ -24,7 +26,7 @@ const DamageReportDetails = () => {
                 setReport(data);
                 setStatus(data.status);
             } catch (error) {
-                setError("Failed to fetch damage report details.");
+                setFetchingError(error.message);
             }
         };
 
@@ -42,7 +44,7 @@ const DamageReportDetails = () => {
             await updateDamageReportStatus(id, { status, adminMessage });
             setSuccess("Damage report status updated successfully.");
         } catch (error) {
-            setError("Failed to update damage report status.");
+            setError(error.message);
         }
     };
 
@@ -59,6 +61,14 @@ const DamageReportDetails = () => {
             setError("Failed to mark vehicle as 'service'.");
         }
     };
+
+    if (fetchingError){
+        return (
+            <div className="flex items-center space-x-2 text-error bg-red-100 p-4 rounded-md">
+                <span>{fetchingError}</span>
+            </div>
+        )
+    }
 
     if (!report) {
         return <p>Loading damage report details...</p>;
@@ -114,9 +124,9 @@ const DamageReportDetails = () => {
                             rows={4}
                         />
                         <p> If you think that the vehicle requires a technical inspection or repair, please mark it as 'Service'.</p>
-                        <div className="flex space-x-4">
-                            <Button label="Update Status" onClick={handleSubmit} />
-                            <Button label="Mark Vehicle as Service" onClick={handleMarkAsService} className="bg-red-500 text-white" />
+                        <div className="flex justify-between">
+                            <SubmitButton readyToSend={!adminMessage} onClick={handleSubmit} >Update Status</SubmitButton>
+                            <Button label="Mark Vehicle as Service" onClick={handleMarkAsService} className="bg-gray-400 text-white hover:bg-gray-300 mt-3"/>
                         </div>
                     </>
                 )}

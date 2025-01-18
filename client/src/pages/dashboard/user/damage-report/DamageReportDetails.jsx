@@ -46,7 +46,7 @@ const DamageReportDetails = () => {
                 console.log(data)
                 setReport(data);
             } catch (error) {
-                setError("Failed to fetch damage report details.");
+                setError(error.message);
             }
             finally {
                 setLoading(false);
@@ -56,17 +56,16 @@ const DamageReportDetails = () => {
         fetchReport();
     }, [id]);
 
-    if (loading || !report)
-        return <Loading />
-
     if (error) {
         return (
-            <div className="p-6 max-w-6xl mx-auto text-center">
-                <p className="text-red-600">Failed to fetch damage reports: {error}</p>
-                <LinkButton to="/dashboard" label="Go Back to Dashboard" />
+            <div className="flex items-center space-x-2 text-error bg-red-100 p-4 rounded-md">
+                <span>{error}</span>
             </div>
         );
     }
+
+    if (loading || !report)
+        return <Loading />
 
     const status = getCurrentStatus(report.status)
     return (
