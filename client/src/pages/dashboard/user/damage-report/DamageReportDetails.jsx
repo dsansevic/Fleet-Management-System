@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getDamageReportById } from "@api/damageReports";
 import LinkButton from "@components/ui/LinkButton";
 import Title from "@components/ui/Title";
 import {formatDate} from "@utils/formatDate"
+import Loading from "@utils/Loading"
 
 const DamageReportDetails = () => {
     const { id } = useParams();
     const [report, setReport] = useState(null);
     const [loading, setLoading] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const getCurrentStatus = (status) => {
         switch(status) {
@@ -41,6 +43,7 @@ const DamageReportDetails = () => {
             try {
                 setLoading(true)
                 const data = await getDamageReportById(id);
+                console.log(data)
                 setReport(data);
             } catch (error) {
                 setError("Failed to fetch damage report details.");
@@ -53,14 +56,8 @@ const DamageReportDetails = () => {
         fetchReport();
     }, [id]);
 
-    if (loading || !report) {
-        return (
-            <div className="p-6 max-w-6xl mx-auto text-center">
-                <p className="text-gray-600">Loading your damage report history...</p>
-                <div className="loader animate-spin border-t-4 border-blue-500 rounded-full w-12 h-12 mx-auto mt-4"></div>
-            </div>
-        );
-    }
+    if (loading || !report)
+        return <Loading />
 
     if (error) {
         return (
@@ -73,35 +70,39 @@ const DamageReportDetails = () => {
 
     const status = getCurrentStatus(report.status)
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <LinkButton
-                to= {(-1)}
-                label="Go back">
-            </LinkButton>
-            <div className="bg-white shadow-md border rounded-lg p-6 space-y-4 mt-4">
-            <Title>Report details</Title>
-            <p>
-            You filed a damage report for the vehicle <strong>{report?.reservation?.vehicle?.brand} 
-            {report?.reservation?.vehicle?.model} </strong> with license plate <strong>{report?.reservation?.vehicle?.licensePlate} </strong>,
-            you used for the <strong> {report?.reservation?.purpose} </strong> 
-            from  <strong> {formatDate(report?.reservation?.startTime)}</strong>
-            to <strong>  {formatDate(report?.reservation?.endTime)}</strong>. 
-            </p>
-            <p className="break-words hyphens-auto">
-                Issue description: <strong>{report?.description || "No description provided."}</strong>
-            </p>
-            <p>
-                Current status: <strong>{status.label}</strong>
-            </p>
-            {status?.message && 
-                <p>{status.message}</p>}
+        <div className="p-6 lg:px-20 sm:w-screen max-w-4xl mx-auto ">
+            <div className="bg-white shadow-md border rounded-2xl p-6 space-y-4 mt-4 relative">
+                <button onClick={() => navigate("/dashboard-user/damage-report")} className="absolute z-50 top-0 right-0 text-xl">
+                    ✖
+                </button>
 
-            {report?.adminMessage && 
-                <p className="break-words hyphens-auto">
-                    Admin left a message for you: {report?.adminMessage}
+                <Title className="text-center">Report details</Title>
+
+                <p className="text-gray-700 leading-relaxed">
+                    You filed a damage report for the vehicle <strong>{report?.reservation?.vehicle?.brand} 
+                    {report?.reservation?.vehicle?.model} </strong> with license plate <strong>{report?.reservation?.vehicle?.licensePlate} </strong>,
+                    you used for the <strong> {report?.reservation?.purpose} </strong> 
+                    from  <strong> {formatDate(report?.reservation?.startTime)}</strong>
+                    to <strong>  {formatDate(report?.reservation?.endTime)}</strong >. 
                 </p>
-            }
+                <div className="bg-purple-50 p-4 rounded-lg">
+                    <p className="text-gray-800">
+                        <strong>Issue Description:</strong> {report?.description || "No description provided."}
+                    </p>
+                </div>
                 
+                {status?.message && (
+                    <p className="text-gray-700 italic">{status.message}</p>
+                )}
+
+                {report?.adminMessage && (
+                    
+                        <p className="text-gray-800">
+                            <strong>Admin message:</strong> {report?.adminMessage}
+                        </p>
+                    
+                )}
+                    
             </div>
         </div>
     );

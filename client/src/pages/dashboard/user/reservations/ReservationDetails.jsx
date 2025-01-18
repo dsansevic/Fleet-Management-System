@@ -3,18 +3,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchReservationById, updateReservation } from "@api/reservations";
 import GetReservationStatus from "@utils/GetReservationStatus";
 import EditReservationForm from "./EditReservationForm";
-import { ArrowLeftIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/20/solid";
+import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/20/solid";
+import SuccessMessage from "@components/ui/SuccessMessage";
 import { formatDate } from "@utils/formatDate";
 import Modal from "@components/ui/Modal";
+import Loading from "@utils/Loading"; 
 
 const ReservationDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [reservation, setReservation] = useState(null);
     const [error, setError] = useState("");
-    const [isUpdating, setIsUpdating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
     useEffect(() => {
         const loadReservation = async () => {
@@ -32,29 +34,24 @@ const ReservationDetails = () => {
         (new Date(date) - new Date()) / (1000 * 60);
 
     const handleUpdate = async (NewEndTime) => {
-        setIsUpdating(true);
         try {
-            console.log("u kompo", NewEndTime)
             const updatedReservation = await updateReservation(id, { NewEndTime });
             setReservation(updatedReservation.reservation);
+            setSuccessMessage("Reservation updated successfully.");
             setIsEditing(false);
         } catch (error) {
             setError(error.message || "Failed to update reservation.");
-        } finally {
-            setIsUpdating(false);
         }
     };
 
     const handleCancel = async () => {
-        setIsUpdating(true);
         try {
             const updatedReservation = await updateReservation(id, { status: "canceled" });
             setReservation(updatedReservation.reservation);
+            setSuccessMessage("Reservation canceled successfully.");
             setShowCancelConfirm(false);
         } catch (error) {
             setError(error.message || "Failed to cancel reservation.");
-        } finally {
-            setIsUpdating(false);
         }
     };
 
@@ -68,7 +65,7 @@ const ReservationDetails = () => {
     }
 
     if (!reservation) {
-        return <p>Loading reservation details...</p>;
+        return <Loading />
     }
 
     const statusInfo = GetReservationStatus(reservation.status);
@@ -78,55 +75,33 @@ const ReservationDetails = () => {
         ["approved", "pending", "pending-reapproval"].includes(reservation.status);
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <div className="mb-6">
-                <button
-                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded shadow hover:bg-gray-400 flex items-center space-x-2"
-                    onClick={() => navigate(-1)}
-                >
-                    <ArrowLeftIcon className="h-5 w-5" />
-                    <span>Go back</span>
-                </button>
-            </div>
+        <div className="p-6 lg:px-20 sm:w-screen max-w-3xl mx-auto my-auto h-full">
+            <div className="bg-white shadow-md border rounded-2xl p-6 space-y-4 relative">
+            <button onClick={() => navigate(-1)} className="absolute top-0 right-0 text-xl">
+            ✖
+            </button>
+            {successMessage && <SuccessMessage message={successMessage} />}
 
-            <div className="bg-white shadow-md border rounded-lg p-6 space-y-4">
-                <h3
-                    className={`text-xl font-semibold ${
-                        statusInfo.color === "text-gray-500" ? "line-through" : statusInfo.color
-                    }`}
-                >
-                    {reservation.purpose}
-                </h3>
-                <div className={`flex items-center space-x-2 ${statusInfo.color}`}>
-                    {statusInfo.icon}
-                    <span>{statusInfo.message}</span>
+                <div className="text-center">
+                    <h3 className="text-2xl font-semibold text-gray-900">{reservation.purpose}</h3>
+                    <div className={`inline-flex items-center px-3 py-1 mt-2 rounded-full text-md font-medium ${statusInfo.color} `}>
+                        <span className="ml-2">{statusInfo.message}</span>
+                    </div>
                 </div>
-                <p>
-                    <span className="font-bold">Start Time:</span>{" "}
-                    {formatDate(reservation.startTime)}
-                </p>
-                <p>
-                    <span className="font-bold">End Time:</span>{" "}
-                    {formatDate(reservation.endTime)}
-                </p>
-                {reservation.newStartTime && (
-                    <p>
-                        <span className="font-bold">Proposed Start Time:</span>{" "}
-                        {formatDate(reservation.newStartTime)}
-                    </p>
-                )}
-                {reservation.newEndTime && (
-                    <p>
-                        <span className="font-bold">Proposed End Time:</span>{" "}
-                        {formatDate(reservation.newEndTime)}
-                    </p>
-                )}
-                {reservation.additionalDetails && (
-                    <p>
-                        <span className="font-medium">Additional Details:</span>{" "}
-                        {reservation.additionalDetails}
-                    </p>
-                )}
+                <div className="grid grid-cols-2 gap-6 text-sm rounded-lg text-gray-700 bg-purple-50 p-4 pl-10">
+                    <p><span className="font-bold">Starts:</span> {formatDate(reservation.startTime)}</p>
+                    <p><span className="font-bold">Ends:</span> {formatDate(reservation.endTime)}</p>
+
+                    {reservation.newEndTime && (
+                        <p><span className="font-bold">Proposed ending:</span> {formatDate(reservation.newEndTime)}</p>
+                    )}
+                    {reservation.additionalDetails && (
+                        <p className="col-span-2">
+                            <span className="font-medium">Additional Details:</span> {reservation.additionalDetails}
+                        </p>
+                    )}
+                </div>
+                
 
                 {isEditing && canEditOrCancel ? (
                     <EditReservationForm
@@ -136,17 +111,16 @@ const ReservationDetails = () => {
                     />
                 ) : canEditOrCancel ? (
                     <>
-                    <span className="font-semibold">You can edit this reservation 90 minutes before it starts.</span>
-                    <div className="flex space-x-4">
+                    <div className="flex justify-between">
                         <button
-                            className="bg-brand-base text-white px-4 py-2 rounded shadow hover:bg-brand-light flex items-center space-x-2"
+                            className="bg-white text-brand-base px-4 py-2 rounded shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
                             onClick={() => setIsEditing(true)}
                         >
                             <PencilSquareIcon className="h-5 w-5" />
                             <span>Update</span>
                         </button>
                         <button
-                            className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 flex items-center space-x-2"
+                            className="bg-white text-gray-500 px-4 py-2 rounded shadow shadow-gray-300 hover:bg-gray-50 flex items-center space-x-2"
                             onClick={() => setShowCancelConfirm(true)}
                         >
                             <XCircleIcon className="h-5 w-5" />
@@ -155,10 +129,9 @@ const ReservationDetails = () => {
                     </div>
                     </>
                 ) : (
-                    <div className="flex items-center space-x-2 text-red-600">
-                        <XCircleIcon className="h-5 w-5" />
-                        <span>You can no longer edit or cancel this reservation.</span>
-                    </div>
+                    <div className="text-center text-brand-darkest font-bold space-x-2 ">
+                        You can no longer edit or cancel this reservation !
+                </div>
                 )}
             </div>
 

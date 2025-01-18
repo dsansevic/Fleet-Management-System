@@ -23,8 +23,8 @@ function FormInputField({
 
   return (
     <div className="mb-4 relative w-full">
-      <label htmlFor={name} className="block text-sm font-medium text-brand-darkest">
-        {label} {label && <span className="text-error" title="This field is required">*</span>}
+      <label htmlFor={name} className="block text-sm font-medium text-brand-darker">
+        {label && <span className="text-brand-darker" title="This field is required">{label} *</span>}
       </label>
 
       <div className="relative">
@@ -34,9 +34,9 @@ function FormInputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-md pr-10
-            ${error ? 'border-error' : 'border-gray-300'} 
-            border focus:outline-none focus:ring focus:ring-brand-light`}
+          className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-md pr-10 shadow
+            ${error ? 'border-error' : 'border-gray-200'} 
+            border focus:outline-none focus:ring-1 focus:ring-brand-light`}
           ref={ref}
           required
           onKeyUp={handleKeyUp}

@@ -4,7 +4,8 @@ import GetReservationStatus from "@utils/GetReservationStatus";
 import { formatDate } from "@utils/formatDate";
 import { getPreviewText } from "@utils/getPreviewText";
 import usePagination from "@hooks/usePagination";
-import Pagination from "@utils/Pagination"  
+import Pagination from "@utils/Pagination" 
+import Loading from "@utils/Loading"; 
 
 const ActiveReservations = () => {
     const {data: reservations, error, loading, totalPages, currentPage, handlePageChange} 
@@ -19,9 +20,7 @@ const ActiveReservations = () => {
             </p>
 
             {loading ? (
-                <div className="flex justify-center py-10">
-                    <div className="w-10 h-10 border-4 border-gray-300 border-t-brand-dark rounded-full animate-spin"></div>
-                </div>
+                <Loading />
             ) : error ? (
                 <p className="text-red-600 bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (
@@ -46,7 +45,7 @@ const ActiveReservations = () => {
                                     </div>
 
                                     <h3 className="text-xl font-semibold text-gray-900 mt-2 break-words hyphens-auto">
-                                        {res.purpose}
+                                        {getPreviewText(res.purpose)}
                                     </h3>
                                     <p className="text-sm text-gray-700">
                                         {getPreviewText(res.additionalDetails) || "No additional details provided."}

@@ -10,7 +10,6 @@ const EditReservationForm = ({ reservation, onSave, onCancel }) => {
     const handleInputChange = (e) => {
         const { value } = e.target;
         setNewEndTime(value);
-        console.log(newEndTime)
 
         const error = validateReservationField("newEndTime", value, reservation);
         console.log(error)
@@ -21,23 +20,20 @@ const EditReservationForm = ({ reservation, onSave, onCancel }) => {
 
     return (
         <div className="mt-6 space-y-4">
-            <span>You can change the end time. </span>
-            <div>
-                <label className="block text-gray-700 text-sm">New End Time</label>
-                <input
-                    type="datetime-local"
-                    name="newEndTime"
-                    value={newEndTime}
-                    className={`w-full text-sm border p-2 rounded ${
-                        newEndTimeError ? "border-error" : ""
-                    }`}
-                    onChange={handleInputChange}
-                />
-                {newEndTimeError && <p className="text-error text-sm mt-1">{newEndTimeError}</p>}
-            </div>                      
+            <span className="text-brand-darker ">Propose new end time: </span>
+            <input
+                type="datetime-local"
+                name="newEndTime"
+                value={newEndTime}
+                className={`w-full text-sm border p-2 rounded ${
+                    newEndTimeError ? "border-error" : ""
+                }`}
+                onChange={handleInputChange}
+            />
+            {newEndTimeError && <p className="text-error text-sm mt-1">{newEndTimeError}</p>}
             <div className="flex justify-between">
                 <Button
-                    className="bg-gray-300 "
+                    className="h-10 mt-2"
                     onClick={onCancel}
                     label = "Cancel"
                 />

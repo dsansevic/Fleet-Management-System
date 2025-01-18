@@ -5,6 +5,8 @@ import SubmitButton from "@components/ui/SubmitButton";
 import { addReservation } from "@api/reservations";
 import { validateField } from "@utils/inputValidation";
 import { validateReservationField } from "@utils/validateReservationField";
+import SuccessMessage from "@components/ui/SuccessMessage";
+import Title from "@components/ui/Title"
 
 const AddReservation = () => {
     const [newReservation, setNewReservation] = useState({
@@ -21,6 +23,7 @@ const AddReservation = () => {
     });
     const [isAdding, setIsAdding] = useState(false);
     const [addError, setAddError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const inputRef = useRef();
 
     const hasErrors = Object.values(reservationErrors).some((error) => error);
@@ -55,6 +58,7 @@ const AddReservation = () => {
         setAddError("");
 
         try {
+            setSuccessMessage("");
             const addedReservation = await addReservation(newReservation);
             setNewReservation({
                 startTime: "",
@@ -62,6 +66,8 @@ const AddReservation = () => {
                 purpose: "",
                 additionalDetails: "",
             });
+            setSuccessMessage("Reservation created successfully.");
+            
         } catch (error) {
             setAddError(error.message || "Failed to add reservation.");
         } finally {
@@ -70,8 +76,9 @@ const AddReservation = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto mt-8 bg-white shadow-lg rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Create New Reservation</h2>
+        <div className="max-w-3xl mx-auto mt-8 bg-white shadow-lg rounded-2xl p-8">
+            <Title className="text-center">Request a Company Vehicle</Title>
+            {successMessage && <SuccessMessage message={successMessage} />}
             <form onSubmit={handleAddReservation} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <FormInputField
@@ -95,22 +102,23 @@ const AddReservation = () => {
                 <FormInputField
                     label="Purpose"
                     name="purpose"
-                    placeholder="Enter the purpose of the reservation"
+                    placeholder="Specify the trip purpose (e.g. client meeting, airport transfer, delivery ...)"
                     value={newReservation.purpose}
                     onChange={handleInputChange}
                     error={reservationErrors.purpose}
                 />
                 <TextAreaField
-                    label="Additional Details (Optional)"
+                    label="Vehicle preferences (Optional)"
                     name="additionalDetails"
+                    rows={3}
                     value={newReservation.additionalDetails}
                     onChange={handleInputChange}
-                    placeholder="Add any additional details about your reservation"
+                    placeholder="E.g., SUV, van, automatic ..."
                 />
                 <div className="flex justify-end">
                     <SubmitButton
+                        type = "submit"
                         readyToSend={isAdding || isSubmitDisabled}
-                        className="w-full sm:w-auto bg-brand-base text-white font-semibold py-2 px-6 rounded-lg shadow"
                     >
                         {isAdding ? "Adding..." : "Add Reservation"}
                     </SubmitButton>

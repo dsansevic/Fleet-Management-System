@@ -28,7 +28,7 @@ const Sidebar = ({ links }) => {
             )}
 
             <div
-                className={`fixed top-0 left-0 bg-white text-brand-base shadow-lg shadow-gray-300 z-50 p-6 
+                className={`fixed top-0 left-0 bg-white text-brand-base shadow-lg shadow-gray-300 z-50 p-6 pt-2 
                 transition-transform transform flex flex-col justify-between
                 ${showSideBar ? "translate-x-0 duration-300 ease-out" : "-translate-x-full duration-300 ease-out"} 
                 sm:w-72 w-64 md:translate-x-0 md:w-64 md:h-[calc(100vh-4rem)] md:top-[4rem] h-screen overflow-y-auto`}
@@ -39,7 +39,7 @@ const Sidebar = ({ links }) => {
                             key={index}
                             to={link.to} end
                             className={({ isActive }) =>
-                                `hover:text-brand-light flex py-3 border-b ${isActive ? "text-brand-base font-bold" : "text-gray-600"}`
+                                `hover:text-brand-light flex py-4 border-b ${isActive ? "text-brand-base font-bold" : "text-gray-600"}`
                             }
                         >
                             {link.label}
