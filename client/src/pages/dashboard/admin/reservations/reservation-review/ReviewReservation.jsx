@@ -4,6 +4,7 @@ import { fetchReservationById, updateReservationStatus, handleReapproval } from 
 import { getVehicles } from "@api/vehicles";
 import { useParams, useNavigate } from "react-router-dom";
 import SuccessMessage from "@components/ui/SuccessMessage";
+import ServerErrorMessage from "@components/ui/ServerErrorMessage";
 
 import ReservationDetails from "./ReservationDetails";
 import VehicleDragAndDropList from "./VehicleDragAndDropList";
@@ -38,6 +39,7 @@ const ReviewReservation = () => {
                 const veh = await getVehicles();
                 setVehicles(veh);
             } catch (error) {
+                console.log(error)
                 setError(error.message);
             } finally {
                 setLoading(false);
@@ -117,7 +119,11 @@ const ReviewReservation = () => {
     }
 
     if (error) {
-        return <div className="text-error">{error}</div>;
+        return (
+            <div className="flex items-center space-x-2 text-error bg-red-100 p-4 rounded-md">
+                <span>{error}</span>
+            </div>
+        )
     }
 
     const groupedVehicles = vehicles.reduce((acc, veh) => {

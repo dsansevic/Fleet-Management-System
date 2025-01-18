@@ -7,6 +7,7 @@ import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import SuccessMessage from "@components/ui/SuccessMessage";
 import { formatDate } from "@utils/formatDate";
 import Modal from "@components/ui/Modal";
+import ServerErrorMessage from "@components/ui/ServerErrorMessage";
 import Loading from "@utils/Loading"; 
 
 const ReservationDetails = () => {
@@ -69,12 +70,7 @@ const ReservationDetails = () => {
     };
 
     if (error) {
-        return (
-            <div className="flex items-center space-x-2 text-red-600 bg-red-100 p-4 rounded-md">
-                <XCircleIcon className="h-5 w-5" />
-                <span>{error}</span>
-            </div>
-        );
+        return <ServerErrorMessage error = {error} />
     }
     if (loading || !reservation ) {
         return <Loading />

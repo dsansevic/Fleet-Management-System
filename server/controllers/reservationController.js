@@ -131,9 +131,19 @@ const getInactiveReservations = async (req, res) => {
 
 const getReservationById = async (req, res) => {
     try {
-        const reservation = await Reservation.findById(req.params.id).populate("user", "firstName lastName");
+        const { id } = req.params;
+        const { id: userId, role, companyId } = req.user;
+
+        const reservation = await Reservation.findById(id).populate("user", "firstName lastName");
         if (!reservation) {
             return res.status(404).json({ message: "Reservation not found" });
+        }
+
+        const isOwner = reservation.user._id.toString() === userId;
+        const isAdminInCompany = role === "admin" && reservation.company.toString() === companyId;
+
+        if (!isOwner && !isAdminInCompany) {
+            return res.status(403).json({ message: "Access denied: You cannot view this reservation." });
         }
         res.status(200).json(reservation);
     } catch (error) {
@@ -152,7 +162,7 @@ const updateReservation = async (req, res) => {
         const { NewEndTime, status } = req.body;
         if(status === "canceled") {
             reservation.status = status;
-            reservation.save()
+            await reservation.save()
             return res.status(200).json({
                 message: "Reservation canceled successfully!",
                 reservation
@@ -202,6 +212,10 @@ const updateReservationStatus = async (req, res) => {
             return res.status(404).json({ message: "Reservation not found." });
         }
 
+        if (req.user.companyId.toString() !== reservation.company.toString()) {
+            return res.status(403).json({ message: "Access denied: You cannot update this reservation." });
+        }
+
         const now = new Date();
         const startTime = new Date(reservation.startTime);
 
@@ -218,7 +232,7 @@ const updateReservationStatus = async (req, res) => {
         }
         if (status === "approved") {
             if (!vehicle) {
-                return res.status(400).json({ message: "A vehicle must be assigned when approving a reservation." });
+                return res.status(403).json({ message: "A vehicle must be assigned when approving a reservation." });
             }
             const assignedVehicle = await Vehicle.findById(vehicle);
             if (!assignedVehicle) {
@@ -229,7 +243,7 @@ const updateReservationStatus = async (req, res) => {
             }
             reservation.vehicle = vehicle;
             assignedVehicle.status = "occupied"
-            assignedVehicle.save();
+            await assignedVehicle.save();
         }
 
         reservation.status = status;
@@ -252,6 +266,10 @@ const handleReapproval = async (req, res) => {
 
         if (!reservation || reservation.status !== "pending-reapproval") {
             return res.status(404).json({ message: "Reservation not found or not awaiting reapproval." });
+        }
+
+        if (req.user.companyId.toString() !== reservation.company.toString()) {
+            return res.status(403).json({ message: "Access denied: You cannot reapprove this reservation." });
         }
 
         const { action } = req.body;
@@ -284,15 +302,17 @@ const getPendingReservations = async (req, res) => {
         const reviewDeadline = new Date(now.getTime() + 60 * 60 * 1000);
 
         const pendingReservations = await Reservation.find({
+            company: req.user.companyId,
             status: "pending",
-            startTime: { $gte: reviewDeadline },
+            startTime: { $gte: reviewDeadline }
         })
             .populate("user", "firstName email")
             .populate("vehicle", "brand model")
             .sort({ startTime: 1 })
 
         const reapprovalReservations = await Reservation.find({
-            status: "pending-reapproval",
+            company: req.user.companyId,
+            status: "pending-reapproval"
         })
             .populate("user", "firstName email")
             .populate("vehicle", "brand model")
