@@ -17,14 +17,18 @@ const ReservationDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const loadReservation = async () => {
             try {
+                setLoading(true);
                 const data = await fetchReservationById(id);
                 setReservation(data);
             } catch (error) {
                 setError(error.message);
+            } finally {
+                setLoading(false)
             }
         };
         loadReservation();
@@ -35,23 +39,32 @@ const ReservationDetails = () => {
 
     const handleUpdate = async (NewEndTime) => {
         try {
+            setLoading(true)
             const updatedReservation = await updateReservation(id, { NewEndTime });
             setReservation(updatedReservation.reservation);
             setSuccessMessage("Reservation updated successfully.");
             setIsEditing(false);
         } catch (error) {
             setError(error.message || "Failed to update reservation.");
+        } finally {
+            setLoading(false)
         }
     };
 
     const handleCancel = async () => {
         try {
+            setLoading(true)
             const updatedReservation = await updateReservation(id, { status: "canceled" });
-            setReservation(updatedReservation.reservation);
+            setReservation((prev) => ({
+                ...prev,
+                status: updatedReservation.reservation.status,
+            }));
             setSuccessMessage("Reservation canceled successfully.");
             setShowCancelConfirm(false);
         } catch (error) {
             setError(error.message || "Failed to cancel reservation.");
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -63,8 +76,7 @@ const ReservationDetails = () => {
             </div>
         );
     }
-
-    if (!reservation) {
+    if (loading || !reservation ) {
         return <Loading />
     }
 

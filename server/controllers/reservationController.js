@@ -149,8 +149,15 @@ const updateReservation = async (req, res) => {
         if (!reservation) {
             return res.status(404).json({ message: "Reservation not found." });
         }
-        console.log(req.body)
-        const { NewEndTime } = req.body;
+        const { NewEndTime, status } = req.body;
+        if(status === "canceled") {
+            reservation.status = status;
+            reservation.save()
+            return res.status(200).json({
+                message: "Reservation canceled successfully!",
+                reservation
+            });
+        }
 
         if (!NewEndTime) {
             return res.status(400).json({ message: "New end time is required." });
@@ -179,7 +186,7 @@ const updateReservation = async (req, res) => {
 
         res.status(200).json({
             message: "Change request submitted successfully.",
-            reservation,
+            reservation
         });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -221,6 +228,8 @@ const updateReservationStatus = async (req, res) => {
                 return res.status(403).json({ message: "Vehicle does not belong to the company." });
             }
             reservation.vehicle = vehicle;
+            assignedVehicle.status = "occupied"
+            assignedVehicle.save();
         }
 
         reservation.status = status;
@@ -239,7 +248,6 @@ const updateReservationStatus = async (req, res) => {
 
 const handleReapproval = async (req, res) => {
     try {
-        console.log("noslo je")
         const reservation = await Reservation.findById(req.params.id);
 
         if (!reservation || reservation.status !== "pending-reapproval") {
@@ -280,13 +288,15 @@ const getPendingReservations = async (req, res) => {
             startTime: { $gte: reviewDeadline },
         })
             .populate("user", "firstName email")
-            .populate("vehicle", "brand model");
+            .populate("vehicle", "brand model")
+            .sort({ startTime: 1 })
 
         const reapprovalReservations = await Reservation.find({
             status: "pending-reapproval",
         })
             .populate("user", "firstName email")
-            .populate("vehicle", "brand model");
+            .populate("vehicle", "brand model")
+            .sort({ startTime: 1 })
 
         res.status(200).json({
             pending: pendingReservations,
@@ -301,6 +311,7 @@ const getPendingReservations = async (req, res) => {
 const getLiveOrCompletedReservations = async (req, res) => {
     try {
         const reservations = await Reservation.find({
+            user: req.user.id,
             company: req.user.companyId,
             status: { $in: ["live", "completed"] },
         })
