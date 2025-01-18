@@ -1,49 +1,27 @@
 import EmployeeList from "./EmployeeList";
-import AddEmployeeForm from "./AddEmployeeForm";
-import SubmitButton from "@components/ui/SubmitButton";
-import { getEmployees } from '@api/employees';
-import { useState, useEffect } from 'react'
+import Title from "@components/ui/Title"
+import LinkButton from "@components/ui/LinkButton"
 
 const Employees = () => {
-    const [employees, setEmployees] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [isAddNewVisible, setIsAddNewVisible] = useState(false);
-
-    useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                setLoading(true);
-                const data = await getEmployees();
-                setEmployees(data);
-                setError("");
-            } catch (error) {
-                setError(error.message);
-                console.log("uhvatio error")
-            } finally {
-                setLoading(false);
-                console.log("Loading finished");
-            }
-        };
-
-        fetchEmployees();
-    }, []);
-
-    const handleEmployeeAdded = (newEmployee) => {
-        setEmployees((prevEmployees) => [...prevEmployees, newEmployee]);
-    };
-
     return (
-        <div className="mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">Employees</h1>
-            <div className="mb-4">
-                <SubmitButton type = "button" onClick={() => setIsAddNewVisible(!isAddNewVisible)}>
-                {isAddNewVisible ? "Close" : "Add new employee"} </SubmitButton>
-                {isAddNewVisible && (
-                    <AddEmployeeForm onEmployeeAdded={handleEmployeeAdded} />
-                    )}
+        <div className="p-6 max-w-6xl mx-auto">
+            <Title>Employees</Title>
+            <p className="text-gray-700 mb-4">
+                As an Admin, you have full control over employee registrations. Employees 
+                <span className="font-medium"> cannot self-register</span>, ensuring only verified members gain access.
+            </p>
+
+            <div className="border-l-4 border-brand-dark pl-4 py-2 bg-purple-50 text-gray-700 mb-4">
+                <p className="font-bold">Credentials Are Shown Only Once</p>
+                <p>After adding an employee, their login details will be visible just once. Share them securely and advise them to change their password immediately.</p>
+                <p className="text-sm text-gray-500">
+                If lost, credentials cannot be retrieved.
+            </p>
             </div>
-            <EmployeeList employees={employees} error={error} loading={loading} />
+
+            <LinkButton to ="new" label="Add employee" className="bg-white shadow"></LinkButton>
+           
+            <EmployeeList />
         </div>
     );
 };

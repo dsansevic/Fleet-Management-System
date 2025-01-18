@@ -196,13 +196,31 @@ const checkAvailability = async (req, res) => {
 
 const getEmployees = async (req, res) => {
   try {
-    let employees = await User.find({ role: "employee" });
+    const { companyId } = req.user;
+    const { page = 1, limit = 6} = req.query
 
-    if (employees.length === 0) {
-      return res.status(404).json({ message: "No registered employees." });
-    }
+    const pageNumber = Math.max(1, parseInt(page, 10));
+    const limitNumber = Math.max(1, parseInt(limit, 10));
+    const skip = (pageNumber - 1) * limitNumber;
+    const numberOfEmployees = await User.countDocuments({ role: "employee", company: companyId }) 
+    if (numberOfEmployees === 0)
+      return res.status(200).json({
+        message: "No employees registered.",
+        data: [],
+        currentPage: pageNumber,
+        totalPages: 1
+      });
 
-    res.status(200).json(employees);
+    let employees = await User.find({ role: "employee", company: companyId })
+      .sort({ lastName: 1 })
+      .skip(skip) 
+      .limit(limitNumber)
+
+       return res.status(200).json({
+      data: employees,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(numberOfEmployees / limitNumber),
+    });
   } catch (error) {
     res.status(500).json({ message: "An error occurred while fetching employees.", error: error.message });
   }

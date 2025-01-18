@@ -4,8 +4,12 @@ import SubmitButton from "@components/ui/SubmitButton"
 import { addEmployee } from "@api/employees"; 
 import { validateField } from "@utils/inputValidation";
 import {publicApiClient} from '@api/apiClient'
+import { useNavigate } from "react-router-dom";
+import SuccessMessage from "@components/ui/SuccessMessage";
+import ErrorMessage from "@components/ui/ErrorMessage";
+import Title from "@components/ui/Title";
 
-const AddEmployeeForm = ({ onEmployeeAdded }) => {
+const AddEmployeeForm = () => {
     const [newEmployee, setNewEmployee] = useState({
         firstName: "",
         lastName: "",
@@ -19,9 +23,12 @@ const AddEmployeeForm = ({ onEmployeeAdded }) => {
         password: "",
     });
     const [isAdding, setIsAdding] = useState(false);
+    const [credentialsToShow, setCredentialsToShow] = useState(null)
     const [capsLockIsOn, setCapsLockIsOn] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const [addError, setAddError] = useState("");
     const inputRef = useRef();
+    const navigate = useNavigate();
 
     const hasErrors = Object.values(employeeErrors).some((error) => error);
     const hasEmptyFields = Object.values(newEmployee).some((value) => value === "");
@@ -63,10 +70,16 @@ const AddEmployeeForm = ({ onEmployeeAdded }) => {
         e.preventDefault();
         setIsAdding(true);
         setAddError("");
+        setCredentialsToShow(null);
 
         try {
-            const addedEmployee = await addEmployee(newEmployee);
-            onEmployeeAdded(addedEmployee);
+            await addEmployee(newEmployee);
+
+            setCredentialsToShow({
+                email: newEmployee.email,
+                password: newEmployee.password,
+            });
+            setSuccessMessage("Employee successfully added!");
             setNewEmployee({ firstName: "", lastName: "", email: "", password: "" }); 
         } catch (error) {
             setAddError(error.message);
@@ -76,7 +89,24 @@ const AddEmployeeForm = ({ onEmployeeAdded }) => {
     };
 
     return (
-        <form onSubmit={handleAddEmployee} className="mb-6">
+        <div className="max-w-xl mx-auto mt-8 bg-white shadow-lg rounded-2xl p-8 relative">
+            <button onClick={() => navigate("/dashboard-admin/employees")} className="absolute top-0 right-0 text-xl">
+                ✖
+            </button>
+            <Title className="text-center">Add a New Employee</Title>
+            
+            {successMessage && <SuccessMessage message={successMessage} />}
+            {addError && <ErrorMessage message={addError} />}
+            {credentialsToShow && (
+                <div className="mt-6 p-4 border border-gray-100 rounded-md text-center">
+                    <p><strong>Email:</strong> {credentialsToShow.email}</p>
+                    <p><strong>Password:</strong> {credentialsToShow.password}</p>
+                    <p className="text-sm text-error mt-2">
+                        ⚠️ These credentials will not be shown again    
+                    </p>
+                </div>
+            )}
+            <form onSubmit={handleAddEmployee} className="space-y-6">
             <div className="grid grid-cols-1">
                 <FormInputField
                     label = "First name"
@@ -113,17 +143,19 @@ const AddEmployeeForm = ({ onEmployeeAdded }) => {
                     onCapsLock={handleCapsLock}
                     error={employeeErrors.password}
                 />
-                {capsLockIsOn && (
-                    <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>)}
             </div>
-            <SubmitButton 
-                readyToSend={isAdding || isSubmitDisabled}>
-                {isAdding ? "Adding..." : "Add Employee"}
-                
-            </SubmitButton>
-
-            {addError && <p className="text-red-500 mt-2">{addError}</p>}
+            {capsLockIsOn && (
+            <div className="mt-2 p-2 text-brand-darker text-sm font-medium rounded-md flex items-center gap-2 animate-pulse">
+                ⚠️ Caps Lock is ON! 
+            </div>
+)}
+            <div className="flex justify-end">
+                <SubmitButton readyToSend={isAdding || isSubmitDisabled}>
+                    {isAdding ? "Adding..." : "Add Employee"}
+                </SubmitButton>
+            </div>
         </form>
+    </div>
     );
 };
 

@@ -1,8 +1,8 @@
 import { apiClient } from "./apiClient";
 
-export const getEmployees = async () => {
+export const getEmployees = async (page, limit) => {
     try {
-        const response = await apiClient.get("/user/employees");
+        const response = await apiClient.get(`/user/employees?page=${page}&limit=${limit}`);
         console.log(response)
         return response.data;
     } catch (error) {

@@ -4,6 +4,7 @@ import AdminDashboard from "@pages/dashboard/AdminDashboard";
 import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
 import AddVehicleForm from "@pages/dashboard/admin/vehicles/AddVehicleForm";
 import Employees from "@pages/dashboard/admin/employees/Employees";
+import AddEmployeeForm from "@pages/dashboard/admin/employees/AddEmployeeForm";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
@@ -66,6 +67,15 @@ const AdminDashboardLayout = () => {
                             <>
                                 <Employees />
                                 <PageTitle title="Employees" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="employees/new"
+                        element={
+                            <>
+                                <AddEmployeeForm />
+                                <PageTitle title="Add employee" />
                             </>
                         }
                     />
