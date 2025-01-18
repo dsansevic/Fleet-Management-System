@@ -1,5 +1,6 @@
 const cron = require("node-cron");
 const Reservation = require("../models/Reservation");
+const Vehicle = require("../models/Vehicle");
 
 const updateReservationStatus = () => {
     cron.schedule("*/5 * * * *", async () => {
@@ -16,10 +17,18 @@ const updateReservationStatus = () => {
                 { $set: { status: "expired" } }
             );
 
-            await Reservation.updateMany(
-                { status: "live", endTime: { $lt: currentDate } },
-                { $set: { status: "completed" } }
-            );
+            const completedReservations = await Reservation.find({
+                status: "live",
+                endTime: { $lt: currentDate }
+            });
+
+            for (const reservation of completedReservations) {
+                console.log("evo koja je gotova: ", reservation )
+                reservation.status = "completed";
+                await reservation.save();
+
+                await Vehicle.findByIdAndUpdate(reservation.vehicle, { status: "available" });
+            }
 
             const pendingReapprovals = await Reservation.find({
                 status: "pending-reapproval",
@@ -34,6 +43,11 @@ const updateReservationStatus = () => {
                     await reservation.save();
                 }
             }
+
+            await Vehicle.updateMany(
+                { vehicleInspection: { $lt: currentDate } },
+                { $set: { status: "service" } }
+            );
 
         } catch (error) {
             console.error("Error updating reservation statuses:", error);

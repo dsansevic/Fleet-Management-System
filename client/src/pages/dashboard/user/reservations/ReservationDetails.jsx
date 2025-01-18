@@ -26,6 +26,7 @@ const ReservationDetails = () => {
                 setLoading(true);
                 const data = await fetchReservationById(id);
                 setReservation(data);
+                console.log(data)
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -105,7 +106,13 @@ const ReservationDetails = () => {
                     )}
                     {reservation.additionalDetails && (
                         <p className="col-span-2">
-                            <span className="font-medium">Additional Details:</span> {reservation.additionalDetails}
+                            <span className="font-bold">Additional Details:</span> {reservation.additionalDetails}
+                        </p>
+                    )}
+                    {reservation.vehicle && (
+                        <p className="col-span-2">
+                            <span className="font-bold">Assigned vehicle:</span> {reservation.vehicle.brand}, {reservation.vehicle.model}, {reservation.vehicle.type}, {reservation.vehicle.licensePlate}, seat number: {reservation.vehicle.capacity}
+                                 {reservation.additionalDetails}
                         </p>
                     )}
                 </div>

@@ -134,7 +134,10 @@ const getReservationById = async (req, res) => {
         const { id } = req.params;
         const { id: userId, role, companyId } = req.user;
 
-        const reservation = await Reservation.findById(id).populate("user", "firstName lastName");
+        const reservation = await Reservation.findById(id)
+            .populate("user", "firstName lastName")
+            .populate("vehicle", "brand model licensePlate type capacity");
+
         if (!reservation) {
             return res.status(404).json({ message: "Reservation not found" });
         }
