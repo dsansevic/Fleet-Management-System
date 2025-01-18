@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import AdminDashboard from "@pages/dashboard/AdminDashboard";
 import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
+import AddVehicleForm from "@pages/dashboard/admin/vehicles/AddVehicleForm";
 import Employees from "@pages/dashboard/admin/employees/Employees";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
@@ -47,6 +48,15 @@ const AdminDashboardLayout = () => {
                             <>
                                 <Vehicles />
                                 <PageTitle title="Manage Vehicles" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="vehicles/new"
+                        element={
+                            <>
+                                <AddVehicleForm />
+                                <PageTitle title="Add Vehicle" />
                             </>
                         }
                     />
