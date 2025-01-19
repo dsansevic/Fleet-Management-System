@@ -9,7 +9,6 @@
     --brand-light: #b3a2d8;
     --brand-lighter: #a192ce;
     --brand-base: #9b79b9;
-    /* --brand-base: #f77f00; */
     --brand-dark: #6e4e8d;
     --brand-darker: #4e2a5b;
     --brand-darkest: #621212;
@@ -40,11 +39,3 @@ button:active {
 body {
     font-family: 'Poppins', sans-serif;
 }
-
-/* html {
-    scrollbar-gutter: stable;
-} */
-/* 
-body {
-    padding-left: 2rem;
-} */
