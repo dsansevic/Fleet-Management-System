@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const EmptyStateMessage = ({ icon = "ⓘ", title, message, link }) => {
+const EmptyStateMessage = ({ icon = "ⓘ", title, message, link = "" }) => {
     return (
         <div className="flex flex-col items-center justify-center text-gray-500 text-lg text-center p-10 mt-5 bg-gray-50 rounded-xl shadow-sm">
             <span className="text-4xl mb-2">{icon}</span>
