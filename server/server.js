@@ -10,8 +10,7 @@ const userRoutes = require("./routes/user");
 const vehicleRoutes = require("./routes/vehicle");
 const reservationRoutes = require("./routes/reservation");
 const damageReportRoutes = require("./routes/damageReport");
-
-// const companyRoutes = require("./routes/company")
+const notificationRoutes = require("./routes/notification");
 
 const app = express();
 app.use(express.json());
@@ -47,6 +46,7 @@ app.use("/reservation", reservationRoutes);
 
 app.use("/damage-report", damageReportRoutes);
 
+app.use("/notification", notificationRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found.` });

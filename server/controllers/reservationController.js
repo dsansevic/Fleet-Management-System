@@ -230,6 +230,17 @@ const updateReservation = async (req, res) => {
 
         await reservation.save();
 
+        const notificationMessage = `${req.user.firstName} has requested new end time for reservation "${reservation.purpose}".`;
+        const notification = new Notification({
+            type: "reservation",
+            message: notificationMessage,
+            sender: req.user.id,
+            company: req.user.companyId,
+            reservation: reservation._id,
+        });
+
+        await notification.save();
+
         res.status(200).json({
             message: "Change request submitted successfully.",
             reservation
@@ -286,6 +297,18 @@ const updateReservationStatus = async (req, res) => {
 
         await reservation.save();
 
+        const notificationMessage = `Your reservation "${reservation.purpose}" has been ${status} by ${req.user.firstName}.`;
+        const notification = new Notification({
+            type: "status-update",
+            message: notificationMessage,
+            sender: req.user.id,
+            recipient: reservation.user._id,
+            company: req.user.companyId,
+            reservation: reservation._id,
+        });
+
+        await notification.save();
+
         res.status(200).json({
             message: `Reservation status updated to ${status}.`,
             reservation,
@@ -322,8 +345,22 @@ const handleReapproval = async (req, res) => {
             reservation.newEndTime = null; 
         }
         reservation.status = "approved";
-
         await reservation.save();
+
+        const notificationMessage =
+        action === "approve"
+            ? `Your reservation "${reservation.purpose}" has been updated and approved by ${req.user.firstName}.`
+            : `Your requested changes for reservation "${reservation.purpose}" have been rejected by ${req.user.firstName}. The original details remain active.`;
+
+        const notification = new Notification({
+            type: "status-update",
+            message: notificationMessage,
+            sender: req.user.id,
+            recipient: reservation.user._id,
+            company: req.user.companyId,
+            reservation: reservation._id,
+        });
+        await notification.save();
 
         res.status(200).json({ message: `Reservation ${action}d successfully.`, reservation });
     } catch (error) {

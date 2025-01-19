@@ -5,6 +5,7 @@ import { capitalizedFirstLetter } from '@utils/capitalizedFirstLetter'
 import { BellIcon } from "@heroicons/react/20/solid";
 import { useAuthContext } from "@hooks/useAuthContext";
 import { useState } from "react";
+import NotificationsDropdown from "@components/ui/NotificationsDropdown";
 
 const UserNavbar = () => {
     const logout = useLogout();
@@ -21,12 +22,11 @@ const UserNavbar = () => {
                     <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />
                 </NavLink>
                 <div className="flex gap-4">
-                    <BellIcon className="h-10 w-10 text-brand-dark hover:text-brand-lighter cursor-pointer" />
-
+                    <NotificationsDropdown />
                     <div className="relative">
                         <span
                             onClick={toggleMenu}
-                            className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-10 h-10 hover:bg-brand-lighter cursor-pointer" 
+                            className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-9 h-9 hover:bg-brand-lighter cursor-pointer" 
                         >
                             {capitalizedFirstLetter(user?.firstName) || "U"}
                         </span>
@@ -34,13 +34,6 @@ const UserNavbar = () => {
                         {menuOpen && (
                             <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-md shadow-md z-50">
                                 <p className="w-full bg-brand-light text-center p-2 text-brand-darkest rounded-t-md">{user?.firstName  || "User"}</p>
-                                <NavLink
-                                    to="profile"
-                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                    onClick={() => setMenuOpen(false)}
-                                >
-                                    My Profile
-                                </NavLink>
                                 <button
                                     onClick={() => logout()}
                                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
