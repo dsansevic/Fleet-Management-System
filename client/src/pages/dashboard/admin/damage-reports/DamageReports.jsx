@@ -22,7 +22,7 @@ const DamageReports = () => {
     const tableHeaders = [
         { name: "Vehicle", key: "vehicle", visibility: "" },
         { name: "Status", key: "status", visibility: "" },
-        { name: "Reported By", key: "reportedBy", visibility: "" },
+        { name: "Reported By", key: "reportedBy", visibility: "hidden lg:table-cell" },
         { name: "Date Reported", key: "createdAt", visibility: "hidden lg:table-cell" },
         { name: "Description", key: "description", visibility: "hidden lg:table-cell" },
         { name: "Details", key: null, visibility: "" },
@@ -79,7 +79,7 @@ const DamageReports = () => {
                     {status.icon}
                     <span>{status.label}</span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
+                <td className="px-6 py-4 text-sm text-gray-900 hidden lg:table-cell">
                     {report.reportedBy?.firstName} {report.reportedBy?.lastName}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
