@@ -10,6 +10,16 @@ export const addReservation = async (reservationData) => {
     }
 };
 
+export const fetchAllReservations = async (page, limit) => {
+    try {
+        const response = await apiClient.get(`/reservation?page=${page}&limit=${limit}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching all reservations:", error);
+        throw error.response?.data || { message: "Failed to fetch all reservations." };
+    }
+};
+
 export const fetchActiveReservations = async (page, limit) => {
     try {
         const response = await apiClient.get(`/reservation/active?page=${page}&limit=${limit}`);

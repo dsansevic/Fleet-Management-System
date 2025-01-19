@@ -3,6 +3,7 @@ const checkAuth = require("../middleware/checkAuth");
 const checkRole = require("../middleware/checkRole");
 const { 
     addReservation,
+    getAllReservations,
     getActiveReservations, 
     getInactiveReservations, 
     getReservationById,
@@ -18,6 +19,7 @@ router.use(checkAuth);
 
 router.post("/", checkRole("employee"), addReservation);
 
+
 router.get("/pending", checkRole("admin"), getPendingReservations);
 
 router.get("/active", checkRole("employee"), getActiveReservations);
@@ -27,6 +29,9 @@ router.get("/inactive", checkRole("employee"), getInactiveReservations);
 router.get("/live-or-completed", checkRole("employee"), getLiveOrCompletedReservations);
 
 router.get("/:id", getReservationById);
+
+router.get("/", checkRole("admin"), getAllReservations);
+
 
 router.patch("/:id/status", checkRole("admin"), updateReservationStatus);
 

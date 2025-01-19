@@ -41,6 +41,39 @@ const addReservation = async (req, res) => {
     }
 };
 
+const getAllReservations = async (req, res) => {
+    try {
+        const { page = 1, limit = 9 } = req.query;
+        const companyId = req.user.companyId;
+
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const totalReservations = await Reservation.countDocuments({ company: companyId });
+
+        if (totalReservations === 0) {
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+        }
+
+        const reservations = await Reservation.find({ company: companyId })
+            .populate("user", "firstName lastName email")
+            .populate("vehicle", "brand model licensePlate type")
+            .sort({ startTime: 1 })
+            .skip(skip)
+            .limit(limitNumber);
+
+        res.status(200).json({
+            data: reservations,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalReservations / limitNumber),
+        });
+    } catch (error) {
+        console.error("Error fetching all reservations:", error);
+        res.status(500).json({ message: "Failed to fetch reservations", error: error.message });
+    }
+};
+
 const getActiveReservations = async (req, res) => {
     try {
         const { page = 1, limit = 6 } = req.query;
@@ -353,6 +386,7 @@ const getLiveOrCompletedReservations = async (req, res) => {
 
 module.exports 
     = { addReservation, 
+        getAllReservations,
         getActiveReservations, 
         getInactiveReservations, 
         getReservationById,

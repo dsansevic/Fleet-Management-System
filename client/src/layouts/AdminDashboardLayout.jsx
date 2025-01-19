@@ -6,6 +6,7 @@ import AddVehicleForm from "@pages/dashboard/admin/vehicles/AddVehicleForm";
 import EditVehicleForm from "@pages/dashboard/admin/vehicles/EditVehicleForm";
 import Employees from "@pages/dashboard/admin/employees/Employees";
 import AddEmployeeForm from "@pages/dashboard/admin/employees/AddEmployeeForm";
+import Reservations from "@pages/dashboard/admin/reservations/Reservations";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
@@ -95,6 +96,15 @@ const AdminDashboardLayout = () => {
                             <>
                                 <PendingReservations />
                                 <PageTitle title="Pending reservations" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="reservations"
+                        element={
+                            <>
+                                <Reservations />
+                                <PageTitle title="Reservations" />
                             </>
                         }
                     />

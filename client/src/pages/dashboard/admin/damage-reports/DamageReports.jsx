@@ -111,6 +111,7 @@ const DamageReports = () => {
                         { value: "in-progress", label: "In Progress" },
                         { value: "resolved", label: "Resolved" }
                     ]}
+                    required = {false}
             />
             </div>
             {loading ? (
