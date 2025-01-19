@@ -116,7 +116,6 @@ const ReservationDetails = () => {
                     {reservation.vehicle && (
                         <p className="col-span-2">
                             <span className="font-bold">Assigned vehicle:</span> {reservation.vehicle.brand}, {reservation.vehicle.model}, {reservation.vehicle.type}, {reservation.vehicle.licensePlate}, seat number: {reservation.vehicle.capacity}
-                                 {reservation.additionalDetails}
                         </p>
                     )}
                 </div>

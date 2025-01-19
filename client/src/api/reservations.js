@@ -87,6 +87,16 @@ export const fetchLiveOrCompletedReservations = async () => {
         return response.data;
     } catch (error) {
         console.error("Error fetching live or completed reservations:", error);
-        throw new Error("Failed to fetch live or completed reservations.");
+        throw error.response?.data || { message: "Failed to fetch live or completed reservations."};
+    }
+};
+
+export const fetchPendingReservations = async (page, limit) => {
+    try {
+        const response = await apiClient.get(`/reservation/pending?page=${page}&limit=${limit}`)
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching pending reservations:", error);
+        throw error.response?.data || { message: "Failed to fetch pending reservations." };
     }
 };

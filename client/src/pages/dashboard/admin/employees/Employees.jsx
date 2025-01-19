@@ -13,7 +13,7 @@ const Employees = () => {
 
             <div className="border-l-4 border-brand-dark pl-4 py-2 bg-purple-50 text-gray-700 mb-4">
                 <p className="font-bold">Credentials Are Shown Only Once</p>
-                <p>After adding an employee, their login details will be visible just once. Share them securely and advise them to change their password immediately.</p>
+                <p>After adding an employee, their login details will be visible just once. Share them securely!</p>
                 <p className="text-sm text-gray-500">
                 If lost, credentials cannot be retrieved.
             </p>

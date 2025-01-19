@@ -16,7 +16,7 @@ const AdminDashboard = () => {
             </p>
             <div className="mt-6">
                 <Link 
-                    to="/dashboard-admin/review-reservations"
+                    to="/dashboard-admin/pending-reservations"
                     className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-lg shadow hover:bg-brand-darker"
                 >
                     Review Reservations

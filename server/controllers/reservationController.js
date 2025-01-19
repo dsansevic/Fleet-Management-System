@@ -336,28 +336,43 @@ const getPendingReservations = async (req, res) => {
     try {
         const now = new Date();
         const reviewDeadline = new Date(now.getTime() + 60 * 60 * 1000);
+        const { page = 1, limit = 6 } = req.query;
+
+        const pageNumber = Math.max(1, parseInt(page, 10));
+        const limitNumber = Math.max(1, parseInt(limit, 10));
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const totalPending = await Reservation.countDocuments({
+            company: req.user.companyId,
+            status: "pending",
+            startTime: { $gte: reviewDeadline }
+        });
 
         const pendingReservations = await Reservation.find({
             company: req.user.companyId,
             status: "pending",
             startTime: { $gte: reviewDeadline }
         })
-            .populate("user", "firstName email")
+            .populate("user", "firstName lastName email")
             .populate("vehicle", "brand model")
             .sort({ startTime: 1 })
+            .skip(skip)
+            .limit(limitNumber);
 
         const reapprovalReservations = await Reservation.find({
             company: req.user.companyId,
             status: "pending-reapproval"
         })
-            .populate("user", "firstName email")
+            .populate("user", "firstName lastName email")
             .populate("vehicle", "brand model")
-            .sort({ startTime: 1 })
+            .sort({ startTime: 1 });
 
         res.status(200).json({
             pending: pendingReservations,
-            pendingReapproval: reapprovalReservations,
-        });
+            pendingTotalPages: Math.ceil(totalPending / limitNumber),
+            pendingCurrentPage: pageNumber,
+            reapproval: reapprovalReservations
+        })
     } catch (error) {
         console.error("Error fetching reservations:", error);
         res.status(500).json({ message: "Failed to fetch reservations" });
