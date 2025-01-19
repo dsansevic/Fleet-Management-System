@@ -21,7 +21,7 @@ const NotificationsDropdown = () => {
         try {
             const url = isAdmin ? "/notification" : "/notification/user";
             const response = await apiClient.get(url);
-            setNotifications(response.data.data);
+            setNotifications(response.data.data || []);
         } catch (err) {
             setError("Failed to load notifications.");
         } finally {
@@ -59,9 +59,9 @@ const NotificationsDropdown = () => {
         <div className="relative">
             <button onClick={toggleDropdown} className="relative p-0">
                 <BellIcon className="h-10 w-10 p-0 text-brand-dark hover:text-brand-lighter cursor-pointer" />
-                {notifications.some((n) => !n.read) && (
+                {(notifications || []).some((n) => !n.read) && (
                     <span className="absolute top-0 right-1 flex items-center justify-center w-5 h-5 bg-error text-white text-xs font-bold rounded-full">
-                        {notifications.filter((n) => !n.read).length}
+                        {(notifications || []).filter((n) => !n.read).length}
                     </span>
                 )}
             </button>

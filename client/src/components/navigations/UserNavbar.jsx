@@ -1,8 +1,6 @@
-import { NavLink } from "react-router-dom";
 import useLogout from "@hooks/useLogout";
 import fleetflowLogo from '@assets/logo.png';
 import { capitalizedFirstLetter } from '@utils/capitalizedFirstLetter'
-import { BellIcon } from "@heroicons/react/20/solid";
 import { useAuthContext } from "@hooks/useAuthContext";
 import { useState } from "react";
 import NotificationsDropdown from "@components/ui/NotificationsDropdown";
@@ -18,9 +16,7 @@ const UserNavbar = () => {
     return (
         <div className="border-b sticky top-0 border-lightgreen bg-white z-20 ">
             <nav className="container mx-auto px-14 py-2 flex items-center justify-between">
-                <NavLink to="/" className="invisible lg:visible md:visible">
-                    <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />
-                </NavLink>
+                <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />
                 <div className="flex gap-4">
                     <NotificationsDropdown />
                     <div className="relative">
