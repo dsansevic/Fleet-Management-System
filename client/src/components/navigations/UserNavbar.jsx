@@ -28,11 +28,11 @@ const UserNavbar = () => {
                         </span>
 
                         {menuOpen && (
-                            <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-md shadow-md z-50">
+                            <div className="absolute right-0 mt-3 w-36 bg-white border border-gray-200 rounded-md shadow-md z-50">
                                 <p className="w-full bg-brand-light text-center p-2 text-brand-darkest rounded-t-md">{user?.firstName  || "User"}</p>
                                 <button
                                     onClick={() => logout()}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    className="block w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100"
                                 >
                                     Log Out
                                 </button>
