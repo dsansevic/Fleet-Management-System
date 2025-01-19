@@ -24,8 +24,9 @@ const AdminDashboardLayout = () => {
         if (document.startViewTransition) {
             document.startViewTransition(() => {});
         }        
-        if (!location.pathname.startsWith("/dashboard-admin/damage-reports") && previousPath.current.startsWith("/dashboard-admin/damage-reports")) {
-            sessionStorage.removeItem("currentPage");
+
+        if (!location.pathname.startsWith("/dashboard-admin/vehicles") && previousPath.current.startsWith("/dashboard-admin/vehicles")) {
+            sessionStorage.removeItem("vehiclePage");
         }
 
         previousPath.current = location.pathname;

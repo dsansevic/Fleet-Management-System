@@ -5,7 +5,7 @@ const UserDashboard = () => {
     const { user } = useAuthContext();
 
     return (
-        <div className="p-12 bg-white shadow-md rounded-md">
+        <div className="p-12 bg-white shadow-md rounded-2xl">
             <h1 className="text-2xl font-bold text-gray-700">
             Welcome, {user?.firstName}!
             </h1>

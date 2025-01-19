@@ -6,7 +6,7 @@ const AdminDashboard = () => {
     console.log(user)
 
     return (
-        <div className="p-12 bg-white shadow-md rounded-md">
+        <div className="p-12 bg-white shadow-md rounded-md 2xl">
             <h1 className="text-2xl font-bold text-gray-700">
                 Welcome, {user?.firstName}!
             </h1>

@@ -10,7 +10,7 @@ import EmptyStateMessage from "@components/ui/EmptyStateMessage";
 
 const Reservations = () => {
     const { data: reservations, error, loading, totalPages, currentPage, handlePageChange } =
-        usePagination(fetchAllReservations, "reservationsPage", 6);
+        usePagination(fetchAllReservations, null, 6);
 
     return (
         <div className="p-6 max-w-6xl mx-auto">
