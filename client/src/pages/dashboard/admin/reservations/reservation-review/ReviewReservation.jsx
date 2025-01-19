@@ -4,8 +4,7 @@ import { fetchReservationById, updateReservationStatus, handleReapproval } from 
 import { getVehicles } from "@api/vehicles";
 import { useParams, useNavigate } from "react-router-dom";
 import SuccessMessage from "@components/ui/SuccessMessage";
-import ServerErrorMessage from "@components/ui/ServerErrorMessage";
-
+import Loading from "@utils/Loading";
 import ReservationDetails from "./ReservationDetails";
 import VehicleDragAndDropList from "./VehicleDragAndDropList";
 import SelectedVehicle from "./SelectedVehicle";
@@ -37,7 +36,8 @@ const ReviewReservation = () => {
                 setReservation(res);
                 setStatus(res.status)
                 const veh = await getVehicles();
-                setVehicles(veh);
+                console.log(veh.data)
+                setVehicles(veh.data);
             } catch (error) {
                 console.log(error)
                 setError(error.message);
@@ -115,7 +115,7 @@ const ReviewReservation = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     if (error) {
@@ -134,7 +134,10 @@ const ReviewReservation = () => {
     }, {});
 
     return (
-        <div className="max-w-5xl mx-auto mt-6 p-6 bg-white rounded shadow">
+        <div className="max-w-5xl mx-auto mt-6 p-6 bg-white rounded shadow relative">
+            <button onClick={() => navigate("/dashboard-admin/pending-reservations")} className="absolute top-0 right-0 text-xl">
+                ✖
+            </button>
             <ReservationDetails reservation={reservation} />
             {confirmationMessage ? (
                 <SuccessMessage message={confirmationMessage} />

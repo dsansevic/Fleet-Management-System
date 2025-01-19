@@ -1,5 +1,6 @@
 import VehicleList from "@pages/dashboard/admin/vehicles/VehicleList";
 import LinkButton from "@components/ui/LinkButton"
+import Title from "@components/ui/Title"
 import { getVehicles } from "@api/vehicles";
 import { useState, useEffect } from "react";
 
@@ -26,8 +27,8 @@ const Vehicles = () => {
     }, []);
 
     return (
-        <div className="mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">Vehicles</h1>
+        <div className="p-6 max-w-6xl mx-auto">
+            <Title>Vehicles</Title>
             <LinkButton to ="new" label="Add new vehicle" className="bg-white shadow"></LinkButton>
             <VehicleList vehicles={vehicles} error={error} loading={loading} />
         </div>

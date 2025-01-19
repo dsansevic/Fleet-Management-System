@@ -1,8 +1,8 @@
 import { apiClient } from "./apiClient";
 
-export const getVehicles = async () => {
+export const getVehicles = async (page, limit) => {
     try {
-        const response = await apiClient.get("/vehicle");
+        const response = await apiClient.get(`/vehicle?page=${page}&limit=${limit}`);
         return response.data;
     } catch (error) {
         const errorMessage = error.response?.data?.message || "An unknown error occurred.";
@@ -20,8 +20,19 @@ export const addVehicles = async (data) => {
     }
 };
 
+export const getVehicleById = async (id) => {
+    try {
+        const response = await apiClient.get(`/vehicle/${id}`);
+        return response.data;
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || "An unknown error occurred.";
+        throw new Error(errorMessage); 
+    }
+};
+
 export const updateVehicle = async (id, data) => {
     try {
+        console.log(data)
         const response = await apiClient.patch(`/vehicle/${id}`, data);
         return response.data;
     } catch (error) {

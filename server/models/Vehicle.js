@@ -43,6 +43,7 @@ const vehicleSchema = new Schema(
         type: Date,
         required: true,
         validate: function (value) {
+            if (!this.isNew) return true;
             return value > new Date() && value <= new Date(new Date().setFullYear(new Date().getFullYear() + 1));
           },
     }

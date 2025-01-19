@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { apiClient } from "@api/apiClient";
 import { Link } from "react-router-dom";
+import Loading from "@utils/Loading";
 
 const PendingReservations = () => {
     const [pendingReservations, setPendingReservations] = useState([]);
@@ -26,7 +27,7 @@ const PendingReservations = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading pending reservations...</div>;
+        return <Loading />;
     }
 
     if (error) {

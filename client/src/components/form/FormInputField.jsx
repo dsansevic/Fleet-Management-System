@@ -9,7 +9,8 @@ function FormInputField({
   value, 
   onChange, 
   error,  
-  onCapsLock
+  onCapsLock,
+  required = true
 }, ref) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,7 +25,8 @@ function FormInputField({
   return (
     <div className="mb-4 relative w-full">
       <label htmlFor={name} className="block text-sm font-medium text-brand-darker">
-        {label && <span className="text-brand-darker" title="This field is required">{label} *</span>}
+        {label} 
+        {required &&  <span className="text-brand-darker" title="This field is required">*</span>}
       </label>
 
       <div className="relative">
@@ -38,7 +40,7 @@ function FormInputField({
             ${error ? 'border-error' : 'border-gray-200'} 
             border focus:outline-none focus:ring-1 focus:ring-brand-light`}
           ref={ref}
-          required
+          required= {required}
           onKeyUp={handleKeyUp}
           aria-required="true"
           aria-invalid={error ? "true" : "false"}

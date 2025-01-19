@@ -17,18 +17,15 @@ const updateReservationStatus = () => {
                 { $set: { status: "expired" } }
             );
 
-            const completedReservations = await Reservation.find({
-                status: "live",
-                endTime: { $lt: currentDate }
-            });
+            await Reservation.updateMany(
+                { status: "live", endTime: { $lt: currentDate } },
+                { $set: { status: "completed" } }
+            );
 
-            for (const reservation of completedReservations) {
-                console.log("evo koja je gotova: ", reservation )
-                reservation.status = "completed";
-                await reservation.save();
-
-                await Vehicle.findByIdAndUpdate(reservation.vehicle, { status: "available" });
-            }
+            await Vehicle.updateMany(
+                { _id: { $in: await Reservation.distinct("vehicle", { status: "completed" }) } },
+                { $set: { status: "available" } }
+            );
 
             const pendingReapprovals = await Reservation.find({
                 status: "pending-reapproval",

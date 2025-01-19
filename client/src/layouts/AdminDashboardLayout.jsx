@@ -3,6 +3,7 @@ import { useRef, useEffect } from "react";
 import AdminDashboard from "@pages/dashboard/AdminDashboard";
 import Vehicles from "@pages/dashboard/admin/vehicles/Vehicles";
 import AddVehicleForm from "@pages/dashboard/admin/vehicles/AddVehicleForm";
+import EditVehicleForm from "@pages/dashboard/admin/vehicles/EditVehicleForm";
 import Employees from "@pages/dashboard/admin/employees/Employees";
 import AddEmployeeForm from "@pages/dashboard/admin/employees/AddEmployeeForm";
 import PendingReservations from "@pages/dashboard/admin/reservations/PendingReservations";
@@ -58,6 +59,15 @@ const AdminDashboardLayout = () => {
                             <>
                                 <AddVehicleForm />
                                 <PageTitle title="Add Vehicle" />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="vehicles/edit/:id"
+                        element={
+                            <>
+                                <EditVehicleForm />
+                                <PageTitle title="Edit vehicle" />
                             </>
                         }
                     />

@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const Vehicle = require("../models/Vehicle");
 
 const addVehicle = async (req, res) => {
@@ -37,22 +36,63 @@ const addVehicle = async (req, res) => {
 const getVehicle = async (req, res) => {
     try {
         const companyId = req.user.companyId; 
+        const { page, limit } = req.query;
 
         if (!companyId) {
             return res.status(400).json({ message: "Company ID is required." });
         }
-        const vehicles = await Vehicle.find({ company: companyId }).sort({ brand: 1 });;
 
-        if (!vehicles.length) {
-            return res.status(404).json({ message: "No vehicles registered." });
+        let vehicles;
+
+        if (page && limit) {
+            const pageNumber = Math.max(1, parseInt(page, 10));
+            const limitNumber = Math.max(1, parseInt(limit, 10));
+            const skip = (pageNumber - 1) * limitNumber;
+
+            const totalVehicles = await Vehicle.countDocuments({ company: companyId });
+
+            if (totalVehicles === 0) {
+                return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
+            }
+
+            vehicles = await Vehicle.find({ company: companyId })
+                .sort({ brand: 1 })
+                .skip(skip)
+                .limit(limitNumber);
+
+            return res.status(200).json({
+                data: vehicles,
+                currentPage: pageNumber,
+                totalPages: Math.ceil(totalVehicles / limitNumber),
+            });
+        } else {
+            vehicles = await Vehicle.find({ company: companyId }).sort({ brand: 1 });
+
+            return res.status(200).json({ data: vehicles });
         }
-
-        res.status(200).json(vehicles);
     } catch (error) {
         console.error("Error fetching vehicles:", error);
         res.status(500).json({ message: "An unexpected error occurred while fetching vehicles." });
     }
 };
+
+const getVehicleById = async (req, res) => {
+    try {
+        const {id} = req.params;
+        
+        const vehicle = await Vehicle.findById(id);
+        if (!vehicle)
+            return res.status(400).json({message: "That vehicles doesnt exist in the database!"})
+
+        if (vehicle.company.toString() !== req.user.companyId)
+            return res.status(403).json({ message: "Access denied!" });
+
+        res.status(200).json(vehicle)
+    } catch (error) {
+        console.error("Error fetching vehicle:", error);
+        res.status(500).json({ message: "An unexpected error occurred while fetching vehicle." });
+    }
+}
 
 const updateVehicle = async (req, res) => {
     try {
@@ -69,10 +109,12 @@ const updateVehicle = async (req, res) => {
         }
 
         const vehicle = await Vehicle.findById(id);
-
         if (!vehicle) {
             return res.status(404).json({ message: "Vehicle not found." });
         }
+
+        if (vehicle.company.toString() !== req.user.companyId)  
+            return res.status(403).json({ message: "Access denied: You cannot update this vehicle." });
 
         updateKeys.forEach((key) => {
             vehicle[key] = updates[key];
@@ -90,4 +132,4 @@ const updateVehicle = async (req, res) => {
     }
 };
 
-module.exports = { addVehicle, getVehicle, updateVehicle };
+module.exports = { addVehicle, getVehicle, getVehicleById, updateVehicle };
