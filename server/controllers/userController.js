@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 
 const jwt = require('jsonwebtoken');
 
-const generateToken = (user) =>
+const generateToken = (user, companyName) =>
     jwt.sign({ 
       id: user._id, 
       role: user.role, 
       firstName: user.firstName, 
-      companyId: user.company
+      companyId: user.company,
+      companyName: companyName
     }, 
     process.env.JWT_SECRET, { expiresIn: '1h' });
 
@@ -89,7 +90,7 @@ const userCompanySignUp = async (req, res) => {
     newUser.company = newCompany._id;
     await newUser.save();
     
-    const token = generateToken(newUser);
+    const token = generateToken(newUser, companyName);
     res.cookie('accessToken', token, {
       httpOnly: true,
       maxAge: 3600000,
@@ -99,7 +100,7 @@ const userCompanySignUp = async (req, res) => {
   
     res.status(201).json({
       message: 'Sign up successful',
-      user: { id: newUser._id, firstName: newUser.firstName, role: newUser.role, companyId: newUser.company },
+      user: { id: newUser._id, firstName: newUser.firstName, role: newUser.role, companyId: newUser.company, companyName: companyName },
   });
 
   } catch (error) {
@@ -128,8 +129,11 @@ const logIn = async (req, res) => {
       const isValidPassword = await user.validatePassword(password);
       if (!isValidPassword) 
         return res.status(400).json({ message:'Invalid credentials'})
+
+      const company = await Company.findById(user.company);
+      const companyName = company ? company.name : "Unknown Company";
       
-      const token = generateToken(user);
+      const token = generateToken(user, companyName);
       
       res.cookie('accessToken', token, {
         httpOnly: true,
@@ -140,7 +144,7 @@ const logIn = async (req, res) => {
 
       res.status(201).json({
           message: 'Login successful',
-          user: { id: user._id, firstName: user.firstName, role: user.role, companyId: user.company }
+          user: { id: user._id, firstName: user.firstName, role: user.role, companyId: user.company, companyName: companyName }
       });
 
     } catch (error) {
@@ -168,7 +172,8 @@ const verifySession = (req, res) => {
           id: user.id,
           firstName: user.firstName,
           role: user.role,
-          companyId: user.companyId
+          companyId: user.companyId,
+          companyName: user.companyName 
         },
       });
 
