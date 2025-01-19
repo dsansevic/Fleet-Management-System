@@ -10,6 +10,8 @@ const ActiveReservations = () => {
                          cancel them up to 90 minutes before the start time."
             fetchFunction={fetchActiveReservations}
             storageKey="activeReservationsPage"
+            emptyMessage = "No active reservations at the moment. "
+            link = "/dashboard-user/new-reservation" 
         />
     );
 };

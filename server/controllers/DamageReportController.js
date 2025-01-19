@@ -62,31 +62,38 @@ const addDamageReport = async (req, res) => {
 const getDamageReports = async (req, res) => {
     try {
         const {companyId, role} = req.user;
-        const { page = 1, limit = 5 } = req.query;
+        const { page = 1, limit = 5, status } = req.query;
 
         const pageNumber = Math.max(1, parseInt(page, 10));
         const limitNumber = Math.max(1, parseInt(limit, 10));
         const skip = (pageNumber - 1) * limitNumber;
 
         const reservations = await Reservation.find({ company: companyId }).select('_id');
+
         if (reservations.length === 0) {
             return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
         }
         const reservationIds = reservations.map(res => res._id);
 
-        const numberOfReports = await DamageReport.countDocuments({ reservation: { $in: reservationIds } })
+        const filter = { reservation: { $in: reservationIds } };
 
+        if (status) {
+            const validStatuses = ["pending", "in-progress", "resolved"];
+            if (validStatuses.includes(status)) {
+                filter.status = status;
+            }
+        }
+        const numberOfReports = await DamageReport.countDocuments(filter);
         if (numberOfReports === 0) {
             return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
         }
 
-        let reports = await DamageReport.find({ reservation: { $in: reservationIds } })
+        let reports = await DamageReport.find(filter)
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNumber);
 
         reports = await populateDamageReports(reports, companyId, role);
-         
         res.status(200).json({
             data: reports,
             currentPage: pageNumber,
@@ -137,7 +144,7 @@ const getUserReports = async (req, res) => {
         const numberOfReports = await DamageReport.countDocuments({ reportedBy: id });
         
         if (numberOfReports === 0)
-            return res.status(404).json({message: "No damage reports found!"}) 
+            return res.status(200).json({ data: [], currentPage: pageNumber, totalPages: 0 });
 
         let reports = await DamageReport.find({ reportedBy: id })
             .sort({ createdAt: -1 })

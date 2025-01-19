@@ -13,13 +13,18 @@ export const createDamageReport = async (reservationId, description) => {
     }
 };
 
-export const getDamageReport = async (page, limit) => {
+export const getDamageReport = async (page, limit, status = "") => {
     try {
-        const response = await apiClient.get(`/damage-report?page=${page}&limit=${limit}`)
+        let url = `/damage-report?page=${page}&limit=${limit}`;
+        
+        if (status && status !== "all") {
+            url += `&status=${status}`;
+        }
+        const response = await apiClient.get(url);
         return response.data;
     } catch (error) {
         console.error("Error creating damage report:", error);
-        throw new Error("Failed to create damage report.");
+        throw new Error("Failed to get damage reports.");
     }
 };
 
@@ -36,7 +41,7 @@ export const getDamageReportById = async (id) => {
 export const getUserDamageReport = async (page, limit) => {
     try {
         const response = await apiClient.get(`/damage-report/user?page=${page}&limit=${limit}`);  
-        return response.data;
+        return response
     } catch (error) {
         console.error(error);
         throw new Error(error.response?.data?.message || "Failed to fetch user's damage report.");

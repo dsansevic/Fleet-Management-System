@@ -7,7 +7,7 @@ import Pagination from "@utils/Pagination";
 import Loading from "@utils/Loading";
 import Title from "@components/ui/Title";
 
-const ReservationsList = ({ title, description, fetchFunction, storageKey }) => {
+const ReservationsList = ({ title, description, fetchFunction, storageKey, emptyMessage, link }) => {
     const { data: reservations, error, loading, totalPages, currentPage, handlePageChange } =
         usePagination(fetchFunction, storageKey, 6);
 
@@ -21,7 +21,16 @@ const ReservationsList = ({ title, description, fetchFunction, storageKey }) => 
             ) : error ? (
                 <p className="text-error bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (
-                <p className="text-gray-600 text-center">No reservations available.</p>
+                <p className="text-gray-600 text-lg text-center p-10">{emptyMessage}
+                {link && (
+                        <Link
+                            to={link}
+                            className="text-brand-base hover:cursor-pointer font-medium"
+                        >
+                            Create one!
+                        </Link>
+                )}
+                </p>
             ) : (
                 <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

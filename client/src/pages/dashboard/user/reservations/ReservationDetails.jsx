@@ -71,7 +71,11 @@ const ReservationDetails = () => {
     };
 
     if (error) {
-        return <ServerErrorMessage error = {error} />
+        return (
+            <div className="flex items-center space-x-2 text-error bg-red-100 p-4 rounded-md">
+                <span>{error}</span>
+            </div>
+        )
     }
     if (loading || !reservation ) {
         return <Loading />

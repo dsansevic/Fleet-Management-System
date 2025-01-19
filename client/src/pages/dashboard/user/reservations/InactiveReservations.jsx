@@ -10,6 +10,7 @@ const InactiveReservations = () => {
                          but editing or reactivating them isn't possible."
             fetchFunction={fetchInactiveReservations}
             storageKey="inactiveReservationsPage"
+            emptyMessage = "No inactive reservations at the moment."
         />
     );
 };
