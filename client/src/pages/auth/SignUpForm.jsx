@@ -43,14 +43,14 @@ const SignUpForm = () => {
     }   
 
     return (
-        <div className="max-w-2xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-gray-300 relative z-10">
+        <div className="max-w-2xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-brand-base relative z-10">
             <div className="flex items-center justify-center mb-2 ">
             <h1 className="text-3xl font-semibold mr-2">Get started with </h1>
                 <Link to="/" >
                     <img src={fleetflowLogo} alt="FleetFlow" className="w-40 cursor-pointer" />
                 </Link>
             </div>
-            <div className="text-center mb-2">Already connected to a company? 
+            <div className="text-center mb-2 text-gray-600">Already connected to a company? 
                     <Link to="/login">
                     <span className="text-brand-base cursor-pointer"> Log in</span>
                     </Link>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Title from "@components/ui/Title";
 import useLogin from "@hooks/UseLogin";
 import FormInputField from "@components/form/FormInputField";
 import SubmitButton from "@components/ui/SubmitButton";
@@ -46,9 +47,10 @@ function LogIn() {
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-gray-300 relative z-10">
-      <div className="flex items-center justify-center mb-4">
-        <h2 className="text-3xl font-semibold mr-2">Welcome Back!</h2>
+    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-2xl shadow-md shadow-brand-base relative z-10">
+      <div className="text-center mb-6">
+        <Title>Welcome Back! 👋</Title>
+        <p className="text-gray-600 text-sm">Sign in to access your fleet management dashboard.</p>
       </div>
       <form onSubmit={handleSubmit}>
         <FormInputField
@@ -70,11 +72,12 @@ function LogIn() {
           onCapsLock={handleCapsLock}
         />
         {capsLockIsOn && (
-            <p className='text-error text-sm mt-1'>Caps Lock is ON!</p>
+          <p className="text-error p-2 text-sm rounded-md">⚠️ Caps Lock is ON!</p>
         )}
-        <p className="text-center mb-4">
-          <Link to="/signup">
-            Don't have an account? <span className="text-brand-dark cursor-pointer hover:text-brand-lighter">Create one</span>
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-brand-dark font-medium hover:text-brand-lighter">
+            Create one
           </Link>
         </p>
         <p className="text-error text-sm text-center mt-1">{error}</p>
