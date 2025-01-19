@@ -8,6 +8,7 @@ import { formatDate } from "@utils/formatDate";
 import Pagination from "@utils/Pagination";
 import Loading from "@utils/Loading";
 import SelectField from "@components/form/SelectField";
+import EmptyStateMessage from "@components/ui/EmptyStateMessage";
 
 const DamageReports = () => {
     const [statusFilter, setStatusFilter] = useState("");
@@ -118,6 +119,11 @@ const DamageReports = () => {
                 <Loading />
             ) : error ? (
                 <p className="text-red-600 bg-red-100 p-4 rounded-md">{error}</p>
+            ) : reports.length === 0 ? (
+                <EmptyStateMessage
+                    title="No damage reports found"
+                    message="No one has submitted a damage report yet"
+                />
             ) : (
                 <>
                     

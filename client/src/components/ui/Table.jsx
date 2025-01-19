@@ -1,4 +1,4 @@
-const Table = ({ headers, data, sortConfig, onSort, rows, emptyMessage }) => {
+const Table = ({ headers, data, rows }) => {
     return (
         <div className="overflow-x-auto shadow-lg shadow-gray-300 rounded-2xl p-2 bg-white">
             <table className="min-w-full border-collapse  bg-white">
@@ -7,13 +7,9 @@ const Table = ({ headers, data, sortConfig, onSort, rows, emptyMessage }) => {
                         {headers.map((header) => (
                             <th
                                 key={header.name}
-                                className={`px-6 py-3 text-center text-sm cursor-pointer ${header.visibility}`}
-                                onClick={() => header.key && onSort(header.key)}
-                                title={header.key ? `Sort by ${header.name}` : ""}
+                                className={`px-6 py-3 text-center text-sm ${header.visibility}`}
                             >
-                                {header.name}{" "}
-                                {header.key === sortConfig?.key &&
-                                    (sortConfig.ascending ? "▲" : "▼")}
+                                {header.name}
                             </th>
                         ))}
                     </tr>
@@ -24,7 +20,7 @@ const Table = ({ headers, data, sortConfig, onSort, rows, emptyMessage }) => {
                     ) : (
                         <tr>
                             <td colSpan={headers.length} className="text-center py-4">
-                                {emptyMessage || "No data available"}
+                                No data available
                             </td>
                         </tr>
                     )}

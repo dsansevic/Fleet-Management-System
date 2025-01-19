@@ -74,7 +74,6 @@ const DamageReport = () => {
                         headers={tableHeaders}
                         data={reports}
                         rows={rows}
-                        emptyMessage = "You haven't submitted any damage report yet"
                     />
                     <Pagination 
                         totalPages = {totalPages} 

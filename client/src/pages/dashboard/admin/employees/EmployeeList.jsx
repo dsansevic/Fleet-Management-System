@@ -2,6 +2,7 @@ import usePagination from "@hooks/usePagination";
 import { getEmployees } from '@api/employees';
 import Pagination from "@utils/Pagination";
 import Loading from "@utils/Loading";
+import EmptyStateMessage from "@components/ui/EmptyStateMessage";
 
 const EmployeeList = () => {
     const { data: employees, error, loading, totalPages, currentPage, handlePageChange } =
@@ -14,7 +15,11 @@ const EmployeeList = () => {
                 ) : error ? (
                     <p className="text-error bg-red-100 p-4 rounded-md">{error}</p>
                 ) : employees.length === 0 ? (
-                    <p className="text-gray-600 text-center">No employees registered.</p>
+                    <EmptyStateMessage 
+                        icon="👤" 
+                        title="No employees registered"
+                        message="There are no employees listed in the system. Add one!"
+                    />
                 ) : (
             <>              
             <div className="max-w-5xl mx-auto">

@@ -6,6 +6,7 @@ import Title from "@components/ui/Title";
 import GetReservationStatus from "@utils/GetReservationStatus";
 import { getPreviewText } from "@utils/getPreviewText";
 import { formatDate } from "@utils/formatDate";
+import EmptyStateMessage from "@components/ui/EmptyStateMessage";
 
 const Reservations = () => {
     const { data: reservations, error, loading, totalPages, currentPage, handlePageChange } =
@@ -21,14 +22,12 @@ const Reservations = () => {
             ) : error ? (
                 <p className="text-error bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (
-                <p className="flex flex-col items-center justify-center text-gray-500 text-lg text-center p-10 bg-gray-50 border border-gray-300 rounded-xl shadow-sm">
-                    <span className="text-4xl mb-2">ⓘ</span>
-                    <span className="font-semibold text-gray-700">No reservations recorded</span>
-                    <span className="text-sm text-gray-500 text-center">
-                        There are no active or past reservations in the system.<br />
-                        Check again later or contact support if this seems incorrect.
-                    </span>
-                </p>            
+                <EmptyStateMessage
+                    icon="🕒"
+                    title="No reservations recorded"
+                    message="There are no active or past reservations in the system. 
+                            Check again later or contact support if this seems incorrect."
+                />
             ) : (
                 <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

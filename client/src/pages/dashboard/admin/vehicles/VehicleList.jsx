@@ -4,6 +4,7 @@ import Loading from "@utils/Loading";
 import { Link } from "react-router-dom";
 import { formatDate } from "@utils/formatDate"
 import usePagination from "@hooks/usePagination";
+import EmptyStateMessage from "@components/ui/EmptyStateMessage";
 
 const VehicleList = () => {
     const { data: vehicles, error, loading, totalPages, currentPage, handlePageChange } =
@@ -16,7 +17,11 @@ const VehicleList = () => {
             ) : error ? (
                 <p className="text-error bg-red-100 p-4 rounded-md">{error}</p>
             ) : vehicles.length === 0 ? (
-                <p className="text-gray-600 text-center">No vehicles registered.</p>
+                <EmptyStateMessage 
+                    icon = "ō͡≡o"
+                    title="No vehicles registered"
+                    message="There are no vehicles in the system. Add a new vehicle to get started."
+                />
             ) : (
                 <>
                     <div className="max-w-6xl mx-auto">

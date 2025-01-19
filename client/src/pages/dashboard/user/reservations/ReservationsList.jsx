@@ -6,6 +6,7 @@ import usePagination from "@hooks/usePagination";
 import Pagination from "@utils/Pagination";
 import Loading from "@utils/Loading";
 import Title from "@components/ui/Title";
+import EmptyStateMessage from "@components/ui/EmptyStateMessage"
 
 const ReservationsList = ({ title, description, fetchFunction, storageKey, emptyMessage, link }) => {
     const { data: reservations, error, loading, totalPages, currentPage, handlePageChange } =
@@ -21,16 +22,12 @@ const ReservationsList = ({ title, description, fetchFunction, storageKey, empty
             ) : error ? (
                 <p className="text-error bg-red-100 p-4 rounded-md">{error}</p>
             ) : reservations.length === 0 ? (
-                <p className="text-gray-600 text-lg text-center p-10">{emptyMessage}
-                {link && (
-                        <Link
-                            to={link}
-                            className="text-brand-base hover:cursor-pointer font-medium"
-                        >
-                            Create one!
-                        </Link>
-                )}
-                </p>
+                <EmptyStateMessage 
+                    icon="🕒"
+                    title="No active reservations"
+                    message={emptyMessage}
+                    link={link && { to: link, text: "Create one!" }}
+                />
             ) : (
                 <>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
