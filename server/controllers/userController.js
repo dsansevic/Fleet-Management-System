@@ -94,8 +94,8 @@ const userCompanySignUp = async (req, res) => {
     res.cookie('accessToken', token, {
       httpOnly: true,
       maxAge: 3600000,
-      sameSite: 'strict',
-      secure: false,
+      sameSite: 'None',
+      secure: true,
     });
   
     res.status(201).json({
@@ -138,8 +138,8 @@ const logIn = async (req, res) => {
       res.cookie('accessToken', token, {
         httpOnly: true,
         maxAge: 3600000, // 1h
-        sameSite: "strict",
-        secure: false // true za HTTPS
+        sameSite: "None",
+        secure: true // true za HTTPS
       });
 
       res.status(201).json({
