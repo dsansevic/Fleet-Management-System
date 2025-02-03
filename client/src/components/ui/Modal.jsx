@@ -12,7 +12,7 @@ const Modal = ({ isOpen, onClose, title, content, actions }) => {
             >
                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                 <div className="text-gray-600">{content}</div>
-                <div className="flex justify-end space-x-4">
+                <div className="flex justify-between">
                     {actions.map((action, index) => (
                         <button
                             key={index}

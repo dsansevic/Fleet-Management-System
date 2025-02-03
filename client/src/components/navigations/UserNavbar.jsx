@@ -16,13 +16,13 @@ const UserNavbar = () => {
     return (
         <div className="border-b sticky top-0 border-lightgreen bg-white z-20 ">
             <nav className="container mx-auto px-14 py-2 flex items-center justify-between">
-                <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />
-                <div className="flex gap-4">
+                <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto invisible lg:visible" />
+                <div className="flex gap-3">
                     <NotificationsDropdown />
                     <div className="relative">
                         <span
                             onClick={toggleMenu}
-                            className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-9 h-9 hover:bg-brand-lighter cursor-pointer" 
+                            className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-8 h-8 mt-1 hover:bg-brand-lighter cursor-pointer" 
                         >
                             {capitalizedFirstLetter(user?.firstName) || "U"}
                         </span>

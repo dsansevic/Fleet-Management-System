@@ -47,7 +47,7 @@ function LogIn() {
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-2xl shadow-md shadow-brand-base relative z-10">
+    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-2xl shadow-sm shadow-brand-base relative z-10">
       <button onClick={() => navigate("/")} className="absolute top-0 right-0 text-xl">
         ✖
       </button>

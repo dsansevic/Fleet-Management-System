@@ -43,7 +43,7 @@ const SignUpForm = () => {
     }   
 
     return (
-        <div className="max-w-2xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md shadow-brand-base relative z-10">
+        <div className="max-w-2xl mx-auto my-10 bg-white p-6 rounded-lg shadow-sm shadow-brand-base relative z-10">
             <button onClick={() => navigate(-1)} className="absolute top-0 right-0 text-xl">
                 ✖
             </button>

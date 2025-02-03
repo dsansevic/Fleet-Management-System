@@ -98,7 +98,7 @@ const DamageReports = () => {
     };
 
     return (
-        <div className="p-12 mx-auto overflow-x-auto">
+        <div className="p-6 max-w-6xl mx-auto overflow-x-auto">            
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-6">Damage Reports</h2>
             <div className="mb-4 w-36">
             <label className="mr-2">Filter by status:</label>

@@ -34,7 +34,7 @@ const Vehicles = () => {
         until the reservation period ends. Once completed, it becomes <span className="font-medium">available</span> again.
     </p>
 
-    <div className="border-l-4 border-brand-dark pl-4 py-2 bg-blue-50 text-gray-700 mb-4">
+    <div className="border-l-4 border-brand-dark pl-4 py-2 bg-purple-50 text-gray-700 mb-4">
         <p className="font-bold">Full Control Over Vehicle Details</p>
         <p>You can manually update vehicle status and modify details at any time, ensuring accurate records and efficient fleet management.</p>
     </div>
