@@ -11,7 +11,7 @@ import PendingReservations from "@pages/dashboard/admin/reservations/PendingRese
 import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-review/ReviewReservation";
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
 import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageReportDetails";
-import AdminDashboardSideBar from "@components/navigations/AdminDashboardSidebar";
+import AdminDashboardSideBar from "@components/navigations/AdminDashboardSideBar";
 import NotFound from '@pages/errors/NotFound';
 import PageTitle from "@utils/PageTitle";
 
