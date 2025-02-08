@@ -38,6 +38,7 @@ const Sidebar = ({ links }) => {
                         <NavLink
                             key={index}
                             to={link.to} end
+                            onClick={toggleSideBar}
                             className={({ isActive }) =>
                                 `hover:text-brand-light flex py-4 border-b ${isActive ? "text-brand-base font-bold" : "text-gray-600"}`
                             }
