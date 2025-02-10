@@ -9,7 +9,7 @@ const EmployeeList = () => {
             usePagination(getEmployees, null, 9);
 
     return (
-        <div className=" mx-auto mt-6 bg-white shadow-lg rounded-2xl p-6">
+        <div className="mx-auto mt-6 bg-white shadow-lg border border-purple-50 rounded-2xl p-6">
              {loading ? (
                     <Loading />
                 ) : error ? (
@@ -23,11 +23,11 @@ const EmployeeList = () => {
                 ) : (
             <>              
             <div className="max-w-5xl mx-auto">
-                <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <ul className="grid md:grid-cols-1 lg:grid-cols-3 gap-6">
                     {employees.map((employee) => (
                         <li
                             key={employee.email}
-                            className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200"
+                            className="flex items-center space-x-4 p-4 border border-gray-200 rounded-2xl hover:bg-gray-50 transition duration-200"
                         >
                             <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full">
                                 👤
