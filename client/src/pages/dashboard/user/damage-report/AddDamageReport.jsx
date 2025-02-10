@@ -96,7 +96,6 @@ const AddDamageReport = () => {
                 <div className="flex justify-between">
                 <LinkButton
                     to={(-1)}
-                    label = "Go back"
                 >
                     Cancel
                 </LinkButton>

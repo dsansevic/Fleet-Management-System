@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDamageReportById } from "@api/damageReports";
-import LinkButton from "@components/ui/LinkButton";
 import Title from "@components/ui/Title";
 import {formatDate} from "@utils/formatDate"
 import Loading from "@utils/Loading"

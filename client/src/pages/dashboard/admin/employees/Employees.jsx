@@ -1,6 +1,8 @@
 import EmployeeList from "./EmployeeList";
 import Title from "@components/ui/Title"
 import LinkButton from "@components/ui/LinkButton"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Employees = () => {
     return (
@@ -19,8 +21,10 @@ const Employees = () => {
             </p>
             </div>
 
-            <LinkButton to ="new" label="Add employee" className="border-0 bg-white shadow-sm shadow-brand-dark"></LinkButton>
-           
+            <LinkButton to ="new" className="border-0 bg-white shadow-sm shadow-brand-dark">
+                <FontAwesomeIcon icon={faUserPlus} />   Add employee
+            </LinkButton>
+
             <EmployeeList />
         </div>
     );

@@ -38,7 +38,9 @@ const Vehicles = () => {
         <p className="font-bold">Full Control Over Vehicle Details</p>
         <p>You can manually update vehicle status and modify details at any time, ensuring accurate records and efficient fleet management.</p>
     </div>
-            <LinkButton to ="new" label="Add new vehicle" className="bg-white shadow"></LinkButton>
+            <LinkButton to ="new" className="bg-white shadow">
+                Add new vehicle
+            </LinkButton>
             <VehicleList vehicles={vehicles} error={error} loading={loading} />
         </div>
     );
