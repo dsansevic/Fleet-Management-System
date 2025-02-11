@@ -3,6 +3,8 @@ import LinkButton from "@components/ui/LinkButton"
 import Title from "@components/ui/Title"
 import { getVehicles } from "@api/vehicles";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faFileCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 const Vehicles = () => {
     const [vehicles, setVehicles] = useState([]);
@@ -27,19 +29,18 @@ const Vehicles = () => {
     }, []);
 
     return (
-        <div className="p-6 max-w-6xl mx-auto">
+        <div className="p-6 w-full mx-auto">
             <Title>Company Vehicles</Title>
             <p className="text-gray-700 mb-4">
-        When a vehicle is assigned to a reservation, its status will automatically update to <span className="font-medium">occupied </span> 
-        until the reservation period ends. Once completed, it becomes <span className="font-medium">available</span> again.
+            Track and manage your fleet effortlessly. Vehicle statuses update automatically based on reservations.
     </p>
 
-    <div className="border-l-4 border-brand-dark pl-4 py-2 bg-purple-50 text-gray-700 mb-4">
+    <div className="border-l-4 border-brand-dark pl-4 py-2 bg-white text-gray-700 mb-4 rounded-2xl">
         <p className="font-bold">Full Control Over Vehicle Details</p>
-        <p>You can manually update vehicle status and modify details at any time, ensuring accurate records and efficient fleet management.</p>
+        <p>Manually adjust vehicle details to ensure accurate fleet management.</p>
     </div>
-            <LinkButton to ="new" className="bg-white shadow">
-                Add new vehicle
+            <LinkButton to ="new" className="border-0 bg-white shadow-sm shadow-brand-dark">
+                <FontAwesomeIcon icon={faFileCirclePlus} className="mr-1" />  Add new vehicle
             </LinkButton>
             <VehicleList vehicles={vehicles} error={error} loading={loading} />
         </div>

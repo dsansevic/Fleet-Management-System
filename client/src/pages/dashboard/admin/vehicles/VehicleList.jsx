@@ -24,12 +24,12 @@ const VehicleList = () => {
                 />
             ) : (
                 <>
-                    <div className="max-w-6xl mx-auto">
+                    <div className="w-full mx-auto">
                         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {vehicles.map((vehicle) => (
                                 <li
                                 key={vehicle._id}
-                                className="flex flex-col justify-between p-6 border border-gray-200 rounded-xl shadow-sm bg-white hover:shadow-md transition duration-200"
+                                className="flex flex-col justify-between p-6 border border-gray-200 rounded-2xl shadow-sm bg-white hover:shadow-md transition duration-200"
                             >
                                 <div className="flex justify-between items-center w-full pb-3 border-b border-gray-300">
                                     <h3 className="text-xl font-semibold text-gray-900">
@@ -57,7 +57,7 @@ const VehicleList = () => {
 
                                 <Link
                                     to={`edit/${vehicle._id}`}
-                                    className="mt-4 px-4 py-2 text-brand-dark bg-purple-50 hover:bg-purple-100 rounded-md text-sm font-medium shadow-sm transition-all w-full text-center"
+                                    className="mt-4 px-4 py-2 text-brand-dark bg-purple-100 hover:bg-purple-200 rounded-2xl text-sm font-medium shadow-sm transition-all w-full text-center"
                                 >Edit
                                 </Link>
                             </li>
