@@ -5,7 +5,7 @@ import Title from "@components/ui/Title";
 
 const HomePage = () => {
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="bg-gray-100 min-h-screen w-full">
             <header className="bg-brand-dark text-white text-center py-16 px-6">
                 <div className="max-w-4xl mx-auto">
                     <h1 className="text-4xl font-bold leading-tight">
