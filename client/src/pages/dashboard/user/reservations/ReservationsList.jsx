@@ -13,7 +13,7 @@ const ReservationsList = ({ title, description, fetchFunction, storageKey, empty
         usePagination(fetchFunction, storageKey, 6);
 
     return (
-        <div className="p-6 max-w-6xl mx-auto">
+        <div className="p-6 w-full mx-auto">
             <Title>{title}</Title>
             <p className="text-gray-600 mb-4">{description}</p>
 

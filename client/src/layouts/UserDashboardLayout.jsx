@@ -36,7 +36,7 @@ const UserDashboardLayout = () => {
     }, [location.pathname]);
 
     return (
-        <div className="flex h-full w-full">
+        <div className="flex h-full w-screen">
             <UserDashboardSideBar />
             <div className="flex-1 bg-background p-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
                 <Routes>

@@ -56,7 +56,7 @@ const DamageReport = () => {
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto">
+        <div className="p-6 w-full mx-auto">
             <Title>Damage report</Title>
             <p className="text-gray-600 mb-4">
                 On this page, you can view the history of your submitted damage reports. 
