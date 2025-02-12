@@ -1,8 +1,8 @@
 const Table = ({ headers, data, rows }) => {
     return (
-        <div className="overflow-x-auto shadow-lg shadow-gray-300 rounded-2xl p-2 bg-white">
-            <table className="min-w-full border-collapse  bg-white">
-                <thead className="bg-gray-50">
+        <div>
+            <table className="min-w-full border-collapse bg-white rounded-2xl">
+                <thead className="bg-brand-dark text-white">
                     <tr>
                         {headers.map((header) => (
                             <th

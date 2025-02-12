@@ -9,6 +9,9 @@ import Pagination from "@utils/Pagination";
 import Loading from "@utils/Loading";
 import SelectField from "@components/form/SelectField";
 import EmptyStateMessage from "@components/ui/EmptyStateMessage";
+import Title from "@components/ui/Title"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const DamageReports = () => {
     const [statusFilter, setStatusFilter] = useState("");
@@ -71,35 +74,43 @@ const DamageReports = () => {
     const rows = (report) => {
         const status = GetReservationStatus(report.status);
         return (
-            <tr key={report._id} className="border-b border-gray-300 hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
+            <tr key={report._id} className="border-t border-gray-400 hover:bg-gray-50">
+                <td className="px-10 py-6 border-r border-r-gray-100 text-sm font-medium text-gray-900">
                     {report.reservation?.vehicle?.brand} {report.reservation?.vehicle?.model}
                 </td>
-                <td className="px-6 py-4 text-sm font-medium capitalize flex items-center gap-1">
+                <td className="px-10 py-6 border-r border-r-gray-100 text-sm font-medium capitalize flex items-center gap-1">
                     {status.icon}
                     <span>{status.label}</span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900 hidden lg:table-cell">
+                <td className="px-10 py-6 border-r border-r-gray-100 text-sm text-gray-900 hidden lg:table-cell">
                     {report.reportedBy?.firstName} {report.reportedBy?.lastName}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                <td className="px-10 py-6 text-sm border-r border-r-gray-100 text-gray-500 hidden lg:table-cell">
                     {formatDate(report.createdAt)}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+                <td className="px-10 py-6 text-sm border-r border-r-gray-100 text-gray-500 hidden lg:table-cell">
                     {getPreviewText(report.description)}
                 </td>
-                <td className="px-6 py-4">
-                    <Link to={report._id} className="text-brand-dark hover:text-brand-base text-sm font-medium">
-                        View Details
-                    </Link>
+                <td className="px-10 py-6">
+                <Link
+                    to={report._id}
+                    className="text-sm text-brand-dark hover:text-brand-base px-3 py-1 rounded-lg"
+                    >
+                    <FontAwesomeIcon icon={faEye} className="mr-2" />
+                    Review
+                </Link>
                 </td>
             </tr>
         );
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto overflow-x-auto">            
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-6">Damage Reports</h2>
+        <div className="p-6 w-full mx-auto overflow-x-auto">            
+            <Title>Damage Reports</Title>
+            <p className="text-gray-700 mb-4">
+                Here are all the damage reports submitted by employees. 
+                Review the details and take necessary actions to keep your fleet running smoothly.            
+            </p>
             <div className="mb-4 w-36">
             <label className="mr-2">Filter by status:</label>
                 <SelectField
