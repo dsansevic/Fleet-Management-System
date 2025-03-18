@@ -3,7 +3,7 @@ import fleetflowLogo from '@assets/logo.png';
 
 const GuestNavbar = () => {
     return (
-      <div className="border-b sticky top-0 border-lightgreen bg-white z-20 ">
+      <div className="border-b shadow-sm shadow-brand-light sticky top-0 border-lightgreen bg-white z-20 ">
         <nav className="container mx-auto px-10 py-2 flex items-center justify-between">
           <NavLink to="/">
                 <img src={fleetflowLogo} alt="FleetFlow Logo" className="h-7 w-auto " />

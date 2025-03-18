@@ -17,26 +17,18 @@ const HomePage = () => {
                     <div className="mt-6 flex justify-center space-x-4">
                         <Link 
                             to="/signup"
-                            className="px-6 py-3 bg-white text-brand-dark font-semibold rounded-lg shadow hover:bg-gray-200"
+                            className="px-6 py-3 bg-white text-brand-dark text-xl font-medium rounded-lg shadow hover:bg-gray-200"
                         >
                             Register Your Company
-                        </Link>
-                        <Link 
-                            to="/login"
-                            className="px-6 py-3 border border-white text-white font-semibold rounded-lg hover:bg-brand-base"
-                        >
-                            Sign In
                         </Link>
                     </div>
                 </div>
             </header>
 
             <section className="max-w-6xl mx-auto my-16 px-6">
-                <Title>How FleetFlow Helps You</Title>
-                <p className="text-gray-600 text-center max-w-3xl mx-auto">
-                    Manage your company fleet effortlessly with these powerful features:
+                <p className="text-gray-600 text-2xl font-medium text-center">
+                    FleetFlow makes managing your company fleet simple with these key features:
                 </p>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
                     <div className="p-6 bg-white shadow-md rounded-lg text-center">
                         <FontAwesomeIcon icon={faUsers} className="text-4xl text-brand-dark" />

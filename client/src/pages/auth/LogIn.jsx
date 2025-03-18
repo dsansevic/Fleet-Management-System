@@ -47,12 +47,12 @@ function LogIn() {
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="max-w-md mx-auto my-10 bg-white p-6 rounded-2xl shadow-sm shadow-brand-base relative z-10">
+    <div className="max-w-md mx-auto my-10 p-6 rounded-xl border border-brand-light relative z-10">
       <button onClick={() => navigate("/")} className="absolute top-0 right-0 text-xl">
         ✖
       </button>
       <div className="text-center mb-6">
-        <Title>Welcome Back! 👋</Title>
+        <Title>Welcome Back!</Title>
         <p className="text-gray-600 text-sm">Sign in to access your fleet management dashboard.</p>
       </div>
       <form onSubmit={handleSubmit}>
