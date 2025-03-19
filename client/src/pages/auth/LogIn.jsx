@@ -42,54 +42,79 @@ function LogIn() {
         navigate("/dashboard-admin") 
       else if (result.role === "employee"){ 
         navigate("/dashboard-user")}
-    }
+  }
   
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 rounded-xl border border-brand-light relative z-10">
-      <button onClick={() => navigate("/")} className="absolute top-0 right-0 text-xl">
+    <div className="w-11/12 sm:max-w-[500px] lg:max-w-[768px] xl:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-xl sm:bg-white relative z-10 sm:border border-gray-200">
+      <button 
+        onClick={() => navigate("/")} 
+        className="hidden sm:block absolute top-4 right-4 text-xl"
+      >
         ✖
       </button>
-      <div className="text-center mb-6">
-        <Title>Welcome Back!</Title>
-        <p className="text-gray-600 text-sm">Sign in to access your fleet management dashboard.</p>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <FormInputField
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="e.g. john.smith@example.com"
-          value={input.email}
-          onChange={handleInputChange}
-          ref={inputRef}
-        />
-        <FormInputField
-          label="Password"
-          name="password"
-          type="password"
-          placeholder="Enter your password"
-          value={input.password}
-          onChange={handleInputChange}
-          onCapsLock={handleCapsLock}
-        />
-        {capsLockIsOn && (
-          <p className="text-error p-2 text-sm rounded-md">⚠️ Caps Lock is ON!</p>
-        )}
-        <p className="text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-brand-dark font-medium hover:text-brand-lighter">
-            Create one
-          </Link>
-        </p>
-        <p className="text-error text-sm text-center mt-1">{error}</p>
-        <div className="flex justify-center items-center mt-4">
-          <SubmitButton readyToSend={isSubmitDisabled}>
-            {isLoading ? "Logging in..." : "Login"}
-          </SubmitButton>
+
+      <div className="flex flex-col md:flex-row gap-2 sm:p-4 justify-between">
+        <div className="w-11/12 lg:w-1/2 mx-auto px-6 py-12 flex flex-col justify-center">
+          <div className="mb-6">
+            <Title className="mb-0 pb-2 sm:text-2xl lg:text-3xl">
+              Welcome Back!
+            </Title>
+            <p className="text-gray-600 text-md md:text-base lg:text-lg">
+              Sign in to access your fleet management dashboard
+            </p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <FormInputField
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="e.g. john.smith@example.com"
+              value={input.email}
+              onChange={handleInputChange}
+              ref={inputRef}
+            />
+            <FormInputField
+              label="Password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              value={input.password}
+              onChange={handleInputChange}
+              onCapsLock={handleCapsLock}
+            />
+            {capsLockIsOn && (
+              <p className="text-error p-2 text-sm rounded-md">
+                ⚠️ Caps Lock is ON!
+              </p>
+            )}
+            <p className="text-md text-gray-600">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-brand-dark font-medium hover:text-brand-lighter"
+              >
+                Create one
+              </Link>
+            </p>
+            <p className="text-error text-sm mt-1">{error}</p>
+            <div className="mt-4">
+              <SubmitButton readyToSend={isSubmitDisabled} className="rounded-lg">
+                {isLoading ? "Logging in..." : "Login"}
+              </SubmitButton>
+            </div>
+          </form>
         </div>
-      </form>
+
+        <div className="hidden lg:flex p-6 lg:w-3/5 justify-center items-center">
+          <img 
+            src="/login-illustration.jpg" 
+            className="w-full max-w-sm lg:max-w-lg object-contain rounded-lg" 
+            alt="Fleet management illustration" 
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ function RootLayout() {
   }
 
   return (
-    <div className="flex flex-col bg-white h-screen w-full">
+    <div className="flex flex-col bg-white sm:bg-gray-100 h-screen w-full">
       {navbar}
       <main>
         <Outlet />
