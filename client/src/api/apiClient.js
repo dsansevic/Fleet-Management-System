@@ -1,11 +1,13 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:3000",
-    withCredentials: true,
+  baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 export const publicApiClient = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:3000",
+  baseURL: BASE_URL,
     withCredentials: false,
 });

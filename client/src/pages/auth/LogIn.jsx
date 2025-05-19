@@ -36,20 +36,20 @@ function LogIn() {
 
     if (isSubmitDisabled) return;
 
-      const result = await login(input.email, input.password);
-      
-      if (result.role === "admin")
-        navigate("/dashboard-admin") 
-      else if (result.role === "employee"){ 
-        navigate("/dashboard-user")}
-  }
-  
+    const result = await login(input.email, input.password);
+
+    if (result.role === "admin") navigate("/dashboard-admin");
+    else if (result.role === "employee") {
+      navigate("/dashboard-user");
+    }
+  };
+
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
     <div className="w-11/12 sm:max-w-[500px] lg:max-w-[768px] xl:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-xl sm:bg-white relative z-10 sm:border border-gray-200">
-      <button 
-        onClick={() => navigate("/")} 
+      <button
+        onClick={() => navigate("/")}
         className="hidden sm:block absolute top-4 right-4 text-xl"
       >
         ✖
@@ -80,6 +80,7 @@ function LogIn() {
               name="password"
               type="password"
               placeholder="Enter your password"
+              autocomplete="current-password"
               value={input.password}
               onChange={handleInputChange}
               onCapsLock={handleCapsLock}
@@ -100,7 +101,10 @@ function LogIn() {
             </p>
             <p className="text-error text-sm mt-1">{error}</p>
             <div className="mt-4">
-              <SubmitButton readyToSend={isSubmitDisabled} className="rounded-lg">
+              <SubmitButton
+                readyToSend={isSubmitDisabled}
+                className="rounded-lg"
+              >
                 {isLoading ? "Logging in..." : "Login"}
               </SubmitButton>
             </div>
@@ -108,10 +112,10 @@ function LogIn() {
         </div>
 
         <div className="hidden lg:flex p-6 lg:w-3/5 justify-center items-center">
-          <img 
-            src="/login-illustration.jpg" 
-            className="w-full max-w-sm lg:max-w-lg object-contain rounded-lg" 
-            alt="Fleet management illustration" 
+          <img
+            src="/login-illustration.jpg"
+            className="w-full max-w-sm lg:max-w-lg object-contain rounded-lg"
+            alt="Fleet management illustration"
           />
         </div>
       </div>
