@@ -3,46 +3,46 @@
 @tailwind utilities;
 
 :root {
-    --background: #f3f4f6; 
-    --foreground: #344E41; 
-  
-    --brand-light: #b3a2d8;
-    --brand-lighter: #a192ce;
-    --brand-base: #9b79b9;
-    --brand-dark: #6e4e8d;
-    --brand-darker: #4e2a5b;
-    --brand-darkest: #621212;
+  --background: #f3f4f6;
+  --foreground: #344e41;
 
-    --text-primary: #1f2937;
-    --text-secondary: #6b7280;
-  
-    --error: #DC2626;
-  }
+  --brand-light: #b3a2d8;
+  --brand-lighter: #a192ce;
+  --brand-base: #9b79b9;
+  --brand-dark: #6e4e8d;
+  --brand-darker: #4e2a5b;
+  --brand-darkest: #621212;
+
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+
+  --error: #dc2626;
+}
 
 body {
-    @apply bg-background text-foreground;
+  @apply bg-background text-foreground;
 }
 
 button {
-    @apply transition duration-300 ease-in-out rounded px-4 py-2;
+  @apply transition duration-300 ease-in-out rounded px-4 py-2;
 }
 
 button:active {
-    @apply transform scale-95;
+  @apply transform scale-95;
 }
 
 ::view-transition-group(root) {
-    animation-duration: 0.4s; 
-    animation-timing-function: ease-in-out;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 thead th:first-child {
-    border-top-left-radius: 16px;
+  border-top-left-radius: 16px;
 }
 thead th:last-child {
-    border-top-right-radius: 16px;
+  border-top-right-radius: 16px;
 }
