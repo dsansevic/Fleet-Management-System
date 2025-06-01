@@ -106,7 +106,7 @@ function SignUp() {
       <div className="flex flex-col md:flex-row sm:p-4 justify-between">
         <div className="hidden lg:flex p-6 lg:w-3/5 justify-center items-center h-max">
           <img
-            src="/signup-illustration.png"
+            src="/images/signup-illustration.png"
             className="w-full max-w-sm lg:max-w-lg object-contain rounded-lg"
             alt="Fleet management illustration"
           />

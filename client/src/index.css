@@ -19,6 +19,11 @@
   --error: #dc2626;
 }
 
+@font-face {
+  font-family: "Nunito Variable";
+  src: url("/fonts/Nunito-VariableFont_wght.ttf") format("truetype");
+}
+
 body {
   @apply bg-background text-foreground;
 }
@@ -37,7 +42,7 @@ button:active {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Nunito Variable", sans-serif;
 }
 
 thead th:first-child {

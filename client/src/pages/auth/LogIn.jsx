@@ -113,7 +113,7 @@ function LogIn() {
 
         <div className="hidden lg:flex p-6 lg:w-3/5 justify-center items-center">
           <img
-            src="/login-illustration.jpg"
+            src="/images/login-illustration.jpg"
             className="w-full max-w-sm lg:max-w-lg object-contain rounded-lg"
             alt="Fleet management illustration"
           />
