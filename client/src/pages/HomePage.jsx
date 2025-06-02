@@ -79,7 +79,7 @@ const HomePage = () => {
       </section>
 
       <section className="bg-brand-light py-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-800">
+        <h2 className="text-2xl mx-2 font-bold text-gray-800">
           Ready to Simplify Fleet Management?
         </h2>
         <p className="text-gray-600 mt-2">

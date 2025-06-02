@@ -12,135 +12,137 @@ import ReviewReservation from "@pages/dashboard/admin/reservations/reservation-r
 import DamageReports from "@pages/dashboard/admin/damage-reports/DamageReports";
 import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageReportDetails";
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSideBar";
-import NotFound from '@pages/errors/NotFound';
+import NotFound from "@pages/errors/NotFound";
 import PageTitle from "@utils/PageTitle";
 
 const AdminDashboardLayout = () => {
-    const location = useLocation();
-    const previousPath = useRef(location.pathname); 
-    
+  const location = useLocation();
+  const previousPath = useRef(location.pathname);
 
-    useEffect(() => {     
-        if (document.startViewTransition) {
-            document.startViewTransition(() => {});
-        }        
+  useEffect(() => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {});
+    }
 
-        if (!location.pathname.startsWith("/dashboard-admin/vehicles") && previousPath.current.startsWith("/dashboard-admin/vehicles")) {
-            sessionStorage.removeItem("vehiclePage");
-        }
+    if (
+      !location.pathname.startsWith("/dashboard-admin/vehicles") &&
+      previousPath.current.startsWith("/dashboard-admin/vehicles")
+    ) {
+      sessionStorage.removeItem("vehiclePage");
+    }
 
-        previousPath.current = location.pathname;
-    }, [location.pathname]);
+    previousPath.current = location.pathname;
+  }, [location.pathname]);
 
-    return (
-        <div className="flex h-full w-screen">
-            <AdminDashboardSideBar />
-            <div className="flex-1 bg-background p-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <>
-                                <AdminDashboard />
-                                <PageTitle title="Admin Dashboard" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="vehicles"
-                        element={
-                            <>
-                                <Vehicles />
-                                <PageTitle title="Manage Vehicles" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="vehicles/new"
-                        element={
-                            <>
-                                <AddVehicleForm />
-                                <PageTitle title="Add Vehicle" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="vehicles/edit/:id"
-                        element={
-                            <>
-                                <EditVehicleForm />
-                                <PageTitle title="Edit vehicle" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="employees"
-                        element={
-                            <>
-                                <Employees />
-                                <PageTitle title="Employees" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="employees/new"
-                        element={
-                            <>
-                                <AddEmployeeForm />
-                                <PageTitle title="Add employee" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="pending-reservations"
-                        element={
-                            <>
-                                <PendingReservations />
-                                <PageTitle title="Pending reservations" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="reservations"
-                        element={
-                            <>
-                                <Reservations />
-                                <PageTitle title="Reservations" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="damage-reports"
-                        element={
-                            <>
-                                <DamageReports />
-                                <PageTitle title="Damage reports" />
-                            </>
-                        }
-                    />
-                    <Route 
-                        path="/damage-reports/:id" 
-                        element={
-                            <>
-                                 <DamageReportDetails />
-                                 <PageTitle title="Report details" />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="review-reservation/:id"
-                        element={
-                            <>
-                                <ReviewReservation />
-                                <PageTitle title="Reservation" />
-                            </>
-                        }
-                    />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex h-full w-screen">
+      <AdminDashboardSideBar />
+      <div className="flex-1 bg-background px-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <AdminDashboard />
+                <PageTitle title="Admin Dashboard" />
+              </>
+            }
+          />
+          <Route
+            path="vehicles"
+            element={
+              <>
+                <Vehicles />
+                <PageTitle title="Manage Vehicles" />
+              </>
+            }
+          />
+          <Route
+            path="vehicles/new"
+            element={
+              <>
+                <AddVehicleForm />
+                <PageTitle title="Add Vehicle" />
+              </>
+            }
+          />
+          <Route
+            path="vehicles/edit/:id"
+            element={
+              <>
+                <EditVehicleForm />
+                <PageTitle title="Edit vehicle" />
+              </>
+            }
+          />
+          <Route
+            path="employees"
+            element={
+              <>
+                <Employees />
+                <PageTitle title="Employees" />
+              </>
+            }
+          />
+          <Route
+            path="employees/new"
+            element={
+              <>
+                <AddEmployeeForm />
+                <PageTitle title="Add employee" />
+              </>
+            }
+          />
+          <Route
+            path="pending-reservations"
+            element={
+              <>
+                <PendingReservations />
+                <PageTitle title="Pending reservations" />
+              </>
+            }
+          />
+          <Route
+            path="reservations"
+            element={
+              <>
+                <Reservations />
+                <PageTitle title="Reservations" />
+              </>
+            }
+          />
+          <Route
+            path="damage-reports"
+            element={
+              <>
+                <DamageReports />
+                <PageTitle title="Damage reports" />
+              </>
+            }
+          />
+          <Route
+            path="/damage-reports/:id"
+            element={
+              <>
+                <DamageReportDetails />
+                <PageTitle title="Report details" />
+              </>
+            }
+          />
+          <Route
+            path="review-reservation/:id"
+            element={
+              <>
+                <ReviewReservation />
+                <PageTitle title="Reservation" />
+              </>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </div>
+  );
 };
 
 export default AdminDashboardLayout;
