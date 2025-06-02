@@ -47,7 +47,7 @@ function FormInputField(
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-md pr-10 shadow
+          className={`block w-full p-2 sm:p-2.5 text-sm placeholder-italic rounded-lg pr-10 shadow
               ${error ? "border-error" : "border-gray-200"} 
               border focus:outline-none focus:ring-1 focus:ring-brand-light`}
           ref={ref}

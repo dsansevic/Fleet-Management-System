@@ -36,6 +36,10 @@ button:active {
   @apply transform scale-95;
 }
 
+.rounded-base {
+  @apply rounded-2xl;
+}
+
 ::view-transition-group(root) {
   animation-duration: 0.4s;
   animation-timing-function: ease-in-out;

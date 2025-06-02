@@ -8,104 +8,103 @@ import { createDamageReport } from "@api/damageReports";
 import { fetchLiveOrCompletedReservations } from "@api/reservations";
 
 const AddDamageReport = () => {
-    const [reservations, setReservations] = useState([]);
-    const [selectedReservation, setSelectedReservation] = useState("");
-    const [description, setDescription] = useState("");
-    const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const inputRef = useRef();
+  const [reservations, setReservations] = useState([]);
+  const [selectedReservation, setSelectedReservation] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const inputRef = useRef();
 
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
-    useEffect(() => {
-        const fetchReservations = async () => {
-            try {
-                const data = await fetchLiveOrCompletedReservations();
-                setReservations(data);
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-        fetchReservations();
-    }, []);
-
-    const handleSelect = (e) => {
-        setSelectedReservation(e.target.value);
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const data = await fetchLiveOrCompletedReservations();
+        setReservations(data);
+      } catch (error) {
+        setError(error.message);
+      }
     };
+    fetchReservations();
+  }, []);
 
-    const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-    };
+  const handleSelect = (e) => {
+    setSelectedReservation(e.target.value);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setSuccessMessage("");
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
 
-        if (!selectedReservation || !description.trim()) {
-            setError("Please select a reservation and provide a description of the issue.");
-            return;
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
 
-        try {
-            await createDamageReport(selectedReservation, description);
-            setSuccessMessage("Damage report submitted successfully.");
-            setSelectedReservation("");
-            setDescription("");
-        } catch (error) {
-            setError(error.message);
-        }
-    };
+    if (!selectedReservation || !description.trim()) {
+      setError(
+        "Please select a reservation and provide a description of the issue."
+      );
+      return;
+    }
 
-    return (
-        <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded shadow">
-            <h1 className="text-2xl font-bold mb-4">Report a Damage or Problem</h1>
+    try {
+      await createDamageReport(selectedReservation, description);
+      setSuccessMessage("Damage report submitted successfully.");
+      setSelectedReservation("");
+      setDescription("");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
-            {successMessage && <SuccessMessage message={successMessage} />}
+  return (
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-base shadow">
+      <h1 className="text-2xl font-bold mb-4">Report a Damage or Problem</h1>
 
-            <p className="text-gray-600 mb-6">
-                You can only report problems associated with your active or completed reservations.
-            </p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <SelectField
-                    label="Reservation"
-                    ref={inputRef}
-                    name="reservation"
-                    value={selectedReservation}
-                    onChange={handleSelect}
-                    placeholder="Select reservation"
-                    options={reservations.map((res) => ({
-                        value: res._id,
-                        label: `${res.vehicle?.brand} ${res.vehicle?.model} (${new Date(
-                            res.startTime
-                        ).toLocaleString()} - ${new Date(res.endTime).toLocaleString()})`,
-                    }))}
-                />
-                <TextAreaField
-                    label="Description of the problem"
-                    name="description"
-                    value={description}
-                    onChange={handleDescriptionChange}
-                    placeholder="Provide a detailed description of the issue."
-                    rows={5}
-                />
-                {error && <p className="text-error mb-4">{error}</p>}
-                        
-                <div className="flex justify-between">
-                <LinkButton
-                    to={(-1)}
-                >
-                    Cancel
-                </LinkButton>
-                    <SubmitButton readyToSend={!description || !selectedReservation}>
-                        Submit
-                    </SubmitButton>
-                </div>
-            </form>
+      {successMessage && <SuccessMessage message={successMessage} />}
+
+      <p className="text-gray-600 mb-6">
+        You can only report problems associated with your active or completed
+        reservations.
+      </p>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <SelectField
+          label="Reservation"
+          ref={inputRef}
+          name="reservation"
+          value={selectedReservation}
+          onChange={handleSelect}
+          placeholder="Select reservation"
+          options={reservations.map((res) => ({
+            value: res._id,
+            label: `${res.vehicle?.brand} ${res.vehicle?.model} (${new Date(
+              res.startTime
+            ).toLocaleString()} - ${new Date(res.endTime).toLocaleString()})`,
+          }))}
+        />
+        <TextAreaField
+          label="Description of the problem"
+          name="description"
+          value={description}
+          onChange={handleDescriptionChange}
+          placeholder="Provide a detailed description of the issue."
+          rows={5}
+        />
+        {error && <p className="text-error mb-4">{error}</p>}
+
+        <div className="flex justify-between">
+          <LinkButton to={-1}>Cancel</LinkButton>
+          <SubmitButton readyToSend={!description || !selectedReservation}>
+            Submit
+          </SubmitButton>
         </div>
-    );
+      </form>
+    </div>
+  );
 };
 
 export default AddDamageReport;

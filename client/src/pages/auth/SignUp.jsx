@@ -95,7 +95,7 @@ function SignUp() {
   };
 
   return (
-    <div className="w-11/12 sm:max-w-[500px] lg:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-xl sm:bg-white relative z-10 sm:border border-gray-200">
+    <div className="w-11/12 sm:max-w-[500px] lg:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-base sm:bg-white relative z-10 sm:border border-gray-200">
       <button
         onClick={() => navigate("/")}
         className="hidden sm:block absolute top-4 right-4 text-xl"
@@ -172,7 +172,10 @@ function SignUp() {
 
             <div className="text-center">
               <p className="text-error text-sm mt-1">{errorAlert}</p>
-              <SubmitButton readyToSend={isSubmitDisabled && !isLoading}>
+              <SubmitButton
+                readyToSend={isSubmitDisabled && !isLoading}
+                className="rounded-lg"
+              >
                 {isLoading ? "Submitting..." : "Submit"}
               </SubmitButton>
             </div>

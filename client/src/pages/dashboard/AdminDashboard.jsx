@@ -5,7 +5,7 @@ const AdminDashboard = () => {
   const { user } = useAuthContext();
 
   return (
-    <div className="p-12 bg-white shadow-md rounded-2xl">
+    <div className="p-12 rounded-base">
       <h1 className="text-2xl font-bold text-gray-700">
         Welcome, {user?.firstName}!
       </h1>
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
       <div className="mt-6">
         <Link
           to="/dashboard-admin/pending-reservations"
-          className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-lg shadow hover:bg-brand-darker"
+          className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-base shadow hover:bg-brand-darker"
         >
           Review Reservations
         </Link>

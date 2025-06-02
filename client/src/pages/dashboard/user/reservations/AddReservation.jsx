@@ -77,7 +77,7 @@ const AddReservation = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 bg-white shadow-lg rounded-2xl p-8">
+    <div className="max-w-3xl mx-auto mt-8 bg-white shadow-lg rounded-base p-8">
       <Title className="text-center">Request a Company Vehicle</Title>
       {successMessage && <SuccessMessage message={successMessage} />}
       <form onSubmit={handleAddReservation} className="space-y-6">

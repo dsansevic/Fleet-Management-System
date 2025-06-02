@@ -52,7 +52,7 @@ const Reservations = () => {
               return (
                 <li
                   key={res._id}
-                  className="relative bg-white border border-gray-200 backdrop-blur-xl shadow-sm rounded-2xl p-5 flex flex-col space-y-4 hover:shadow-md shadow-gray-300 transition-all duration-300"
+                  className="relative bg-white border border-gray-200 backdrop-blur-xl shadow-sm rounded-base p-5 flex flex-col space-y-4 hover:shadow-md shadow-gray-300 transition-all duration-300"
                 >
                   <div className="w-full pb-3 border-b border-gray-300">
                     <h3 className="text-xl font-semibold text-gray-900 mt-2 break-words hyphens-auto">

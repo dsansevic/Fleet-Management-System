@@ -113,7 +113,7 @@ const DamageReports = () => {
         <td className="px-10 py-6">
           <Link
             to={report._id}
-            className="text-sm text-brand-dark hover:text-brand-base px-3 py-1 rounded-lg"
+            className="text-sm text-brand-dark hover:text-brand-base px-3 py-1 rounded-base bg-purple-100"
           >
             <FontAwesomeIcon icon={faEye} className="mr-2" />
             Review

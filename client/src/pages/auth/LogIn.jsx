@@ -47,7 +47,7 @@ function LogIn() {
   const isSubmitDisabled = Object.values(input).some((value) => value === "");
 
   return (
-    <div className="w-11/12 sm:max-w-[500px] lg:max-w-[768px] xl:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-xl sm:bg-white relative z-10 sm:border border-gray-200">
+    <div className="w-11/12 sm:max-w-[500px] lg:max-w-[768px] xl:max-w-[900px] mx-auto my-10 px-4 sm:p-6 rounded-base sm:bg-white relative z-10 sm:border border-gray-200">
       <button
         onClick={() => navigate("/")}
         className="hidden sm:block absolute top-4 right-4 text-xl"
@@ -86,7 +86,7 @@ function LogIn() {
               onCapsLock={handleCapsLock}
             />
             {capsLockIsOn && (
-              <p className="text-error p-2 text-sm rounded-md">
+              <p className="text-error pb-2 text-sm animate-pulse">
                 ⚠️ Caps Lock is ON!
               </p>
             )}

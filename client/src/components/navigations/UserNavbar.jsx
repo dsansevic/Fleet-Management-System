@@ -32,8 +32,8 @@ const UserNavbar = () => {
             </span>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-3 w-36 bg-white border border-gray-200 rounded-md shadow-md z-50">
-                <p className="w-full bg-brand-light text-center p-2 text-brand-darkest rounded-t-md">
+              <div className="absolute right-0 mt-3 w-36 bg-white border border-gray-200 rounded-base shadow-md z-50">
+                <p className="w-full bg-brand-light text-center p-2 text-brand-darkest rounded-t-2xl">
                   {user?.firstName || "User"}
                 </p>
                 <button

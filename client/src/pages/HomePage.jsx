@@ -48,7 +48,7 @@ const HomePage = () => {
           <div className="mt-6 flex justify-center space-x-4">
             <Link
               to="/signup"
-              className="px-6 py-3 bg-white text-brand-dark text-xl font-medium rounded-lg shadow hover:bg-gray-200"
+              className="px-6 py-3 bg-white text-brand-dark text-xl font-medium rounded-base shadow hover:bg-gray-200"
             >
               Register Your Company
             </Link>
@@ -65,7 +65,7 @@ const HomePage = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="p-6 bg-white shadow-md rounded-lg text-center"
+              className="p-6 bg-white shadow-md rounded-base text-center"
             >
               <FontAwesomeIcon
                 icon={feature.icon}

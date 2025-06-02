@@ -24,7 +24,7 @@ const NotFound = () => {
         </p>
         <Link
           to={targetPath}
-          className="inline-block bg-slate-700 text-white px-4 py-2 rounded-md text-lg font-medium hover:bg-slate-600 transition-colors"
+          className="inline-block bg-slate-700 text-white px-4 py-2 rounded-base text-lg font-medium hover:bg-slate-600 transition-colors"
         >
           Go back to Home Page
         </Link>
