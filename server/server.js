@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 const isProduction = process.env.NODE_ENV === "production";
 
 const allowedOrigins = isProduction
-  ? ["https://fleet-management-system-production-fd15.up.railway.app"]
+  ? [process.env.FRONTEND_URL]
   : ["http://localhost:5173"];
 
 app.use(
