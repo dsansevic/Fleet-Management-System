@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import GetReservationStatus from "@utils/GetReservationStatus";
-import { formatDate } from "@utils/formatDate";
+import { shortDate } from "@utils/shortDate";
 import { getPreviewText } from "@utils/getPreviewText";
 import usePagination from "@hooks/usePagination";
 import Pagination from "@utils/Pagination";
@@ -49,41 +49,46 @@ const ReservationsList = ({
               return (
                 <li
                   key={res._id}
-                  className="relative bg-white backdrop-blur-xl shadow-lg rounded-base p-5 flex flex-col space-y-4 hover:shadow-xl shadow-gray-300 transition-all duration-300 hover:bg-gray-50"
+                  className="relative bg-white border border-gray-200 backdrop-blur-xl shadow-sm rounded-base p-5 flex flex-col space-y-4 hover:shadow-md shadow-gray-300 transition-all duration-300"
                 >
-                  <div className="absolute top-3 right-3 flex items-center">
-                    <span className="w-4 h-4 flex items-center justify-center text-sm">
-                      {status.icon}
-                    </span>
-                    <span
-                      className={`text-sm font-medium px-2 py-0.5 rounded-base ${status.color} bg-opacity-20 flex items-center`}
-                    >
-                      {status.label}
-                    </span>
+                  <div className="w-full pb-3 border-b border-gray-300">
+                    <h3 className="text-xl font-semibold text-gray-900 mt-2 break-words hyphens-auto">
+                      {getPreviewText(res.purpose)}
+                    </h3>
+                    <div>
+                      <span className="text-sm text-gray-500">
+                        {shortDate(res.startTime)} – {shortDate(res.endTime)}
+                      </span>
+                      <span className="flex items-center">
+                        <span className="w-4 h-4 flex items-center justify-center text-sm">
+                          {status.icon}
+                        </span>
+                        <span
+                          className={`text-sm font-medium px-2 py-0.5 rounded-full ${status.color} bg-opacity-20 flex items-center`}
+                        >
+                          {status.label}
+                        </span>
+                      </span>
+                    </div>
                   </div>
 
-                  <h3 className="text-xl font-semibold text-gray-900 mt-2 break-words hyphens-auto">
-                    {getPreviewText(res.purpose)}
-                  </h3>
                   <p className="text-sm text-gray-700">
-                    {getPreviewText(res.additionalDetails) ||
-                      "No additional details provided."}
+                    {res.additionalDetails ? (
+                      <>
+                        <strong>Special request: </strong>{" "}
+                        {getPreviewText(res.additionalDetails)}
+                      </>
+                    ) : (
+                      "No special request provided."
+                    )}
                   </p>
 
-                  <div className="text-sm text-gray-600">
-                    <p>
-                      📅 {formatDate(res.startTime)} – {formatDate(res.endTime)}
-                    </p>
-                  </div>
-
-                  <div className="mt-3 flex justify-end items-center">
-                    <Link
-                      to={`/dashboard-user/reservation/${res._id}`}
-                      className="text-brand-darker hover:text-brand-dark text-sm font-medium"
-                    >
-                      View Details →
-                    </Link>
-                  </div>
+                  <Link
+                    to={`/dashboard-user/reservation/${res._id}`}
+                    className="mt-3 w-full text-center text-brand-darker bg-sky-50 p-2 rounded-xl hover:bg-sky-100 cursor-pointer text-sm font-medium"
+                  >
+                    View Details
+                  </Link>
                 </li>
               );
             })}
