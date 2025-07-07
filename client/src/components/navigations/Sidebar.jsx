@@ -36,7 +36,7 @@ const Sidebar = ({ links }) => {
                     ? "translate-x-0 duration-300 ease-out"
                     : "-translate-x-full duration-300 ease-out"
                 } 
-                sm:w-72 w-64 md:translate-x-0 md:w-64 md:h-[calc(100vh-4rem)] md:top-[4rem] h-screen overflow-y-auto`}
+                sm:w-72 w-64 md:translate-x-0 md:w-64 md:h-[calc(100vh-4rem)] md:top-[4rem] h-full overflow-y-auto`}
       >
         <div>
           {links.map((link, index) => (

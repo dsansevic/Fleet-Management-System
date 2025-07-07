@@ -14,6 +14,7 @@ import DamageReportDetails from "@pages/dashboard/admin/damage-reports/DamageRep
 import AdminDashboardSideBar from "@components/navigations/AdminDashboardSideBar";
 import NotFound from "@pages/errors/NotFound";
 import PageTitle from "@utils/PageTitle";
+import Footer from "../components/Footer";
 
 const AdminDashboardLayout = () => {
   const location = useLocation();
@@ -35,111 +36,116 @@ const AdminDashboardLayout = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex h-full w-screen">
+    <div className="flex min-h-full w-screen">
       <AdminDashboardSideBar />
-      <div className="flex-1 bg-background px-4 md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <AdminDashboard />
-                <PageTitle title="Admin Dashboard" />
-              </>
-            }
-          />
-          <Route
-            path="vehicles"
-            element={
-              <>
-                <Vehicles />
-                <PageTitle title="Manage Vehicles" />
-              </>
-            }
-          />
-          <Route
-            path="vehicles/new"
-            element={
-              <>
-                <AddVehicleForm />
-                <PageTitle title="Add Vehicle" />
-              </>
-            }
-          />
-          <Route
-            path="vehicles/edit/:id"
-            element={
-              <>
-                <EditVehicleForm />
-                <PageTitle title="Edit vehicle" />
-              </>
-            }
-          />
-          <Route
-            path="employees"
-            element={
-              <>
-                <Employees />
-                <PageTitle title="Employees" />
-              </>
-            }
-          />
-          <Route
-            path="employees/new"
-            element={
-              <>
-                <AddEmployeeForm />
-                <PageTitle title="Add employee" />
-              </>
-            }
-          />
-          <Route
-            path="pending-reservations"
-            element={
-              <>
-                <PendingReservations />
-                <PageTitle title="Pending reservations" />
-              </>
-            }
-          />
-          <Route
-            path="reservations"
-            element={
-              <>
-                <Reservations />
-                <PageTitle title="Reservations" />
-              </>
-            }
-          />
-          <Route
-            path="damage-reports"
-            element={
-              <>
-                <DamageReports />
-                <PageTitle title="Damage reports" />
-              </>
-            }
-          />
-          <Route
-            path="/damage-reports/:id"
-            element={
-              <>
-                <DamageReportDetails />
-                <PageTitle title="Report details" />
-              </>
-            }
-          />
-          <Route
-            path="review-reservation/:id"
-            element={
-              <>
-                <ReviewReservation />
-                <PageTitle title="Reservation" />
-              </>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+      <div className="flex-1 bg-background md:ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
+        <div className="px-4 ">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <AdminDashboard />
+                  <PageTitle title="Admin Dashboard" />
+                </>
+              }
+            />
+            <Route
+              path="vehicles"
+              element={
+                <>
+                  <Vehicles />
+                  <PageTitle title="Manage Vehicles" />
+                </>
+              }
+            />
+            <Route
+              path="vehicles/new"
+              element={
+                <>
+                  <AddVehicleForm />
+                  <PageTitle title="Add Vehicle" />
+                </>
+              }
+            />
+            <Route
+              path="vehicles/edit/:id"
+              element={
+                <>
+                  <EditVehicleForm />
+                  <PageTitle title="Edit vehicle" />
+                </>
+              }
+            />
+            <Route
+              path="employees"
+              element={
+                <>
+                  <Employees />
+                  <PageTitle title="Employees" />
+                </>
+              }
+            />
+            <Route
+              path="employees/new"
+              element={
+                <>
+                  <AddEmployeeForm />
+                  <PageTitle title="Add employee" />
+                </>
+              }
+            />
+            <Route
+              path="pending-reservations"
+              element={
+                <>
+                  <PendingReservations />
+                  <PageTitle title="Pending reservations" />
+                </>
+              }
+            />
+            <Route
+              path="reservations"
+              element={
+                <>
+                  <Reservations />
+                  <PageTitle title="Reservations" />
+                </>
+              }
+            />
+            <Route
+              path="damage-reports"
+              element={
+                <>
+                  <DamageReports />
+                  <PageTitle title="Damage reports" />
+                </>
+              }
+            />
+            <Route
+              path="/damage-reports/:id"
+              element={
+                <>
+                  <DamageReportDetails />
+                  <PageTitle title="Report details" />
+                </>
+              }
+            />
+            <Route
+              path="review-reservation/:id"
+              element={
+                <>
+                  <ReviewReservation />
+                  <PageTitle title="Reservation" />
+                </>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+        <div className="relative bottom-0 w-full">
+          <Footer />
+        </div>
       </div>
     </div>
   );

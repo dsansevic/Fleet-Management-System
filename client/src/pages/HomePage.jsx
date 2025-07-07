@@ -35,7 +35,7 @@ const features = [
 
 const HomePage = () => {
   return (
-    <div className="bg-gray-100 min-h-screen w-full">
+    <div className="bg-gray-100 min-h-screen w-full mb-6">
       <header className="bg-brand-dark text-white text-center py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold leading-tight">
@@ -88,7 +88,7 @@ const HomePage = () => {
         <div className="mt-6">
           <Link
             to="/signup"
-            className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-lg shadow hover:bg-brand-darker"
+            className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-2xl shadow hover:bg-brand-darker"
           >
             Get Started
           </Link>

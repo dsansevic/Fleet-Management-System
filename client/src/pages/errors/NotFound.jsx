@@ -20,7 +20,7 @@ const NotFound = () => {
       <div className="text-center md:text-left">
         <h1 className="text-4xl font-bold text-text-primary mb-4">Oops!</h1>
         <p className="text-lg text-text-secondary mb-6">
-          It seems like the page you're looking for doesn't exist 🥺
+          It seems like the page you're looking for doesn't exist!
         </p>
         <Link
           to={targetPath}
