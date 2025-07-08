@@ -108,6 +108,7 @@ const userCompanySignUp = async (req, res) => {
       maxAge: 3600000,
       sameSite: isProduction ? "None" : "Lax",
       secure: false,
+      path: "/",
     });
 
     res.status(201).json({
@@ -155,6 +156,7 @@ const logIn = async (req, res) => {
       maxAge: 3600000, // 1h
       sameSite: isProduction ? "None" : "Lax",
       secure: true,
+      path: "/",
     });
 
     res.status(201).json({
