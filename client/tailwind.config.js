@@ -12,6 +12,7 @@ export default {
           lighter: "var(--brand-lighter)",
           base: "var(--brand-base)",
           dark: "var(--brand-dark)",
+          dark_hover: "var(--brand-dark_hover)",
           darker: "var(--brand-darker)",
           darkest: "var(--brand-darkest)",
         },

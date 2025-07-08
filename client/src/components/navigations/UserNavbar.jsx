@@ -26,7 +26,7 @@ const UserNavbar = () => {
           <div className="relative">
             <span
               onClick={toggleMenu}
-              className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-8 h-8 mt-1 hover:bg-brand-lighter cursor-pointer"
+              className="flex items-center justify-center bg-brand-dark text-white font-bold text-lg rounded-full w-8 h-8 mt-1 hover:bg-brand-dark_hover cursor-pointer"
             >
               {capitalizedFirstLetter(user?.firstName) || "U"}
             </span>

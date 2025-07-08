@@ -60,7 +60,7 @@ const NotificationsDropdown = () => {
   return (
     <div className="relative">
       <button onClick={toggleDropdown} className="relative p-0">
-        <BellIcon className="h-10 w-10 p-0 text-brand-dark hover:text-brand-base cursor-pointer" />
+        <BellIcon className="h-10 w-10 p-0 text-brand-dark hover:text-brand-dark_hover cursor-pointer" />
         {(notifications || []).some((n) => !n.read) && (
           <span className="absolute top-0 right-1 flex items-center justify-center w-5 h-5 bg-error text-white text-xs font-bold rounded-full">
             {(notifications || []).filter((n) => !n.read).length}

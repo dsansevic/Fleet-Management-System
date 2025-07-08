@@ -43,7 +43,7 @@ const PendingReservations = () => {
   return (
     <div className="p-6 w-full mx-auto">
       <Title>Reservations Awaiting Your Review</Title>
-      <p className="text-gray-600 text-sm md:text-base leading-relaxed my-4">
+      <p className="text-gray-600 leading-relaxed my-4 text-lg">
         Review pending reservations and approve or decline them 1 hour before
         they start.
       </p>
@@ -106,11 +106,10 @@ const PendingReservations = () => {
               </h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {pendingReservations.map((res) => {
-                  const status = GetReservationStatus(res.status);
                   return (
                     <li
                       key={res._id}
-                      className="relative bg-white shadow-md rounded-base p-5 flex flex-col space-y-4 hover:shadow-xl border border-purple-200 transition-all duration-300 hover:bg-slate-50"
+                      className="relative shadow-md rounded-base bg-gray-50 p-5 flex flex-col space-y-4 hover:shadow-xl border border-neutral-300 transition-all duration-300  "
                     >
                       <div className="w-full pb-3 border-b border-gray-300x shadow-  ">
                         <h3 className="text-xl font-semibold  text-gray-900">
@@ -118,7 +117,7 @@ const PendingReservations = () => {
                         </h3>
                       </div>
 
-                      <p className="text-sm text-gray-700">
+                      <p className="text-md text-gray-700">
                         {res.user.firstName} {res.user.lastName} (
                         {res.user.email})
                       </p>
@@ -132,7 +131,7 @@ const PendingReservations = () => {
 
                       <Link
                         to={`/dashboard-admin/review-reservation/${res._id}`}
-                        className="mt-4 px-4 py-2 text-white bg-brand-dark hover:bg-brand-darker rounded-base text-sm font-medium shadow-sm transition-all w-full text-center"
+                        className="mt-4 px-4 py-2 text-white bg-brand-dark hover:bg-brand-dark_hover rounded-base text-sm font-medium shadow-sm transition-all w-full text-center"
                       >
                         Review
                       </Link>

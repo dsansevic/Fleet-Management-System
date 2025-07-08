@@ -31,12 +31,12 @@ const Vehicles = () => {
   return (
     <div className="p-6 w-full mx-auto">
       <Title>Company Vehicles</Title>
-      <p className="text-gray-700 mb-4">
+      <p className="text-gray-700 mb-4 text-lg">
         Track and manage your fleet effortlessly. Vehicle statuses update
         automatically based on reservations.
       </p>
 
-      <div className="border-l-4 border-brand-dark pl-4 py-2 bg-white text-gray-700 mb-4 rounded-base">
+      <div className="border-l-2 border-brand-dark pl-4 py-2 bg-white text-gray-700 mb-4">
         <p className="font-bold">Full Control Over Vehicle Details</p>
         <p>
           Manually adjust vehicle details to ensure accurate fleet management.

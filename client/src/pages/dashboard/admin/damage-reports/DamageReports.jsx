@@ -126,12 +126,11 @@ const DamageReports = () => {
   return (
     <div className="p-6 w-full mx-auto overflow-x-auto">
       <Title>Damage Reports</Title>
-      <p className="text-gray-700 mb-4">
+      <p className="text-gray-700 mb-4 text-lg">
         Here are all the damage reports submitted by employees. Review the
         details and take necessary actions to keep your fleet running smoothly.
       </p>
-      <div className="mb-4 w-36">
-        <label className="mr-2">Filter by status:</label>
+      <div className="mb-6 w-36">
         <SelectField
           name="statusFilter"
           value={statusFilter}

@@ -8,7 +8,7 @@ const Employees = () => {
   return (
     <div className="p-6 w-full mx-auto">
       <Title>Employees</Title>
-      <p className="text-gray-700 mb-4">
+      <p className="text-gray-700 mb-4 text-lg">
         As an Admin, you have full control over employee registrations.
         Employees
         <span className="font-bold"> cannot self-register</span>, ensuring only

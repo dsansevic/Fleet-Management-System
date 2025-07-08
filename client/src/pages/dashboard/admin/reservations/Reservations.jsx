@@ -22,7 +22,7 @@ const Reservations = () => {
   return (
     <div className="p-6 w-full mx-auto">
       <Title>All Reservations</Title>
-      <p className="text-gray-600 mb-4 text-xl">
+      <p className="text-gray-600 mb-4 text-lg">
         A read-only list displaying every reservation across your organization.
         To make changes or manage active bookings, head to the{" "}
         <Link

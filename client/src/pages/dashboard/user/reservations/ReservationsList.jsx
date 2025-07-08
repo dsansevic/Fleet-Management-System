@@ -28,7 +28,7 @@ const ReservationsList = ({
   return (
     <div className="p-6 w-full mx-auto">
       <Title>{title}</Title>
-      <p className="text-gray-600 mb-4">{description}</p>
+      <p className="text-gray-600 mb-4 text-lg">{description}</p>
 
       {loading ? (
         <Loading />

@@ -6,28 +6,25 @@ const UserDashboard = () => {
 
   return (
     <div className="p-12 h-96">
-      <h1 className="text-2xl font-bold text-gray-700">
+      <h1 className="text-3xl font-bold text-gray-700">
         Welcome, {user?.firstName}!
       </h1>
-      <p className="text-gray-600 mt-2">
-        You are an employee at{" "}
+      <p className="text-gray-600 mt-2 pb-2 text-lg border-b border-gray-300">
+        You’re part of the{" "}
         <strong className="text-brand-dark">
           {user?.companyName || "your company"}
-        </strong>
-        .
+        </strong>{" "}
+        team.
       </p>
-      <p className="text-gray-600 mt-10">
-        Need a vehicle for work? Book one now
-      </p>
-
-      <div className="mt-6">
+      <p className="text-gray-600 mt-6 text-lg">
+        Need a vehicle for work?{" "}
         <Link
           to="/dashboard-user/new-reservation"
-          className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-base shadow hover:bg-brand-base transition"
+          className="text-brand-dark hover:text-brand-dark_hover"
         >
-          Create Reservation
+          Book one now
         </Link>
-      </div>
+      </p>
     </div>
   );
 };
