@@ -7,9 +7,11 @@ FleetFlow is a fleet management application that enables administrators to manag
 
 ## Demo Access
 
-| Role         | Email                   | Password   |
-|--------------|-------------------------|------------|
-| **Admin**    | ana@ana-transport.hr    | Test12345  |
-| **Employee** | luka@ana-transport.hr   | Test12345  |
+Access the app here: https://fleet-management-system-1f8a.onrender.com
+
+| Role         | Email                 | Password  |
+| ------------ | --------------------- | --------- |
+| **Admin**    | ana@ana-transport.hr  | Test12345 |
+| **Employee** | luka@ana-transport.hr | Test12345 |
 
 Alternatively, you can create your own account via the **Sign Up** page.
