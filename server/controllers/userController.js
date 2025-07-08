@@ -106,8 +106,8 @@ const userCompanySignUp = async (req, res) => {
     res.cookie("accessToken", token, {
       httpOnly: true,
       maxAge: 3600000,
-      sameSite: isProduction ? "None" : "Lax",
-      secure: false,
+      sameSite: "None",
+      secure: true,
       path: "/",
     });
 
@@ -154,7 +154,7 @@ const logIn = async (req, res) => {
     res.cookie("accessToken", token, {
       httpOnly: true,
       maxAge: 3600000, // 1h
-      sameSite: isProduction ? "None" : "Lax",
+      sameSite: "None",
       secure: true,
       path: "/",
     });
@@ -178,7 +178,7 @@ const logIn = async (req, res) => {
 const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    sameSite: isProduction ? "None" : "Lax",
+    sameSite: "None",
     secure: true,
   });
   res.status(200).json({ message: "Logged out successfully" });
