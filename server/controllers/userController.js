@@ -107,7 +107,7 @@ const userCompanySignUp = async (req, res) => {
       httpOnly: true,
       maxAge: 3600000,
       sameSite: isProduction ? "None" : "Lax",
-      secure: isProduction,
+      secure: true,
     });
 
     res.status(201).json({
@@ -154,7 +154,7 @@ const logIn = async (req, res) => {
       httpOnly: true,
       maxAge: 3600000, // 1h
       sameSite: isProduction ? "None" : "Lax",
-      secure: isProduction, // true za HTTPS
+      secure: true,
     });
 
     res.status(201).json({
