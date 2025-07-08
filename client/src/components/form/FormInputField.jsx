@@ -33,11 +33,11 @@ function FormInputField(
         className="block text-sm font-medium text-brand-darker"
       >
         {label}
-        {required && (
+        {/* {required && (
           <span className="text-brand-darker" title="This field is required">
             *
           </span>
-        )}
+        )} */}
       </label>
 
       <div className="relative">

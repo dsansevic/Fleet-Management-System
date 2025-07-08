@@ -22,7 +22,7 @@ const DamageReport = () => {
 
   const tableHeaders = [
     { name: "Vehicle", key: "vehicle", visibility: "" },
-    { name: "Status", key: "status", visibility: "" },
+    { name: "Status", key: "status", visibility: "hidden md:table-cell" },
     { name: "Date", key: "date", visibility: "hidden lg:table-cell" },
     {
       name: "Description",
@@ -37,24 +37,24 @@ const DamageReport = () => {
     return (
       <tr
         key={report._id}
-        className="border-b border-indigo-50 hover:bg-gray-50"
+        className="border-t border-indigo-50 hover:bg-gray-50"
       >
-        <td className="px-6 py-4 text-sm font-medium text-gray-700">
+        <td className="px-8 py-4 border-r text-sm font-medium text-gray-700">
           <strong>{report.reservation?.vehicle?.brand}</strong>
           <br />
           {report.reservation?.vehicle?.model}
         </td>
-        <td className="px-6 py-4 text-sm font-medium capitalize flex items-center gap-1">
+        <td className="px-10 py-4 border-r text-sm font-medium capitalize hidden md:table-cell items-center gap-1">
           {status.icon}
           <span>{status.label}</span>
         </td>
-        <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+        <td className="px-10 py-4 border-r text-sm text-gray-500 hidden lg:table-cell">
           {formatDate(report.createdAt)}
         </td>
-        <td className="px-6 py-4 text-sm text-gray-500 hidden lg:table-cell">
+        <td className="px-10 py-4 border-r text-sm text-gray-500 hidden lg:table-cell">
           {getPreviewText(report.description)}
         </td>
-        <td className="px-6 py-4">
+        <td className="px-10 py-4 border-r">
           <Link
             to={`${report._id}`}
             className="text-brand-dark hover:text-brand-base text-sm font-medium"

@@ -24,7 +24,7 @@ const DamageReports = () => {
 
   const tableHeaders = [
     { name: "Vehicle", key: "vehicle", visibility: "" },
-    { name: "Status", key: "status", visibility: "" },
+    { name: "Status", key: "status", visibility: "hidden md:table-cell" },
     {
       name: "Reported By",
       key: "reportedBy",
@@ -38,7 +38,7 @@ const DamageReports = () => {
     {
       name: "Description",
       key: "description",
-      visibility: "hidden lg:table-cell",
+      visibility: "hidden xl:table-cell",
     },
     { name: "Details", key: null, visibility: "" },
   ];
@@ -97,7 +97,7 @@ const DamageReports = () => {
           {report.reservation?.vehicle?.brand}{" "}
           {report.reservation?.vehicle?.model}
         </td>
-        <td className="px-10 py-6 border-r border-r-gray-100 text-sm font-medium capitalize flex items-center gap-1">
+        <td className="px-10 py-6 border-r border-r-gray-100 text-sm font-medium capitalize hidden md:table-cell items-center gap-1">
           {status.icon}
           <span>{status.label}</span>
         </td>
@@ -107,7 +107,7 @@ const DamageReports = () => {
         <td className="px-10 py-6 text-sm border-r border-r-gray-100 text-gray-500 hidden lg:table-cell">
           {formatDate(report.createdAt)}
         </td>
-        <td className="px-10 py-6 text-sm border-r border-r-gray-100 text-gray-500 hidden lg:table-cell">
+        <td className="px-10 py-6 text-sm border-r border-r-gray-100 text-gray-500 hidden xl:table-cell">
           {getPreviewText(report.description)}
         </td>
         <td className="px-10 py-6">

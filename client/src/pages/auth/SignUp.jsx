@@ -150,7 +150,7 @@ function SignUp() {
             <FormInputField
               label="Company Name"
               name="companyName"
-              placeholder="Enter company name"
+              placeholder="e.g. FleetFlow Ltd."
               value={userData.companyName}
               onChange={handleInputChange}
               error={userErrors.companyName}

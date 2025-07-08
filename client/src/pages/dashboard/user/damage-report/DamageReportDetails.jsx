@@ -85,8 +85,11 @@ const DamageReportDetails = () => {
           with license plate{" "}
           <strong>{report?.reservation?.vehicle?.licensePlate} </strong>, you
           used for the <strong> {report?.reservation?.purpose} </strong>
-          from <strong> {formatDate(report?.reservation?.startTime)}</strong>
-          to <strong> {formatDate(report?.reservation?.endTime)}</strong>.
+          from <strong>
+            {" "}
+            {formatDate(report?.reservation?.startTime)}
+          </strong> to{" "}
+          <strong> {formatDate(report?.reservation?.endTime)}</strong>.
         </p>
         <div className="bg-purple-50 p-4 rounded-base">
           <p className="text-gray-800">

@@ -2,7 +2,7 @@ const Table = ({ headers, data, rows }) => {
   return (
     <div>
       <table className="min-w-full border-collapse bg-white rounded-base">
-        <thead className="bg-gray-700 text-white">
+        <thead className="bg-brand-darker text-white">
           <tr>
             {headers.map((header) => (
               <th

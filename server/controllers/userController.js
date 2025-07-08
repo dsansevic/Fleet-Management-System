@@ -220,8 +220,7 @@ const checkAvailability = async (req, res) => {
     const existingUserByEmail = await User.findOne({ email });
     if (existingUserByEmail) {
       return res.status(400).json({
-        message:
-          "This email is already registered. If this is your email, you can log in or reset your password.",
+        message: "Email already registered.",
       });
     }
   }

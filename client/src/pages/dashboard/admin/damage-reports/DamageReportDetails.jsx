@@ -82,39 +82,41 @@ const DamageReportDetails = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <button
-        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-base shadow hover:bg-gray-400"
-        onClick={() => navigate(-1)}
-      >
-        Back
-      </button>
-      <div className="bg-white shadow-md border rounded-base p-6 space-y-4 mt-4">
-        <h3 className="text-2xl font-semibold">Damage Report</h3>
-        <p>
-          A damage report has been submitted for the vehicle{" "}
-          <strong>
-            {report?.reservation?.vehicle?.brand}
-            {report?.reservation?.vehicle?.model}{" "}
-          </strong>{" "}
-          with license plate{" "}
-          <strong>{report?.reservation?.vehicle?.licensePlate} </strong>. The
-          issue is related to the reservation for{" "}
-          <strong> {report?.reservation?.purpose} </strong>
-          from <strong> {formatDate(report?.reservation?.startTime)} </strong>
-          to <strong> {formatDate(report?.reservation?.endTime)}</strong>.
-          Reported by{" "}
-          <strong>
-            {report?.reportedBy?.firstName} {report?.reportedBy?.lastName}{" "}
-          </strong>
-          on <strong>{formatDate(report?.createdAt)} </strong>.
-        </p>
-        <p className="break-words hyphens-auto">
-          Issue description:{" "}
-          <strong>{report?.description || "No description provided."}</strong>
-        </p>
-        <p>
-          Current status: <strong>{report?.status || "Unknown"}</strong>.
-        </p>
+      <div className="bg-white shadow-md border rounded-base p-6 space-y-4 mt-4 relative">
+        <button
+          onClick={() => navigate("/dashboard-admin/damage-reports")}
+          className="absolute top-0 right-0 text-xl"
+        >
+          ✖
+        </button>
+        <h3 className="text-2xl text-center font-semibold">Damage Report</h3>
+        <div className="bg-purple-50 p-2 rounded-base space-y-2">
+          <p>
+            <strong>Vehicle:</strong> {report?.reservation?.vehicle?.brand}{" "}
+            {report?.reservation?.vehicle?.model} (
+            {report?.reservation?.vehicle?.licensePlate})
+          </p>
+          <p>
+            <strong>Reported By:</strong> {report?.reportedBy?.firstName}{" "}
+            {report?.reportedBy?.lastName}
+          </p>
+          <p>
+            <strong>Reservation:</strong> {report?.reservation?.purpose},{" "}
+            {formatDate(report?.reservation?.startTime)} -{" "}
+            {formatDate(report?.reservation?.endTime)}
+          </p>
+          <p>
+            <strong>Report Date:</strong> {formatDate(report?.createdAt)}
+          </p>
+          <p className="break-words hyphens-auto">
+            <strong>Issue Description:</strong>{" "}
+            {report?.description || "No description provided."}
+          </p>
+          <p>
+            <strong>Current vehicle status:</strong>{" "}
+            {report?.status || "Unknown"}
+          </p>
+        </div>
         {success && <SuccessMessage message={success} />}
         {!success && (
           <>

@@ -71,7 +71,7 @@ const HomePage = () => {
                 icon={feature.icon}
                 className="text-4xl text-brand-dark"
               />
-              <h3 className="text-lg font-semibold mt-3">{feature.title}</h3>
+              <h2 className="text-lg font-semibold mt-3">{feature.title}</h2>
               <p className="text-gray-600 mt-2">{feature.description}</p>
             </div>
           ))}
@@ -80,15 +80,12 @@ const HomePage = () => {
 
       <section className="bg-brand-light py-16 text-center">
         <h2 className="text-2xl mx-2 font-bold text-gray-800">
-          Ready to Simplify Fleet Management?
+          All set? Let’s get your fleet organized!
         </h2>
-        <p className="text-gray-600 mt-2">
-          Sign up today and take full control of your company vehicles.
-        </p>
         <div className="mt-6">
           <Link
             to="/signup"
-            className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-2xl shadow hover:bg-brand-darker"
+            className="px-6 py-3 bg-brand-dark text-white font-semibold rounded-base shadow hover:bg-brand-dark_hover"
           >
             Get Started
           </Link>

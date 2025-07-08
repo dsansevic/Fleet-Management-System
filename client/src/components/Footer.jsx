@@ -8,7 +8,7 @@ const Footer = () => {
           <div className="mb-4 md:mb-0">
             <div className="flex items-center">
               <img
-                src="../images/logo_icon.png"
+                src="/images/logo_icon.png"
                 class="h-8 me-3"
                 alt="FleetFlow Logo"
               />
