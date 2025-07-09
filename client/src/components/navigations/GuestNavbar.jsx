@@ -17,7 +17,7 @@ const GuestNavbar = () => {
             to="/signup"
             className="w-20 sm:w-auto px-3 py-3 sm:px-6 sm:py-3 bg-white text-brand-dark font-semibold rounded-base border border-brand-light hover:bg-gray-50 text-sm leading-none"
           >
-            Sign up
+            Sign Up
           </NavLink>
           <NavLink
             to="/login"
